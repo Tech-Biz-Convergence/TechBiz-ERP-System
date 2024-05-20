@@ -1,0 +1,54 @@
+<div class="account-page">
+<div class="main-wrapper">
+  <div class="account-content">
+    <a [routerLink] = "routes.jobList" class="btn btn-primary apply-btn">Apply Job</a>
+    <div class="container">
+    
+      <!-- Account Logo -->
+      <div class="account-logo">
+        <a [routerLink] = "routes.adminDashboard"><img src="assets/img/logo2.png" alt="Dreams Technologies"></a>
+      </div>
+      <!-- /Account Logo -->
+      
+      <div class="account-box">
+        <div class="account-wrapper">
+          <h3 class="account-title">Login</h3>
+          <p class="account-subtitle">Access to our dashboard</p>
+          
+          <!-- Account Form -->
+          <form>
+            <div class="input-block mb-4">
+              <label class="col-form-label">Email Address</label>
+              <input class="form-control" type="text" value="admin@dreamguystech.com">
+            </div>
+            <div class="input-block mb-4">
+              <div class="row align-items-center">
+                <div class="col">
+                  <label class="col-form-label">Password</label>
+                </div>
+                <div class="col-auto">
+                  <a class="text-muted" [routerLink] = "routes.forgot_password">
+                    Forgot password?
+                  </a>
+                </div>
+              </div>
+              <div class="position-relative">
+                <input class="form-control" [type]="password[1] ? 'text' : 'password' " value="123456" id="password">
+                <span class="fa-solid" [ngClass]=" password[1] ? 'fa-eye' : 'fa-eye-slash'" (click)="togglePassword(1)" id="toggle-password"></span>
+              </div>
+            </div>
+            <div class="input-block mb-4 text-center">
+              <button class="btn btn-primary account-btn" type="button" (click)="navigate()">Login</button>
+            </div>
+            <div class="account-footer">
+              <p>Don't have an account yet? <a [routerLink] = "routes.register">Register</a></p>
+            </div>
+          </form>
+          <!-- /Account Form -->
+          
+        </div>
+      </div>
+    </div>
+  </div>
+    </div>
+  </div>
