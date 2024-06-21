@@ -1,14 +1,15 @@
 ﻿using BusinessEntities.HR.MasterModels;
 using BusinessLogic.HR.Master;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Utilities;
 
 namespace TechBiz_Api_Project.Controllers
 {
-
+    [Route("api/auth/[controller]")]
+    [Authorize(Roles = "Admin")]
     [ApiController]
-    [Route("api/[controller]")]
     public class EmployeeController : ControllerBase
     {
         BizEmployeeManagement m_BizEmployeeMgr;
@@ -17,6 +18,7 @@ namespace TechBiz_Api_Project.Controllers
         {
             m_BizEmployeeMgr =new BizEmployeeManagement();
         }
+        
         [HttpGet("GetEmployee")]
         public IActionResult GetEmployee()
         {
@@ -42,6 +44,7 @@ namespace TechBiz_Api_Project.Controllers
             res = m_BizEmployeeMgr.AddNewEmployee(model);
             return Ok(res);
         }
+
     }
     
 }

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "ukyp19ePE4XMc/fAOLGNFyB0taIWwls/SgWCq2mnfe0KNk9fYcUTJxF0Tgx7S8PgTd1xGG56Rpxy+9xYIb5zXQ==",
+  "dgSpecHash": "TWjJH5PKuMicw1BgRDR9fue4m2Y023M/ZO11YsJZIHAKB0Eip6fyLoFiqcXUyTbMBg4O9ThzXMJCZIZlHVm28A==",
   "success": true,
-  "projectFilePath": "D:\\TechBiz\\Project\\TechBiz\\TechBiz-ERP-Project\\TechBiz-Api-Project\\BusinessEntities\\BusinessEntities.csproj",
+  "projectFilePath": "D:\\TechBiz\\Project\\TechBiz\\TechBiz-ERP-System\\TechBiz-Api-Project\\BusinessEntities\\BusinessEntities.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

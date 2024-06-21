@@ -1,0 +1,6 @@
+@TechBiz_Microservices_Api_HostAddress = http://localhost:5069
+
+GET {{TechBiz_Microservices_Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

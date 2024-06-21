@@ -563,11 +563,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\TechBiz\\Project\\TechBiz\\TechBiz-ERP-Project\\TechBiz-Api-Project\\Utilities\\Utilities.csproj",
-      "projectName": "Utilities",
-      "projectPath": "D:\\TechBiz\\Project\\TechBiz\\TechBiz-ERP-Project\\TechBiz-Api-Project\\Utilities\\Utilities.csproj",
+      "projectUniqueName": "D:\\TechBiz\\Project\\TechBiz\\TechBiz-ERP-System\\TechBiz-Api-Project\\Utilities\\Utility.csproj",
+      "projectName": "Utility",
+      "projectPath": "D:\\TechBiz\\Project\\TechBiz\\TechBiz-ERP-System\\TechBiz-Api-Project\\Utilities\\Utility.csproj",
       "packagesPath": "C:\\Users\\Warut\\.nuget\\packages\\",
-      "outputPath": "D:\\TechBiz\\Project\\TechBiz\\TechBiz-ERP-Project\\TechBiz-Api-Project\\Utilities\\obj\\",
+      "outputPath": "D:\\TechBiz\\Project\\TechBiz\\TechBiz-ERP-System\\TechBiz-Api-Project\\Utilities\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Warut\\AppData\\Roaming\\NuGet\\NuGet.Config",

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\TechBiz\\Project\\TechBiz\\TechBiz-ERP-Project\\TechBiz-Api-Project\\DataLayer\\DataLayer.csproj": {}
+    "D:\\TechBiz\\Project\\TechBiz\\TechBiz-ERP-System\\TechBiz-Api-Project\\DataLayer\\DataLayer.csproj": {}
   },
   "projects": {
-    "D:\\TechBiz\\Project\\TechBiz\\TechBiz-ERP-Project\\TechBiz-Api-Project\\BusinessEntities\\BusinessEntities.csproj": {
+    "D:\\TechBiz\\Project\\TechBiz\\TechBiz-ERP-System\\TechBiz-Api-Project\\BusinessEntities\\BusinessEntities.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\TechBiz\\Project\\TechBiz\\TechBiz-ERP-Project\\TechBiz-Api-Project\\BusinessEntities\\BusinessEntities.csproj",
+        "projectUniqueName": "D:\\TechBiz\\Project\\TechBiz\\TechBiz-ERP-System\\TechBiz-Api-Project\\BusinessEntities\\BusinessEntities.csproj",
         "projectName": "BusinessEntities",
-        "projectPath": "D:\\TechBiz\\Project\\TechBiz\\TechBiz-ERP-Project\\TechBiz-Api-Project\\BusinessEntities\\BusinessEntities.csproj",
+        "projectPath": "D:\\TechBiz\\Project\\TechBiz\\TechBiz-ERP-System\\TechBiz-Api-Project\\BusinessEntities\\BusinessEntities.csproj",
         "packagesPath": "C:\\Users\\Warut\\.nuget\\packages\\",
-        "outputPath": "D:\\TechBiz\\Project\\TechBiz\\TechBiz-ERP-Project\\TechBiz-Api-Project\\BusinessEntities\\obj\\",
+        "outputPath": "D:\\TechBiz\\Project\\TechBiz\\TechBiz-ERP-System\\TechBiz-Api-Project\\BusinessEntities\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Warut\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -64,14 +64,14 @@
         }
       }
     },
-    "D:\\TechBiz\\Project\\TechBiz\\TechBiz-ERP-Project\\TechBiz-Api-Project\\DataLayer\\DataLayer.csproj": {
+    "D:\\TechBiz\\Project\\TechBiz\\TechBiz-ERP-System\\TechBiz-Api-Project\\DataLayer\\DataLayer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\TechBiz\\Project\\TechBiz\\TechBiz-ERP-Project\\TechBiz-Api-Project\\DataLayer\\DataLayer.csproj",
+        "projectUniqueName": "D:\\TechBiz\\Project\\TechBiz\\TechBiz-ERP-System\\TechBiz-Api-Project\\DataLayer\\DataLayer.csproj",
         "projectName": "DataLayer",
-        "projectPath": "D:\\TechBiz\\Project\\TechBiz\\TechBiz-ERP-Project\\TechBiz-Api-Project\\DataLayer\\DataLayer.csproj",
+        "projectPath": "D:\\TechBiz\\Project\\TechBiz\\TechBiz-ERP-System\\TechBiz-Api-Project\\DataLayer\\DataLayer.csproj",
         "packagesPath": "C:\\Users\\Warut\\.nuget\\packages\\",
-        "outputPath": "D:\\TechBiz\\Project\\TechBiz\\TechBiz-ERP-Project\\TechBiz-Api-Project\\DataLayer\\obj\\",
+        "outputPath": "D:\\TechBiz\\Project\\TechBiz\\TechBiz-ERP-System\\TechBiz-Api-Project\\DataLayer\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Warut\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -88,8 +88,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "D:\\TechBiz\\Project\\TechBiz\\TechBiz-ERP-Project\\TechBiz-Api-Project\\BusinessEntities\\BusinessEntities.csproj": {
-                "projectPath": "D:\\TechBiz\\Project\\TechBiz\\TechBiz-ERP-Project\\TechBiz-Api-Project\\BusinessEntities\\BusinessEntities.csproj"
+              "D:\\TechBiz\\Project\\TechBiz\\TechBiz-ERP-System\\TechBiz-Api-Project\\BusinessEntities\\BusinessEntities.csproj": {
+                "projectPath": "D:\\TechBiz\\Project\\TechBiz\\TechBiz-ERP-System\\TechBiz-Api-Project\\BusinessEntities\\BusinessEntities.csproj"
               }
             }
           }

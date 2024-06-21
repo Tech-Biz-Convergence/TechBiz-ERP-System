@@ -18,6 +18,8 @@ namespace BusinessLogic.HR.Master
 {
     public class BizEmployeeManagement
     {
+        const double PI = 3.14158;
+        const int VAT_THAI = 7;
         private EmployeeRepository m_EmployeeRepository;
 
         public BizEmployeeManagement()
@@ -63,6 +65,8 @@ namespace BusinessLogic.HR.Master
         public ResultMessage GetEmployeeById(int id)
         {
             int total = 0;
+            int qryRack = 0;
+
             ResultMessage resultMessage = new ResultMessage();
             DataTable dt = new DataTable();
 

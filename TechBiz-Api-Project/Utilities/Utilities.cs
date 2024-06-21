@@ -10,8 +10,21 @@ using Microsoft.Extensions.Configuration;
 
 namespace Utilities
 {
+    public static class GlobalMessage
+    {
+        public const string SUCCESS_CODE = "SC-COM-0000";
+        public const string INSERT_SUCCESS_CODE = "SC-COM-0001";
+        public const string UPDATE_SUCCESS_CODE = "SC-COM-0002";
+        public const string ERROR_CODE = "ER-COM-0000";
+        public const string INSERT_ERROR_CODE = "ER-COM-0001";
+        public const string UPDATE_ERROR_CODE = "ER-COM-0002";
+       
+
+        // คุณสามารถเพิ่มข้อความอื่นๆ ได้ตามต้องการ
+    }
     public class ResultMessage
     {
+        
         public bool status { get; set; } = true;
         // public string type { get; set; } = GlobalMessage.typeSuccess;
         public string code { get; set; }

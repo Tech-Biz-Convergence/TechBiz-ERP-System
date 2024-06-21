@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\TechBiz\\Project\\TechBiz\\TechBiz-ERP-Project\\TechBiz-Api-Project\\BusinessEntities\\BusinessEntities.csproj": {}
+    "D:\\TechBiz\\Project\\TechBiz\\TechBiz-ERP-System\\TechBiz-Api-Project\\BusinessEntities\\BusinessEntities.csproj": {}
   },
   "projects": {
-    "D:\\TechBiz\\Project\\TechBiz\\TechBiz-ERP-Project\\TechBiz-Api-Project\\BusinessEntities\\BusinessEntities.csproj": {
+    "D:\\TechBiz\\Project\\TechBiz\\TechBiz-ERP-System\\TechBiz-Api-Project\\BusinessEntities\\BusinessEntities.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\TechBiz\\Project\\TechBiz\\TechBiz-ERP-Project\\TechBiz-Api-Project\\BusinessEntities\\BusinessEntities.csproj",
+        "projectUniqueName": "D:\\TechBiz\\Project\\TechBiz\\TechBiz-ERP-System\\TechBiz-Api-Project\\BusinessEntities\\BusinessEntities.csproj",
         "projectName": "BusinessEntities",
-        "projectPath": "D:\\TechBiz\\Project\\TechBiz\\TechBiz-ERP-Project\\TechBiz-Api-Project\\BusinessEntities\\BusinessEntities.csproj",
+        "projectPath": "D:\\TechBiz\\Project\\TechBiz\\TechBiz-ERP-System\\TechBiz-Api-Project\\BusinessEntities\\BusinessEntities.csproj",
         "packagesPath": "C:\\Users\\Warut\\.nuget\\packages\\",
-        "outputPath": "D:\\TechBiz\\Project\\TechBiz\\TechBiz-ERP-Project\\TechBiz-Api-Project\\BusinessEntities\\obj\\",
+        "outputPath": "D:\\TechBiz\\Project\\TechBiz\\TechBiz-ERP-System\\TechBiz-Api-Project\\BusinessEntities\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Warut\\AppData\\Roaming\\NuGet\\NuGet.Config",

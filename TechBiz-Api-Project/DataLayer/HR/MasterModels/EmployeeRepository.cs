@@ -70,7 +70,7 @@ namespace DataLayer.HR.MasterModels
             }
         }
 
-        public int Insert(tm_employee_info Model, NpgsqlConnection conn, NpgsqlTransaction transaction = null) 
+        public int Insert(tm_employee_info model, NpgsqlConnection conn, NpgsqlTransaction transaction = null) 
         {
             int result = 0;
             try
@@ -92,10 +92,10 @@ namespace DataLayer.HR.MasterModels
                 using (var cmd = new NpgsqlCommand(sql, conn))
                 {
                     
-                    cmd.Parameters.Add("@name", NpgsqlDbType.Varchar).Value = Model.name;
-                    cmd.Parameters.Add("@position", NpgsqlDbType.Varchar).Value = Model.position;
-                    cmd.Parameters.Add("@department", NpgsqlDbType.Varchar).Value = Model.department;
-                    cmd.Parameters.Add("@salary", NpgsqlDbType.Double).Value = Model.salary;
+                    cmd.Parameters.Add("@name", NpgsqlDbType.Varchar).Value = model.name;
+                    cmd.Parameters.Add("@position", NpgsqlDbType.Varchar).Value = model.position;
+                    cmd.Parameters.Add("@department", NpgsqlDbType.Varchar).Value = model.department;
+                    cmd.Parameters.Add("@salary", NpgsqlDbType.Double).Value = model.salary;
  
                     if (transaction != null)
                     {

@@ -1,3 +1,9 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using Middleware;
+using System.Text;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -5,20 +11,50 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+// setting swagger by game
+builder.Services.AddSwaggerGen(c => {
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Identity Service", Version = "v1" });
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Description = "Please insert JWT token with the prefix Bearer into field",
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "bearer",
+        BearerFormat = "JWT"
+    });
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                    },
+                    new string[] { }
+                }
+            });
+});
 
 // Setting Enable CORES
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AngularApp",
-                      policy =>
-                      {
-                          policy.WithOrigins("http://localhost:4200")
-                          .AllowAnyHeader()
-                          .AllowAnyMethod();
-
-                      });
+    options.AddPolicy("AllowAllOrigins",
+    builder =>
+    {
+        builder.WithOrigins("http://localhost:4200", "http://127.0.0.1:5501")
+               .AllowAnyHeader()
+               .AllowAnyMethod();
+    });
+    
 });
+
+//Add service JWT 
+builder.Services.AddJwtAuthentications(builder.Configuration);
+
 
 var app = builder.Build();
 
@@ -34,7 +70,9 @@ app.UseHttpsRedirection();
 
 
 // Apply CORS policy by game
-app.UseCors("AngularApp");
+app.UseCors("AllowAllOrigins");
+//Apply Authenthication
+app.UseAuthentication();
 
 app.UseAuthorization();
 

@@ -1,8 +1,8 @@
 {
   "Version": 1,
-  "Hash": "3mLDExeqd+NB0KIFaOYl96rKjv69Q6KO6QQD9FMQIpc=",
-  "Source": "HR-Project",
-  "BasePath": "_content/HR-Project",
+  "Hash": "XSuHj9Ij379g6fClCusBj/H7nSZ0vSa0pxzbrj94xAg=",
+  "Source": "HrService",
+  "BasePath": "_content/HrService",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],

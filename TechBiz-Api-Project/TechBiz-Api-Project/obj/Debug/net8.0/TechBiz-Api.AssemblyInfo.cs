@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TechBiz-Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ed1179596f8747411f95a9b2ae65441005827ac0")]
 [assembly: System.Reflection.AssemblyProductAttribute("TechBiz-Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TechBiz-Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
