@@ -99,7 +99,7 @@ namespace BusinessLogic.Identity
 
                     resultMessage.status = true;
                     resultMessage.code = GlobalMessage.SUCCESS_CODE;
-                    resultMessage.data = new {token = tokenString,user_id = user.user_id };
+                    resultMessage.data = new {token = tokenString,user_id = user.user_id,user_name = user.user_name };
                 }
                 catch (Exception ex)
                 {

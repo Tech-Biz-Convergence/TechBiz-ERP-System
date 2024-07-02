@@ -19,14 +19,13 @@ $(document).ready(function() {
     }
 
     const token = localStorage.getItem("token");
-    if (!token) {
+    const userId = localStorage.getItem("user_id");
+    const username = localStorage.getItem("user_name");
+    if (!token || !userId||!username) {
         window.location.href= 'login.html';
     }
 
-    const userId = localStorage.getItem("user_id");
-    if (!userId) {
-        window.location.href= 'login.html';
-    }
+
 
     console.log("userId"+userId);
     ShowMainListDataTable();
