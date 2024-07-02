@@ -15,7 +15,9 @@ public class EmployeeController : ControllerBase
 
     public EmployeeController()
     {
+
         m_BizEmployeeMgr = new BizEmployeeManagement();
+
     }
     
 
@@ -76,8 +78,12 @@ public class EmployeeController : ControllerBase
         return Ok(resultMessage);
     }
 
-
-
-
+    [HttpPost("ImportDataExcelFile")]
+    public  IActionResult ImportDataExcelFile([FromBody]IFormFile file)
+    {
+        ResultMessage resultMessage = m_BizEmployeeMgr.ImportDataExcelFile(file);
+        return Ok(resultMessage);
+    }
 
 }
+

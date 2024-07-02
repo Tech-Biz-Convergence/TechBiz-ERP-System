@@ -45,9 +45,9 @@ namespace BusinessLogic.Identity
                         throw new Exception("User already exists.!");
                     }
 
-                    model.SetPassword(model.password, m_Encryptor);
+                    model.SetPassword(model.user_password, m_Encryptor);
                     //insert 
-                    int id = m_UserRepository.Insert(model, conn);
+                    long id = m_UserRepository.Insert(model, conn);
                     model.user_id = id;
 
 
@@ -85,7 +85,7 @@ namespace BusinessLogic.Identity
                         resultMessage.code = "ER-HR-0002";
                         throw new Exception("User not found.!");
                     }
-                    bool isValid = user.ValidatePassword(model.password, m_Encryptor);
+                    bool isValid = user.ValidatePassword(model.user_password, m_Encryptor);
                     if(!isValid)
                     {
                         resultMessage.code = "ER-HR-0003";
@@ -94,12 +94,12 @@ namespace BusinessLogic.Identity
 
 
                     //get token JWT
-                    string tokenString = m_JwtBuilder.GetToken(model.user_id.ToString()) ;
+                    string tokenString = m_JwtBuilder.GetToken(user.user_id.ToString()) ;
 
 
                     resultMessage.status = true;
                     resultMessage.code = GlobalMessage.SUCCESS_CODE;
-                    resultMessage.data = new {token = tokenString};
+                    resultMessage.data = new {token = tokenString,user_id = user.user_id };
                 }
                 catch (Exception ex)
                 {

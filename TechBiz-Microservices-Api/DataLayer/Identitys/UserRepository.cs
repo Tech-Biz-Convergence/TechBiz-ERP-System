@@ -33,7 +33,7 @@ namespace DataLayer.Identitys
             string select = @"
                             SELECT *
                         ";
-            string from = @"   FROM tbm_user_info
+            string from = @"   FROM authentication.tbm_user_info
                         ";
             string where = @"   WHERE user_id = @user_id
                             LIMIT 1
@@ -59,37 +59,40 @@ namespace DataLayer.Identitys
             int result = 0;
             try
             {
-                string sql = @"INSERT INTO tbm_user_info 											
+                string sql = @"INSERT INTO authentication.tbm_user_info 											
                                     (											
                                     create_date, 
                                     create_by,
                                     user_code, 
                                     user_name, 
                                     user_mobile_no,
-                                    user_Email, 
-                                    role_id, 
-                                    permis_id,
+                                    user_email, 
                                     user_type, 
-                                    password, 
+                                    user_password, 
+                                    user_status,
                                     line_token, 
-                                    com_id,
+                                    role_id, 
+                                    permiss_id,
+                                    company_id,
+                                    user_lang_def,
                                     salt
                                     ) 											
                                 VALUES 											
-                                    ( @create_date,
-                                        @create_by,
-                                        @user_code,
-                                        @user_name,
-                                        @user_mobile_no,
-                                        @user_Email,
-                                        @role_id,
-                                        @permis_id,
-                                        @user_type,
-                                        @password,
-                                        @line_token,
-                                        @com_id,
-                                        @salt
-
+                                    ( @create_date, 
+                                    @create_by,
+                                    @user_code, 
+                                    @user_name, 
+                                    @user_mobile_no,
+                                    @user_email, 
+                                    @user_type, 
+                                    @user_password, 
+                                    @user_status,
+                                    @line_token, 
+                                    @role_id, 
+                                    @permiss_id,
+                                    @company_id,
+                                    @user_lang_def,
+                                    @salt
                                     ) RETURNING user_id;";
 
                 using (var cmd = new NpgsqlCommand(sql, conn))
@@ -100,13 +103,15 @@ namespace DataLayer.Identitys
                     cmd.Parameters.Add(new NpgsqlParameter("@user_code", NpgsqlDbType.Varchar) { Value = model.user_code });
                     cmd.Parameters.Add(new NpgsqlParameter("@user_name", NpgsqlDbType.Varchar) { Value = model.user_name });
                     cmd.Parameters.Add(new NpgsqlParameter("@user_mobile_no", NpgsqlDbType.Varchar) { Value = model.user_mobile_no });
-                    cmd.Parameters.Add(new NpgsqlParameter("@user_Email", NpgsqlDbType.Varchar) { Value = model.user_email });
-                    cmd.Parameters.Add(new NpgsqlParameter("@role_id", NpgsqlDbType.Integer) { Value = model.role_id });
-                    cmd.Parameters.Add(new NpgsqlParameter("@permis_id", NpgsqlDbType.Varchar) { Value = model.permis_id });
+                    cmd.Parameters.Add(new NpgsqlParameter("@user_email", NpgsqlDbType.Varchar) { Value = model.user_email });
                     cmd.Parameters.Add(new NpgsqlParameter("@user_type", NpgsqlDbType.Varchar) { Value = model.user_type });
-                    cmd.Parameters.Add(new NpgsqlParameter("@password", NpgsqlDbType.Varchar) { Value = model.password });
+                    cmd.Parameters.Add(new NpgsqlParameter("@user_password", NpgsqlDbType.Varchar) { Value = model.user_password });
+                    cmd.Parameters.Add(new NpgsqlParameter("@user_status", NpgsqlDbType.Varchar) { Value = model.user_status });
                     cmd.Parameters.Add(new NpgsqlParameter("@line_token", NpgsqlDbType.Varchar) { Value = model.line_token });
-                    cmd.Parameters.Add(new NpgsqlParameter("@com_id", NpgsqlDbType.Integer) { Value = model.com_id });
+                    cmd.Parameters.Add(new NpgsqlParameter("@role_id", NpgsqlDbType.Bigint) { Value = model.role_id });
+                    cmd.Parameters.Add(new NpgsqlParameter("@permiss_id", NpgsqlDbType.Bigint) { Value = model.permiss_id });
+                    cmd.Parameters.Add(new NpgsqlParameter("@company_id", NpgsqlDbType.Bigint) { Value = model.company_id });
+                    cmd.Parameters.Add(new NpgsqlParameter("@user_lang_def", NpgsqlDbType.Varchar) { Value = model.user_lang_def });
                     cmd.Parameters.Add(new NpgsqlParameter("@salt", NpgsqlDbType.Varchar) { Value = model.salt });
 
                     if (transaction != null)
@@ -141,7 +146,7 @@ namespace DataLayer.Identitys
             string select = @"
                             SELECT *
                         ";
-            string from = @"   FROM tbm_user_info
+            string from = @"   FROM authentication.tbm_user_info
                         ";
             string where = @"   WHERE user_name = @user_name
                             LIMIT 1

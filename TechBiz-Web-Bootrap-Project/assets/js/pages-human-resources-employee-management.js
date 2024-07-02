@@ -4,6 +4,9 @@
 
 'use strict';
 $(document).ready(function() {
+
+
+
     //============================================================================
     // ZONE : RUN INIT
     // create date   : 20240619 
@@ -19,11 +22,16 @@ $(document).ready(function() {
     if (!token) {
         window.location.href= 'login.html';
     }
-    $('.Slide').hide();
-    $('#SectionSearchId').show();
+
+    const userId = localStorage.getItem("user_id");
+    if (!userId) {
+        window.location.href= 'login.html';
+    }
+
+    console.log("userId"+userId);
     ShowMainListDataTable();
 
-
+    
    
     //============================================================================
     // ZONE : SUBMIT
@@ -39,6 +47,16 @@ $(document).ready(function() {
         AddFromSubmit(formData);
         
     });
+
+    $('#UploadFormId').submit(async function(event) {
+        event.preventDefault();
+
+        var formData = new FormData(this); 
+        console.log(formData);
+        
+        ShowUploadListDataTable(formData)
+        
+    });
     
     //============================================================================
     // ZONE : EVENT CLICK
@@ -47,23 +65,24 @@ $(document).ready(function() {
     // detail        :
     //============================================================================
 
-    $("#logoutId").click(function(){
+    $(document).on('click', '#logoutId', function() {
         console.log("Log out");
         window.location.href = 'login.html'; 
     });
 
-    $("#AddNewId").click(function(){
+    $(document).on('click', '#AddNewId', function() {
         $('#ToppicActionId').text('Add Employee');
         ClearAddNew();
-        $('.Slide').hide();
-        $('#SectionAddId').show();
+        $('.SlideTabSearch').hide();
+        $('#AreaAddId').show();
+    });
+
+    $(document).on('click', '#CloseId', function() {
+        $('.SlideTabSearch').hide();
+        $('#AreaSearchId').show();
     });
 
 
-    $("#CloseId").click(function(){
-        $('.Slide').hide();
-        $('#SectionSearchId').show();
-    });
 
     $(document).on('click', '.EditButton', function() {
         console.log("Edit");
@@ -71,9 +90,10 @@ $(document).ready(function() {
         $('#saveId').prop('disabled', false);
         var id = $(this).attr('data-id');
         RenderAddNewForm(id);
+        
 
-        $('.Slide').hide();
-        $('#SectionAddId').show();
+        $('.SlideTabSearch').hide();
+        $('#AreaAddId').show();
     });
     
     $(document).on('click', '.ViewButton',async function() {
@@ -83,8 +103,8 @@ $(document).ready(function() {
         // alert("Test");
         var id = $(this).attr('data-id');
         RenderAddNewForm(id);
-        $('.Slide').hide();
-        $('#SectionAddId').show();
+        $('.SlideTabSearch').hide();
+        $('#AreaAddId').show();
        
     });
     
@@ -180,6 +200,11 @@ $(document).ready(function() {
     });
 
 
+    $(document).on('click', '#UploadCloseId', function() {
+        $('.SlideTabUpload').hide();
+        $('#AreaUploadId').show();
+    });
+
     //============================================================================
     // ZONE : CUSTOM FUNCTION
     // create date   : 20240619 
@@ -190,6 +215,41 @@ $(document).ready(function() {
     function ShowMainListDataTable()
     {
           Page.mainTableControl = $('#tableShowListId').DataTable({
+            layout: {
+                top1Start: {
+                    buttons: [
+                        'copy',
+                        { 
+                            extend:'print',
+                            exportOptions: {
+                                columns: [1,2,3,4],
+                            }
+                        },
+                        {
+                            extend: 'spacer',
+                            style: 'bar',
+                            text: 'Export files:'
+                        },
+                        'csv',
+                        {
+                            extend: 'excelHtml5',
+                            autoFilter: true,
+                            sheetName: 'Exported data',
+                            exportOptions: {
+                                columns: [1,2,3,4],
+                            }
+                        },
+                        {
+                            extend: 'pdfHtml5',
+                            download: 'open',
+                            exportOptions: {
+                                columns: [1,2,3,4],
+                            }
+                        },
+                        'colvis'
+                    ]
+                }
+            },
             responsive: true,
             searching: true,
             paging: true,
@@ -253,13 +313,38 @@ $(document).ready(function() {
                     orderable: false,
                     className: 'dt-head-center dt-body-center',
                     render: function (data, type, row) {
-                        return `<button type="button" class="btn btn btn-info btn-sm ViewButton" data-id="${row.id}" ><i class="bx bx-list-ul me-1"></i></button> ` +
-                            `<button type="button" class="btn btn-primary btn-sm EditButton" data-id="${row.id}"><i class="bx bx-edit me-1"></i></button> `+
-                            `<button type="button" class="btn btn-danger btn-sm DeleteButton" data-id="${row.id}"><i class="bx bx-trash me-1"></i></button> `;
+                        return `<div class="row"><button type="button" class="btn btn btn-info btn-sm ViewButton col-4" data-id="${row.id}" ><i class="bx bx-list-ul me-1"></i></button> ` +
+                            ` <button type="button" class="btn btn-primary btn-sm EditButton col-4" data-id="${row.id}"><i class="bx bx-edit me-1"></i></button> `+
+                            ` <button type="button" class="btn btn-danger btn-sm DeleteButton col-4" data-id="${row.id}"><i class="bx bx-trash me-1"></i></button> </div>`;
                     }
                 }
             ]
           });
+
+          
+    } 
+
+    function ShowUploadListDataTable(formData)
+    {
+
+        var formData = new FormData(this);
+
+        $.ajax({
+            url: config.apiUrl.base+'/api/auth/employee/ImportDataExcelFile',
+            headers: {"Authorization": "Bearer " + token},
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                alert('File uploaded successfully.');
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('Error uploading file: ' + textStatus);
+            }
+        });
+
+          
     } 
     
     function getTableSortBy(column){
@@ -278,11 +363,19 @@ $(document).ready(function() {
     }
     async function  AddFromSubmit(formData)
     {
-        var type = 'POST';
-        var url =config.apiUrl.base+'/api/auth/employee/addnew';
+        var type;
+        var url;
         var jsonData = JSON.parse(formData);
+       
         //check insert or update
-        if (jsonData.id != '0') {
+        if (jsonData.id == '0') {
+            //insert 
+            jsonData.created_by = userId;
+            var type = 'POST';
+            var url =config.apiUrl.base+'/api/auth/employee/addnew';
+        }else{
+            //update
+            jsonData.update_by = userId;
             type = 'PUT';
             url = config.apiUrl.base+'/api/auth/employee/update';
         }
@@ -317,11 +410,13 @@ $(document).ready(function() {
             }
         });
         
-        $('.Slide').hide();
-        $('#SectionSearchId').show();
+        $('.SlideTabSearch').hide();
+        $('#AreaSearchId').show();
+
         Page.mainTableControl.ajax.reload();
 
     }
+
 
     async function RenderAddNewForm(id)
     {

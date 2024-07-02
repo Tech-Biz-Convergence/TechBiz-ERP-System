@@ -1,4 +1,4 @@
-﻿using IdentityService.Repository;
+﻿
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
@@ -24,7 +24,7 @@ public class Startup(IConfiguration configuration)
         services.AddMongoDb(Configuration);
         services.AddJwt(Configuration);
         services.AddTransient<IEncryptor, Encryptor>();
-        services.AddSingleton<IUserRepository,UserRepository>();
+       // services.AddSingleton<IUserRepository,UserRepository>();
         services.AddSwaggerGen(c =>
         {
             c.SwaggerDoc("v1", new OpenApiInfo { Title = "Identity Service", Version = "v1" });

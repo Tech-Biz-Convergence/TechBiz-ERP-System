@@ -1,4 +1,4 @@
-﻿using IdentityService.Repository;
+﻿
 using Microsoft.AspNetCore.Mvc;
 using Middleware;
 using Utilities;
@@ -10,7 +10,7 @@ namespace IdentityMicroservice.Controllers;
 
 [Route("Api/[controller]")]
 [ApiController]
-public class IdentityController(IUserRepository userRepository, IJwtBuilder jwtBuilder, IEncryptor encryptor)
+public class IdentityController( IJwtBuilder jwtBuilder, IEncryptor encryptor)
     : ControllerBase
 {
     [HttpPost("Login")]

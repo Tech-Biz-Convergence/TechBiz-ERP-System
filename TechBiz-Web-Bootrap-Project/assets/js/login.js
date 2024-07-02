@@ -19,6 +19,7 @@ $(document).ready(function() {
                 console.log(response);
                 if(response.status == true){
                     localStorage.setItem('token', response.data.token);
+                    localStorage.setItem('user_id', response.data.user_id);
                     console.log("Token saved to localStorage: " + response.data.token);
                     MessageBox.SuccessMessage(response.description, response.code).then(() => {
                         window.location.href = 'pages-human-resources-employee-management.html';

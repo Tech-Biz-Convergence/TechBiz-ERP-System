@@ -30,6 +30,8 @@ let config = {
 };
 
 
+
+
 //Custome function by game
 $.fn.serializeObject = function () {
   var result = {};

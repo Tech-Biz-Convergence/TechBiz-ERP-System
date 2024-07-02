@@ -97,6 +97,32 @@
       ],
       "DownstreamPathTemplate": "/api/auth/employee/getPaginate",
       "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "UpstreamPathTemplate": "/api/auth/employee/activateCondition",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7079
+        }
+      ],
+      "DownstreamPathTemplate": "/api/auth/employee/activateCondition",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "UpstreamPathTemplate": "/api/auth/employee/ImportDataExcelFile",
+      "UpstreamHttpMethod": [ "POST" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7079
+        }
+      ],
+      "DownstreamPathTemplate": "/api/auth/employee/ImportDataExcelFile",
+      "DangerousAcceptAnyServerCertificateValidator": true
     }
     //{
     //  "DownstreamPathTemplate": "/api/identity/login",

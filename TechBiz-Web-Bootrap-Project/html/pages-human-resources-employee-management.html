@@ -55,7 +55,8 @@
 
     <!-- Page CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css" />
-  
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.0.2/css/buttons.dataTables.css" />
+    <link rel="stylesheet" href="../assets/css/config.css" />
     
 
     <!-- Helpers -->
@@ -579,142 +580,221 @@
               <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Human Resources /</span> Employee Management</h4>
 
               <div class="row">
-                <div class="col-md-12">
+                <div id="tabs" class="col-md-12">
                   <ul class="nav nav-pills flex-column flex-md-row mb-3">
-                    <li class="nav-item " >
-                      <a class="nav-link active" href="javascript:void(0);"><i class="bx bx-user me-1"></i> Search</a>
+                    <li class="nav-item" >
+                      <a class="nav-link active "  role="tab" data-bs-toggle="tab" href="#TabSearchId" ><i class="bx bx-user me-1" ></i> Search</a>
                     </li>
-                    <li class="nav-item">
-                      <a class="nav-link " href="javascript:void(0);"><i class="bx bx-upload me-1"></i> Upload</a>
+                    <li class="nav-item" >
+                      <a class="nav-link "  role="tab" data-bs-toggle="tab"  href="#TabUploadId"><i class="bx bx-upload me-1" ></i> Upload</a>
                     </li>
                   </ul>
-                  <div id="SectionSearchId" class="card mb-4 Slide">
-                    <div class="row"> 
-                      <div class = "col-md-6">
-                        <h5 class="card-header">Employee List</h5>
-                      </div>
-                      <div class = "col-md-6 text-right mt-3">
-                        <div  class ="container" style="text-align: right;">
-                          <button id = "AddNewId" type="button" class="btn btn-success"><i class="bx bx-plus-medical me-1"></i><b>Add new</b></button>
+                  <div class="tab-content">
+                    <!------------------------------------------------------------------------------->
+                    <!-- tap Search -->
+                    <!------------------------------------------------------------------------------->
+                    <div id="TabSearchId"  class="tab-pane active">
+                      <div id="AreaSearchId" class="card mb-4 SlideTabSearch">
+                        <div class="row"> 
+                          <div class = "col-md-6">
+                            <h5 class="card-header">Employee List</h5>
+                          </div>
+                          <div class = "col-md-6 text-right mt-3">
+                            <div  class ="container" style="text-align: right;">
+                              <button id = "AddNewId" type="button" class="btn btn-success"><i class="bx bx-plus-medical me-1"></i><b>Add new</b></button>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                    
-                    
-                    <!-- Account -->
-                    <hr class="my-0" />
-                      <div class=" container table-responsive mt-3">
-                        <table class="table table-striped" id ="tableShowListId">
-                          <thead>
-                            <tr>
-                              <th style="width:5%;" class="text-center">Active</th>
-                              <th>Name</th>
-                              <th>Position</th>
-                              <th>Department</th>
-                              <th>Salary</th>
-                              <th style="width:15%;" class="text-center">Actions</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                          </tbody>
-                        </table>
-                      </div>
-                      
-                    </div>
-                    <!-- /Account -->
-                  </div>
-                  <div id="SectionAddId" class="card mb-4 Slide">
-                    <h5 class="card-header" id = "ToppicActionId">Add Employee</h5>
-                    <!-- Account -->
-                    <div class="card-body">
-                      <div class="d-flex align-items-start align-items-sm-center gap-4">
-                        <img
-                          src="../assets/img/avatars/1.png"
-                          alt="user-avatar"
-                          class="d-block rounded"
-                          height="100"
-                          width="100"
-                          id="uploadedAvatar"
-                        />
-                        <div class="button-wrapper">
-                          <label for="upload" class="btn btn-primary me-2 mb-4" tabindex="0">
-                            <span class="d-none d-sm-block">Upload new photo</span>
-                            <i class="bx bx-upload d-block d-sm-none"></i>
-                            <input
-                              type="file"
-                              id="upload"
-                              class="account-file-input"
-                              hidden
-                              accept="image/png, image/jpeg"
-                            />
-                          </label>
-                          <button type="button" class="btn btn-outline-secondary account-image-reset mb-4">
-                            <i class="bx bx-reset d-block d-sm-none"></i>
-                            <span class="d-none d-sm-block">Reset</span>
-                          </button>
-
-                          <p class="text-muted mb-0">Allowed JPG, GIF or PNG. Max size of 800K</p>
-                        </div>
-                      </div>
-                    </div>
-                    <hr class="my-0" />
-                    <div class="card-body">
-                      <form id="AddFormId" >
-                        <input type="hidden" name="id" value="0">
-                        <div class="row">
-                          <div class="mb-3 col-md-6">
-                            <label for="Name" class="form-label">Name</label>
-                            <input
-                              class="form-control"
-                              type="text"
-                              id="Name"
-                              name="name"
-                              placeholder="Enter name"
-                              autofocus
-                            />
-                          </div>
-                          <div class="mb-3 col-md-6">
-                            <label for="position" class="form-label">Position</label>
-                            <input class="form-control" type="text" name="position" id="position" placeholder="Enter position" />
-                          </div>
-                        
-                          <div class="mb-3 col-md-6">
-                            <label for="department" class="form-label">Department</label>
-                            <input
-                              type="text"
-                              class="form-control"
-                              id="department"
-                              name="department"
-                              placeholder="Enter department" 
-                            />
-                          </div>
-                          <div class="mb-3 col-md-6">
-                             <label for="Salary" class="form-label">Salary</label>
-                            <input
-                              type="text"
-                              class="form-control"
-                              id="Salary"
-                              name="salary"
-                              placeholder="Enter salary" 
-                            />
-                          </div>
-                          <div class="mb-3 col-md-6">
-                            <label class="form-label" data-lang="status">Active</label>
-                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
-    
+                        <!-- Account -->
+                        <hr class="my-0" />
+                          <div class=" container table-responsive mt-1">
+                            <table class="table table-striped" id ="tableShowListId">
+                              <thead>
+                                <tr>
+                                  <th style="width:5%;" class="text-center">Active</th>
+                                  <th>Name</th>
+                                  <th>Position</th>
+                                  <th>Department</th>
+                                  <th>Salary</th>
+                                  <th style="width:15%;" class="text-center">Actions</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                              </tbody>
+                            </table>
                           </div>
                           
                         </div>
-              
-                        <div class="mt-2">
-                          <button type="submit" class="btn btn-primary me-2" id="saveId">Save changes</button>
-                          <button type="reset" class = "btn btn-outline-secondary" id ="CloseId">Close</button>
+                        <div id="AreaAddId" class="card mb-4 SlideTabSearch" style="display: none;">
+                          <h5 class="card-header" id = "ToppicActionId">Add Employee</h5>
+                          <!-- Account -->
+                          <div class="card-body">
+                            <div class="d-flex align-items-start align-items-sm-center gap-4">
+                              <img
+                                src="../assets/img/avatars/1.png"
+                                alt="user-avatar"
+                                class="d-block rounded"
+                                height="100"
+                                width="100"
+                                id="uploadedAvatar"
+                              />
+                              <div class="button-wrapper">
+                                <label for="upload" class="btn btn-primary me-2 mb-4" tabindex="0">
+                                  <span class="d-none d-sm-block">Upload new photo</span>
+                                  <i class="bx bx-upload d-block d-sm-none"></i>
+                                  <input
+                                    type="file"
+                                    id="upload"
+                                    class="account-file-input"
+                                    hidden
+                                    accept="image/png, image/jpeg"
+                                  />
+                                </label>
+                                <button type="button" class="btn btn-outline-secondary account-image-reset mb-4">
+                                  <i class="bx bx-reset d-block d-sm-none"></i>
+                                  <span class="d-none d-sm-block">Reset</span>
+                                </button>
+      
+                                <p class="text-muted mb-0">Allowed JPG, GIF or PNG. Max size of 800K</p>
+                              </div>
+                            </div>
+                          </div>
+                          <hr class="my-0" />
+                          <div class="card-body">
+                            <form id="AddFormId" >
+                              <input type="hidden" name="id" value="0">
+                              <div class="row">
+                                <div class="mb-3 col-md-6">
+                                  <label for="Name" class="form-label">Name</label>
+                                  <input
+                                    class="form-control"
+                                    type="text"
+                                    id="Name"
+                                    name="name"
+                                    placeholder="Enter name"
+                                    autofocus
+                                  />
+                                </div>
+                                <div class="mb-3 col-md-6">
+                                  <label for="position" class="form-label">Position</label>
+                                  <input class="form-control" type="text" name="position" id="position" placeholder="Enter position" />
+                                </div>
+                              
+                                <div class="mb-3 col-md-6">
+                                  <label for="department" class="form-label">Department</label>
+                                  <input
+                                    type="text"
+                                    class="form-control"
+                                    id="department"
+                                    name="department"
+                                    placeholder="Enter department" 
+                                  />
+                                </div>
+                                <div class="mb-3 col-md-6">
+                                  <label for="Salary" class="form-label">Salary</label>
+                                  <input
+                                    type="text"
+                                    class="form-control"
+                                    id="Salary"
+                                    name="salary"
+                                    placeholder="Enter salary" 
+                                  />
+                                </div>
+                                <div class="mb-3 col-md-6">
+                                <label for="Upload File" class="form-label">Upload File</label>
+                                <input
+                                  type="file"
+                                  class="form-control"
+                                  id="fileInput"
+                                  name="fileInput"
+                                  accept="application/vnd.ms-excel"
+                                  
+                                />
+                              </div>
+                                <div class="mb-3 col-md-6">
+                                  <label class="form-label" data-lang="status">Active</label>
+                                  <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
+                                </div>
+                              </div>
+                              <div class="mt-2">
+                                <button type="submit" class="btn btn-primary me-2" id="saveId">Save changes</button>
+                                <button type="reset" class = "btn btn-outline-secondary" id ="CloseId">Close</button>
+                              </div>
+                            </form>
+                          </div>
+                          <!-- /Account -->
                         </div>
-                      </form>
+                      </div>
+                      <!------------------------------------------------------------------------------->
+                    <!-- tap upload -->
+                    <!------------------------------------------------------------------------------->
+                    <div id="TabUploadId"  class="tab-pane">
+                      <!-- area upload-->
+                      <div id="AreaUploadId" class="card mb-4 $ SlideTabUpload">
+                        <div class="row"> 
+                          <div class = "col-md-6">
+                            <h5 class="card-header">Employee Upload</h5>
+                          </div>
+                          <div class = "col-md-6 text-right mt-3">
+                            <div  class ="container" style="text-align: right;">
+                              <button id = "DownloadId" type="button" class="btn btn-primary"><i class="bx bx-plus-medical me-1"></i><b>Download Template</b></button>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- Account -->
+                        <hr class="my-0" />
+                        <div class="card-body"> 
+                          <form id="UploadFormId" >
+                            <div class="mb-3 col-md-12 ">
+                              <label for="Upload File" class="form-label">Upload File</label>
+                              <input
+                                type="file"
+                                class="form-control"
+                                name="fileInput"
+                                placeholder="Choose File" 
+                              />
+                            </div>
+                            <div class="mt-2">
+                              <button type="submit" class="btn btn-primary me-2" >Upload</button>
+                            </div>
+                          </form>
+                        </div>
+                        </div> <!-- Area upload -->
+                        <!-- Area show upload -->
+                        <div id="AreaShowUploadId" class="card mb-4 SlideTabUpload" style="display: none;">
+                            <div class = "col-md-6">
+                              <h5 class="card-header">Show Upload</h5>
+                            </div>
+                            <div class = "col-md-6 text-right mt-3">
+                              <div  class ="container" style="text-align: right;">
+                              </div>
+                            </div>
+                          <!-- Account -->
+                          <hr class="my-0" />
+                          <div class="card-body"> 
+                            <div class=" table-responsive">
+                              <table class="table table-striped" id ="tableUploadId">
+                                <thead>
+                                  <tr>
+                                    <th>Name</th>
+                                    <th>Position</th>
+                                    <th>Department</th>
+                                    <th>Salary</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                              </table>
+                            </div>
+                            <div class="mt-2">
+                              <button type="button" class="btn btn-primary me-2" id="SaveUploadId">Save</button>
+                              <button type="button"  class = "btn btn-outline-secondary" id ="UploadCloseId">Close</button>
+                            </div>
+                          </div>
+                        </div><!-- Area show upload -->
+
                     </div>
-                    <!-- /Account -->
-                     
-                  </div>
+                  </div>  <!-- tab-content-->
                 </div>
               </div>
             </div>
@@ -787,6 +867,13 @@
     <script src="../assets/js/config.js"></script>
     <script src="../assets/vendor/js/menu.js"></script>
     <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.0.2/js/dataTables.buttons.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.dataTables.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.print.min.js"></script>
   
     <!-- endbuild -->
 

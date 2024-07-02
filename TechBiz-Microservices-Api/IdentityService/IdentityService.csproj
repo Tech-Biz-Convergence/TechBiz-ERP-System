@@ -17,4 +17,8 @@
     <ProjectReference Include="..\Utilities\Utility.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Repository\" />
+  </ItemGroup>
+
 </Project>

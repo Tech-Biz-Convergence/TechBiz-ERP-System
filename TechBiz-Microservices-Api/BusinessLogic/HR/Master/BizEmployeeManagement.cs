@@ -12,6 +12,8 @@ using BusinessEntities.HR.MasterModels;
 using Npgsql.Replication.PgOutput.Messages;
 using System.Reflection.Metadata;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using ExcelDataReader;
 
 
 
@@ -19,8 +21,6 @@ namespace BusinessLogic.HR.Master
 {
     public class BizEmployeeManagement
     {
-        const double PI = 3.14158;
-        const int VAT_THAI = 7;
         private EmployeeRepository m_EmployeeRepository;
 
         public BizEmployeeManagement()
@@ -270,6 +270,74 @@ namespace BusinessLogic.HR.Master
                         conn.Close();
                 }
             }//using
+
+            return resultMessage;
+        }
+        public ResultMessage ImportDataExcelFile(IFormFile uploadfile)
+        {
+            var resultMessage = new ResultMessage();
+            if(uploadfile != null && uploadfile.Length >0)
+            {
+                Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+                Stream stream = uploadfile.OpenReadStream();
+                IExcelDataReader reader = null;
+                if(uploadfile.FileName.EndsWith(".xls"))
+                {
+                    reader = ExcelReaderFactory.CreateReader(stream);
+                }else if (uploadfile.FileName.EndsWith(".xlsx"))
+                {
+                    reader = ExcelReaderFactory.CreateOpenXmlReader(stream);
+                }
+                else
+                {
+
+                }
+                DataTable dt = new DataTable();
+                DataTable dt_ = new DataTable();
+                DataRow row;
+                List<Dictionary<String,Object>> dataExcelList =new List<Dictionary<String,Object>>();
+                try
+                {
+                    dt_ = reader.AsDataSet().Tables[0];
+                    if (!"Name".Equals(dt_.Rows[0][0])
+                    && !"Position".Equals(dt_.Rows[0][1])
+                    && !"Department".Equals(dt_.Rows[0][2])
+                    && !"Salary".Equals(dt_.Rows[0][3])
+                    )
+                    {
+                        resultMessage.status = false;
+                        resultMessage.description = "Template is wrong format!";
+                    }
+                    else
+                    {
+                        int countContentData = dt_.Rows.Count;
+                        for (int row_ = 1; row_ < countContentData; row_++)
+                        {
+                            Dictionary<String, Object> dataDic = new Dictionary<String, Object>();
+                            dataDic.Add("name", dt_.Rows[row_][0]);
+                            dataDic.Add("position", dt_.Rows[row_][1]);
+                            dataDic.Add("department", dt_.Rows[row_][2]);
+                            dataDic.Add("salary", dt_.Rows[row_][3]);
+
+                            dataExcelList.Add(dataDic);
+                        }//end for
+                        var data = new { total = countContentData, data = dt.DataTableToList<tm_employee_info>() };
+                        resultMessage.status = true;
+                        resultMessage.data = data;
+
+                    }//end if
+                    
+                }
+                catch(Exception ex)
+                {
+                    resultMessage.status = false;
+                    return resultMessage;
+                }
+                reader.Close();
+                reader.Dispose();
+
+            }
+
 
             return resultMessage;
         }
