@@ -63,7 +63,7 @@ namespace DataLayer.Identitys
                                     (											
                                     create_date, 
                                     create_by,
-                                    user_code, 
+                                    emp_id, 
                                     user_name, 
                                     user_mobile_no,
                                     user_email, 
@@ -80,7 +80,7 @@ namespace DataLayer.Identitys
                                 VALUES 											
                                     ( @create_date, 
                                     @create_by,
-                                    @user_code, 
+                                    @emp_id, 
                                     @user_name, 
                                     @user_mobile_no,
                                     @user_email, 
@@ -100,7 +100,7 @@ namespace DataLayer.Identitys
 
                     cmd.Parameters.Add(new NpgsqlParameter("@create_date", NpgsqlDbType.Date) { Value = model.create_date });
                     cmd.Parameters.Add(new NpgsqlParameter("@create_by", NpgsqlDbType.Varchar) { Value = model.create_by });
-                    cmd.Parameters.Add(new NpgsqlParameter("@user_code", NpgsqlDbType.Varchar) { Value = model.user_code });
+                    cmd.Parameters.Add(new NpgsqlParameter("@emp_id", NpgsqlDbType.Bigint) { Value = model.emp_id });
                     cmd.Parameters.Add(new NpgsqlParameter("@user_name", NpgsqlDbType.Varchar) { Value = model.user_name });
                     cmd.Parameters.Add(new NpgsqlParameter("@user_mobile_no", NpgsqlDbType.Varchar) { Value = model.user_mobile_no });
                     cmd.Parameters.Add(new NpgsqlParameter("@user_email", NpgsqlDbType.Varchar) { Value = model.user_email });

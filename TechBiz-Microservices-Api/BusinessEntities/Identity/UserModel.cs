@@ -14,7 +14,7 @@ public class tbm_user_info
     public DateTime update_date { get; set; }
     public string update_by { get; set; }
     public long? user_id { get; set; }
-    public string user_code { get; set; }
+    public long emp_id { get; set; }
     public string user_name { get; set; }
     public string user_mobile_no { get; set; }
     public string user_email { get; set; }
