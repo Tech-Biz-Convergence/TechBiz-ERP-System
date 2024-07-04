@@ -8,7 +8,7 @@ namespace HolidayService.Controllers
 {
 
     [Route("Api/Auth/[controller]")]
-    //[Authorize]
+    [Authorize]
     [ApiController]
     public class HolidayController : ControllerBase
     {
@@ -65,6 +65,13 @@ namespace HolidayService.Controllers
             ResultMessage res = new ResultMessage();
             res = m_BizHolidayMgr.GetAllHoliday(queryParameter);
             return Ok(res);
+        }
+
+        [HttpPost("ImportDataExcleFile")]
+        public IActionResult ImportDataExcleFile([FromBody] IFormFile file)
+        { 
+            ResultMessage resultMessage = m_BizHolidayMgr.ImportDataExcelFile(file);
+            return Ok(resultMessage);
         }
     }
 }

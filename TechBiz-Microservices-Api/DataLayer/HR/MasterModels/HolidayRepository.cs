@@ -106,8 +106,8 @@ namespace DataLayer.HR.MasterModels
                                 holiday_day,
                                 holiday_status) 											
                             VALUES 											
-                                ('user',
-                                'user',
+                                (@created_by,
+                                @updated_by,
                                 @holiday_year,
                                 @holiday_name,
                                 @holiday_day,									
@@ -116,6 +116,8 @@ namespace DataLayer.HR.MasterModels
 
                 using (var cmd = new NpgsqlCommand(sql, conn))
                 {
+                    cmd.Parameters.Add("@created_by", NpgsqlDbType.Varchar).Value = model.created_by;
+                    cmd.Parameters.Add("@updated_by", NpgsqlDbType.Varchar).Value = model.updated_by;
                     cmd.Parameters.Add("@holiday_year", NpgsqlDbType.Varchar).Value = model.holiday_year;
                     cmd.Parameters.Add("@holiday_name", NpgsqlDbType.Varchar).Value = model.holiday_name;
                     cmd.Parameters.Add("@holiday_day", NpgsqlDbType.Date).Value = model.holiday_day;
@@ -143,8 +145,8 @@ namespace DataLayer.HR.MasterModels
             try
             {
                 string sql = @"UPDATE hr.tbm_holiday_info
-                       SET  created_by = 'user',
-                            updated_by = 'user',
+                       SET  created_by = @created_by,
+                            updated_by = @updated_by,
                             holiday_year = @holiday_year,
                             holiday_name = @holiday_name,
                             holiday_day = @holiday_day
@@ -152,6 +154,8 @@ namespace DataLayer.HR.MasterModels
 
                 using (var cmd = new NpgsqlCommand(sql, conn))
                 {
+                    cmd.Parameters.Add("@created_by", NpgsqlDbType.Varchar).Value = model.created_by;
+                    cmd.Parameters.Add("@updated_by", NpgsqlDbType.Varchar).Value = model.updated_by;
                     cmd.Parameters.Add("@holiday_year", NpgsqlDbType.Varchar).Value = model.holiday_year;
                     cmd.Parameters.Add("@holiday_name", NpgsqlDbType.Varchar).Value = model.holiday_name;
                     cmd.Parameters.Add("@holiday_day", NpgsqlDbType.Date).Value = model.holiday_day;

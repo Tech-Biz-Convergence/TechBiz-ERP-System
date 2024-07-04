@@ -4,6 +4,9 @@
 
 'use strict';
 $(document).ready(function() {
+
+
+
     //============================================================================
     // ZONE : RUN INIT
     // create date   : 20240619 
@@ -22,12 +25,13 @@ $(document).ready(function() {
         window.location.href= 'login.html';
     }
 
-    // $('.Slide').hide();
-    // $('#SectionSearchId').show();
+
+
     console.log("userId"+userId);
+    console.log("username"+username);
     ShowMainListDataTable();
 
-
+    
    
     //============================================================================
     // ZONE : SUBMIT
@@ -41,6 +45,16 @@ $(document).ready(function() {
         var formData = $(this).serializeObject (); 
         console.log(formData);
         AddFromSubmit(formData);
+        
+    });
+
+    $('#UploadFormId').submit(async function(event) {
+        event.preventDefault();
+
+        var formData = new FormData(this); 
+        console.log(formData);
+        
+        ShowUploadListDataTable(formData)
         
     });
     
@@ -63,11 +77,12 @@ $(document).ready(function() {
         $('#AreaAddId').show();
     });
 
-
     $(document).on('click', '#CloseId', function() {
         $('.SlideTabSearch').hide();
         $('#AreaSearchId').show();
     });
+
+
 
     $(document).on('click', '.EditButton', function() {
         console.log("Edit");
@@ -75,9 +90,10 @@ $(document).ready(function() {
         $('#saveId').prop('disabled', false);
         var id = $(this).attr('data-id');
         RenderAddNewForm(id);
+        
 
-        $('.Slide').hide();
-        $('#SectionAddId').show();
+        $('.SlideTabSearch').hide();
+        $('#AreaAddId').show();
     });
     
     $(document).on('click', '.ViewButton',async function() {
@@ -87,8 +103,8 @@ $(document).ready(function() {
         // alert("Test");
         var id = $(this).attr('data-id');
         RenderAddNewForm(id);
-        $('.Slide').hide();
-        $('#SectionAddId').show();
+        $('.SlideTabSearch').hide();
+        $('#AreaAddId').show();
        
     });
     
@@ -122,7 +138,7 @@ $(document).ready(function() {
         if (button.hasClass('btn-success')) {
             button.removeClass('btn-success').addClass('btn-secondary');
             $.ajax({
-                url: config.apiUrl.base + '/Api/Auth/Employee/activateCondition' + id + '&user_id=' + loginId + '&is_active=false',
+                url: config.apiUrl.base + '/Api/Auth/Holiday/activateCondition' + id + '&user_id=' + loginId + '&is_active=false',
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
                 data: {
@@ -153,7 +169,7 @@ $(document).ready(function() {
         } else {
             button.removeClass('btn-secondary').addClass('btn-success');
             $.ajax({
-                url: config.apiUrl.base + '/Api/Auth/Employee/activateCondition' + id + '&user_id=' + loginId + '&is_active=true',
+                url: config.apiUrl.base + '/Api/Auth/Holiday/activateCondition' + id + '&user_id=' + loginId + '&is_active=true',
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
                 data: {
@@ -184,6 +200,11 @@ $(document).ready(function() {
     });
 
 
+    $(document).on('click', '#UploadCloseId', function() {
+        $('.SlideTabUpload').hide();
+        $('#AreaUploadId').show();
+    });
+
     //============================================================================
     // ZONE : CUSTOM FUNCTION
     // create date   : 20240619 
@@ -194,6 +215,41 @@ $(document).ready(function() {
     function ShowMainListDataTable()
     {
           Page.mainTableControl = $('#tableShowListId').DataTable({
+            layout: {
+                top1Start: {
+                    buttons: [
+                        'copy',
+                        { 
+                            extend:'print',
+                            exportOptions: {
+                                columns: [1,2,3,4],
+                            }
+                        },
+                        {
+                            extend: 'spacer',
+                            style: 'bar',
+                            text: 'Export files:'
+                        },
+                        'csv',
+                        {
+                            extend: 'excelHtml5',
+                            autoFilter: true,
+                            sheetName: 'Exported data',
+                            exportOptions: {
+                                columns: [1,2,3,4],
+                            }
+                        },
+                        {
+                            extend: 'pdfHtml5',
+                            download: 'open',
+                            exportOptions: {
+                                columns: [1,2,3,4],
+                            }
+                        },
+                        'colvis'
+                    ]
+                }
+            },
             responsive: true,
             searching: true,
             paging: true,
@@ -247,13 +303,38 @@ $(document).ready(function() {
                     orderable: false,
                     className: 'dt-head-center dt-body-center',
                     render: function (data, type, row) {
-                        return `<button type="button" class="btn btn btn-info btn-sm ViewButton" data-id="${row.holiday_id}" ><i class="bx bx-list-ul me-1"></i></button> ` +
-                            `<button type="button" class="btn btn-primary btn-sm EditButton" data-id="${row.holiday_id}"><i class="bx bx-edit me-1"></i></button> `+
-                            `<button type="button" class="btn btn-danger btn-sm DeleteButton" data-id="${row.holiday_id}"><i class="bx bx-trash me-1"></i></button> `;
+                        return `<div class="row"><button type="button" class="btn btn btn-info btn-sm ViewButton col-4" data-id="${row.holiday_id}" ><i class="bx bx-list-ul me-1"></i></button> ` +
+                            ` <button type="button" class="btn btn-primary btn-sm EditButton col-4" data-id="${row.holiday_id}"><i class="bx bx-edit me-1"></i></button> `+
+                            ` <button type="button" class="btn btn-danger btn-sm DeleteButton col-4" data-id="${row.holiday_id}"><i class="bx bx-trash me-1"></i></button> </div>`;
                     }
                 }
             ]
           });
+
+          
+    } 
+
+    function ShowUploadListDataTable(formData)
+    {
+
+        var formData = new FormData(this);
+
+        $.ajax({
+            url: config.apiUrl.base+'/api/auth/holiday/ImportDataExcelFile',
+            headers: {"Authorization": "Bearer " + token},
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                alert('File uploaded successfully.');
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('Error uploading file: ' + textStatus);
+            }
+        });
+
+          
     } 
     
     function getTableSortBy(column){
@@ -270,11 +351,19 @@ $(document).ready(function() {
     }
     async function  AddFromSubmit(formData)
     {
-        var type = 'POST';
-        var url =config.apiUrl.base+'/api/auth/holiday/addnew';
+        var type;
+        var url;
         var jsonData = JSON.parse(formData);
+       
         //check insert or update
-        if (jsonData.holiday_id != '0') {
+        if (jsonData.holiday_id == '0') {
+            //insert 
+            jsonData.created_by = userId;
+            var type = 'POST';
+            var url =config.apiUrl.base+'/api/auth/holiday/addnew';
+        }else{
+            //update
+            jsonData.update_by = userId;
             type = 'PUT';
             url = config.apiUrl.base+'/api/auth/holiday/update';
         }
@@ -309,11 +398,13 @@ $(document).ready(function() {
             }
         });
         
-        $('.Slide').hide();
-        $('#SectionSearchId').show();
+        $('.SlideTabSearch').hide();
+        $('#AreaSearchId').show();
+
         Page.mainTableControl.ajax.reload();
 
     }
+
 
     async function RenderAddNewForm(id)
     {
@@ -327,12 +418,15 @@ $(document).ready(function() {
             headers: {"Authorization": "Bearer " + token},
             success: function(response) {
                 console.log(response);
+                console.log(username);
                 if(response.status == true){
                     var res = response.data;
                     $('#AddFormId [name=holiday_id]').val(res.holiday_id);
                     $('#AddFormId [name=holiday_name]').val(res.holiday_name);
                     $('#AddFormId [name=holiday_year]').val(res.holiday_year);
                     $('#AddFormId [name=holiday_day]').val(res.holiday_day);
+                    $('#AddFormId [name=created_by]').val(username);
+                    $('#AddFormId [name=updated_by]').val(username);
                 }else{
                     MessageBox.ErrorMessage(response.code,response.description);
                     
@@ -355,7 +449,9 @@ $(document).ready(function() {
     function ClearAddNew()
     {
         $('#AddFormId').trigger('reset');
-        $('#AddFormId [name=_holiday_id]').val('0');
+        $('#AddFormId [name=holiday_id]').val('0');
+        $('#AddFormId [name=created_by]').val(username);
+        $('#AddFormId [name=updated_by]').val(username);
         $('#saveId').prop('disabled', false);
         
        
