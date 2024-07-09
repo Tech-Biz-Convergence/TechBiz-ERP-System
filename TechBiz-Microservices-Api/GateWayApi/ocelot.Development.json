@@ -233,7 +233,314 @@
       ],
       "DownstreamPathTemplate": "/api/auth/holiday/ImportDataExcelFile",
       "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    //Company API
+    {
+
+      "UpstreamPathTemplate": "/api/auth/CompanyInfo/get",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7079
+        }
+      ],
+      "DownstreamPathTemplate": "/api/auth/CompanyInfo/get",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+
+      "UpstreamPathTemplate": "/api/auth/CompanyInfo/addnew",
+      "UpstreamHttpMethod": [ "POST" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7079
+        }
+      ],
+      "DownstreamPathTemplate": "/api/auth/CompanyInfo/addnew",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+
+      "UpstreamPathTemplate": "/api/auth/CompanyInfo/update",
+      "UpstreamHttpMethod": [ "PUT" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7079
+        }
+      ],
+      "DownstreamPathTemplate": "/api/auth/CompanyInfo/update",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    //Role API
+    {
+
+      "UpstreamPathTemplate": "/api/auth/Role/get",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7079
+        }
+      ],
+      "DownstreamPathTemplate": "/api/auth/Role/get",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+
+      "UpstreamPathTemplate": "/api/auth/Role/addnew",
+      "UpstreamHttpMethod": [ "POST" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7079
+        }
+      ],
+      "DownstreamPathTemplate": "/api/auth/Role/addnew",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+
+      "UpstreamPathTemplate": "/api/auth/Role/update",
+      "UpstreamHttpMethod": [ "PUT" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7079
+        }
+      ],
+      "DownstreamPathTemplate": "/api/auth/Role/update",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    //Department API
+    {
+
+      "UpstreamPathTemplate": "/api/auth/department/get",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7079
+        }
+      ],
+      "DownstreamPathTemplate": "/api/auth/department/get",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+
+      "UpstreamPathTemplate": "/api/auth/department/get/{id}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7079
+        }
+      ],
+      "DownstreamPathTemplate": "/api/auth/department/get/{id}",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+
+    {
+
+      "UpstreamPathTemplate": "/api/auth/department/addnew",
+      "UpstreamHttpMethod": [ "POST" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7079
+        }
+      ],
+      "DownstreamPathTemplate": "/api/auth/department/addnew",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+
+      "UpstreamPathTemplate": "/api/auth/department/update",
+      "UpstreamHttpMethod": [ "PUT" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7079
+        }
+      ],
+      "DownstreamPathTemplate": "/api/auth/department/update",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "UpstreamPathTemplate": "/api/auth/department/delete/{id}",
+      "UpstreamHttpMethod": [ "DELETE" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7079
+        }
+      ],
+      "DownstreamPathTemplate": "/api/auth/department/delete/{id}",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "UpstreamPathTemplate": "/api/auth/department/getPaginate",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7079
+        }
+      ],
+      "DownstreamPathTemplate": "/api/auth/department/getPaginate",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "UpstreamPathTemplate": "/api/auth/department/activateCondition",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7079
+        }
+      ],
+      "DownstreamPathTemplate": "/api/auth/department/activateCondition",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "UpstreamPathTemplate": "/api/auth/department/ImportDataExcelFile",
+      "UpstreamHttpMethod": [ "POST" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7079
+        }
+      ],
+      "DownstreamPathTemplate": "/api/auth/department/ImportDataExcelFile",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    //Leave API
+    {
+
+      "UpstreamPathTemplate": "/api/auth/leave/get",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7079
+        }
+      ],
+      "DownstreamPathTemplate": "/api/auth/leave/get",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+
+      "UpstreamPathTemplate": "/api/auth/leave/get/{id}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7079
+        }
+      ],
+      "DownstreamPathTemplate": "/api/auth/leave/get/{id}",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+
+    {
+
+      "UpstreamPathTemplate": "/api/auth/leave/addnew",
+      "UpstreamHttpMethod": [ "POST" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7079
+        }
+      ],
+      "DownstreamPathTemplate": "/api/auth/leave/addnew",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+
+      "UpstreamPathTemplate": "/api/auth/leave/update",
+      "UpstreamHttpMethod": [ "PUT" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7079
+        }
+      ],
+      "DownstreamPathTemplate": "/api/auth/leave/update",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "UpstreamPathTemplate": "/api/auth/leave/delete/{id}",
+      "UpstreamHttpMethod": [ "DELETE" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7079
+        }
+      ],
+      "DownstreamPathTemplate": "/api/auth/leave/delete/{id}",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "UpstreamPathTemplate": "/api/auth/leave/getPaginate",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7079
+        }
+      ],
+      "DownstreamPathTemplate": "/api/auth/leave/getPaginate",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "UpstreamPathTemplate": "/api/auth/leave/activateCondition",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7079
+        }
+      ],
+      "DownstreamPathTemplate": "/api/auth/leave/activateCondition",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "UpstreamPathTemplate": "/api/auth/leave/ImportDataExcelFile",
+      "UpstreamHttpMethod": [ "POST" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7079
+        }
+      ],
+      "DownstreamPathTemplate": "/api/auth/leave/ImportDataExcelFile",
+      "DangerousAcceptAnyServerCertificateValidator": true
     }
+
     //{
     //  "DownstreamPathTemplate": "/api/identity/login",
     //  "DownstreamScheme": "http",
