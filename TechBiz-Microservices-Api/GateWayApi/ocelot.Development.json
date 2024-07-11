@@ -539,6 +539,115 @@
       ],
       "DownstreamPathTemplate": "/api/auth/leave/ImportDataExcelFile",
       "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    //Position API
+    {
+
+      "UpstreamPathTemplate": "/api/position/get",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7203
+        }
+      ],
+      "DownstreamPathTemplate": "/api/position/get",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+
+      "UpstreamPathTemplate": "/api/position/get/{id}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7203
+        }
+      ],
+      "DownstreamPathTemplate": "/api/position/get/{id}",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+
+      "UpstreamPathTemplate": "/api/position/addnew",
+      "UpstreamHttpMethod": [ "POST" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7203
+        }
+      ],
+      "DownstreamPathTemplate": "/api/position/addnew",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+
+      "UpstreamPathTemplate": "/api/position/update",
+      "UpstreamHttpMethod": [ "PUT" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7203
+        }
+      ],
+      "DownstreamPathTemplate": "/api/position/update",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "UpstreamPathTemplate": "/api/position/delete/{id}",
+      "UpstreamHttpMethod": [ "DELETE" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7203
+        }
+      ],
+      "DownstreamPathTemplate": "/api/position/delete/{id}",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "UpstreamPathTemplate": "/api/position/getPaginate",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7203
+        }
+      ],
+      "DownstreamPathTemplate": "/api/position/getPaginate",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "UpstreamPathTemplate": "/api/position/activateCondition",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7203
+        }
+      ],
+      "DownstreamPathTemplate": "/api/position/activateCondition",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "UpstreamPathTemplate": "/api/position/ImportDataExcelFile",
+      "UpstreamHttpMethod": [ "POST" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7203
+        }
+      ],
+      "DownstreamPathTemplate": "/api/position/ImportDataExcelFile",
+      "DangerousAcceptAnyServerCertificateValidator": true
     }
 
     //{
