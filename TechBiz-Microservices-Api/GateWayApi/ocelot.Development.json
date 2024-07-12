@@ -233,7 +233,7 @@
       ],
       "DownstreamPathTemplate": "/api/hr/holiday/ImportDataExcelFile",
       "DangerousAcceptAnyServerCertificateValidator": true
-    },    
+    },
     //Department API
     {
 
@@ -918,6 +918,116 @@
         }
       ],
       "DownstreamPathTemplate": "/api/hr/Job/ImportDataExcelFile",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    //Interview API
+    {
+
+      "UpstreamPathTemplate": "/api/hr/interview/get",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7079
+        }
+      ],
+      "DownstreamPathTemplate": "/api/hr/interview/get",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+
+      "UpstreamPathTemplate": "/api/hr/interview/get/{id}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7079
+        }
+      ],
+      "DownstreamPathTemplate": "/api/hr/interview/get/{id}",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+
+    {
+
+      "UpstreamPathTemplate": "/api/hr/interview/addnew",
+      "UpstreamHttpMethod": [ "POST" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7079
+        }
+      ],
+      "DownstreamPathTemplate": "/api/hr/interview/addnew",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+
+      "UpstreamPathTemplate": "/api/hr/interview/update",
+      "UpstreamHttpMethod": [ "PUT" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7079
+        }
+      ],
+      "DownstreamPathTemplate": "/api/hr/interview/update",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "UpstreamPathTemplate": "/api/hr/interview/delete/{id}",
+      "UpstreamHttpMethod": [ "DELETE" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7079
+        }
+      ],
+      "DownstreamPathTemplate": "/api/hr/interview/delete/{id}",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "UpstreamPathTemplate": "/api/hr/interview/getPaginate",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7079
+        }
+      ],
+      "DownstreamPathTemplate": "/api/hr/interview/getPaginate",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "UpstreamPathTemplate": "/api/hr/interview/activateCondition",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7079
+        }
+      ],
+      "DownstreamPathTemplate": "/api/hr/interview/activateCondition",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "UpstreamPathTemplate": "/api/hr/interview/ImportDataExcelFile",
+      "UpstreamHttpMethod": [ "POST" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7079
+        }
+      ],
+      "DownstreamPathTemplate": "/api/hr/interview/ImportDataExcelFile",
       "DangerousAcceptAnyServerCertificateValidator": true
     }
 
