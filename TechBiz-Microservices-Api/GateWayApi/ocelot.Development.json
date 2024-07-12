@@ -127,7 +127,7 @@
     //Holiday API
     {
 
-      "UpstreamPathTemplate": "/api/auth/holiday/get",
+      "UpstreamPathTemplate": "/api/hr/holiday/get",
       "UpstreamHttpMethod": [ "GET" ],
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -136,12 +136,12 @@
           "Port": 7079
         }
       ],
-      "DownstreamPathTemplate": "/api/auth/holiday/get",
+      "DownstreamPathTemplate": "/api/hr/holiday/get",
       "DangerousAcceptAnyServerCertificateValidator": true
     },
     {
 
-      "UpstreamPathTemplate": "/api/auth/holiday/get/{id}",
+      "UpstreamPathTemplate": "/api/hr/holiday/get/{id}",
       "UpstreamHttpMethod": [ "GET" ],
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -150,13 +150,13 @@
           "Port": 7079
         }
       ],
-      "DownstreamPathTemplate": "/api/auth/holiday/get/{id}",
+      "DownstreamPathTemplate": "/api/hr/holiday/get/{id}",
       "DangerousAcceptAnyServerCertificateValidator": true
     },
 
     {
 
-      "UpstreamPathTemplate": "/api/auth/holiday/addnew",
+      "UpstreamPathTemplate": "/api/hr/holiday/addnew",
       "UpstreamHttpMethod": [ "POST" ],
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -165,12 +165,12 @@
           "Port": 7079
         }
       ],
-      "DownstreamPathTemplate": "/api/auth/holiday/addnew",
+      "DownstreamPathTemplate": "/api/hr/holiday/addnew",
       "DangerousAcceptAnyServerCertificateValidator": true
     },
     {
 
-      "UpstreamPathTemplate": "/api/auth/holiday/update",
+      "UpstreamPathTemplate": "/api/hr/holiday/update",
       "UpstreamHttpMethod": [ "PUT" ],
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -179,11 +179,11 @@
           "Port": 7079
         }
       ],
-      "DownstreamPathTemplate": "/api/auth/holiday/update",
+      "DownstreamPathTemplate": "/api/hr/holiday/update",
       "DangerousAcceptAnyServerCertificateValidator": true
     },
     {
-      "UpstreamPathTemplate": "/api/auth/holiday/delete/{id}",
+      "UpstreamPathTemplate": "/api/hr/holiday/delete/{id}",
       "UpstreamHttpMethod": [ "DELETE" ],
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -192,11 +192,11 @@
           "Port": 7079
         }
       ],
-      "DownstreamPathTemplate": "/api/auth/holiday/delete/{id}",
+      "DownstreamPathTemplate": "/api/hr/holiday/delete/{id}",
       "DangerousAcceptAnyServerCertificateValidator": true
     },
     {
-      "UpstreamPathTemplate": "/api/auth/holiday/getPaginate",
+      "UpstreamPathTemplate": "/api/hr/holiday/getPaginate",
       "UpstreamHttpMethod": [ "GET" ],
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -205,11 +205,11 @@
           "Port": 7079
         }
       ],
-      "DownstreamPathTemplate": "/api/auth/holiday/getPaginate",
+      "DownstreamPathTemplate": "/api/hr/holiday/getPaginate",
       "DangerousAcceptAnyServerCertificateValidator": true
     },
     {
-      "UpstreamPathTemplate": "/api/auth/holiday/activateCondition",
+      "UpstreamPathTemplate": "/api/hr/holiday/activateCondition",
       "UpstreamHttpMethod": [ "GET" ],
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -218,11 +218,11 @@
           "Port": 7079
         }
       ],
-      "DownstreamPathTemplate": "/api/auth/holiday/activateCondition",
+      "DownstreamPathTemplate": "/api/hr/holiday/activateCondition",
       "DangerousAcceptAnyServerCertificateValidator": true
     },
     {
-      "UpstreamPathTemplate": "/api/auth/holiday/ImportDataExcelFile",
+      "UpstreamPathTemplate": "/api/hr/holiday/ImportDataExcelFile",
       "UpstreamHttpMethod": [ "POST" ],
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -231,7 +231,7 @@
           "Port": 7079
         }
       ],
-      "DownstreamPathTemplate": "/api/auth/holiday/ImportDataExcelFile",
+      "DownstreamPathTemplate": "/api/hr/holiday/ImportDataExcelFile",
       "DangerousAcceptAnyServerCertificateValidator": true
     },
     //Company API
@@ -323,7 +323,7 @@
     //Department API
     {
 
-      "UpstreamPathTemplate": "/api/auth/department/get",
+      "UpstreamPathTemplate": "/api/hr/department/get",
       "UpstreamHttpMethod": [ "GET" ],
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -332,12 +332,12 @@
           "Port": 7079
         }
       ],
-      "DownstreamPathTemplate": "/api/auth/department/get",
+      "DownstreamPathTemplate": "/api/hr/department/get",
       "DangerousAcceptAnyServerCertificateValidator": true
     },
     {
 
-      "UpstreamPathTemplate": "/api/auth/department/get/{id}",
+      "UpstreamPathTemplate": "/api/hr/department/get/{id}",
       "UpstreamHttpMethod": [ "GET" ],
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -346,13 +346,13 @@
           "Port": 7079
         }
       ],
-      "DownstreamPathTemplate": "/api/auth/department/get/{id}",
+      "DownstreamPathTemplate": "/api/hr/department/get/{id}",
       "DangerousAcceptAnyServerCertificateValidator": true
     },
 
     {
 
-      "UpstreamPathTemplate": "/api/auth/department/addnew",
+      "UpstreamPathTemplate": "/api/hr/department/addnew",
       "UpstreamHttpMethod": [ "POST" ],
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -361,12 +361,12 @@
           "Port": 7079
         }
       ],
-      "DownstreamPathTemplate": "/api/auth/department/addnew",
+      "DownstreamPathTemplate": "/api/hr/department/addnew",
       "DangerousAcceptAnyServerCertificateValidator": true
     },
     {
 
-      "UpstreamPathTemplate": "/api/auth/department/update",
+      "UpstreamPathTemplate": "/api/hr/department/update",
       "UpstreamHttpMethod": [ "PUT" ],
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -375,11 +375,11 @@
           "Port": 7079
         }
       ],
-      "DownstreamPathTemplate": "/api/auth/department/update",
+      "DownstreamPathTemplate": "/api/hr/department/update",
       "DangerousAcceptAnyServerCertificateValidator": true
     },
     {
-      "UpstreamPathTemplate": "/api/auth/department/delete/{id}",
+      "UpstreamPathTemplate": "/api/hr/department/delete/{id}",
       "UpstreamHttpMethod": [ "DELETE" ],
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -388,11 +388,11 @@
           "Port": 7079
         }
       ],
-      "DownstreamPathTemplate": "/api/auth/department/delete/{id}",
+      "DownstreamPathTemplate": "/api/hr/department/delete/{id}",
       "DangerousAcceptAnyServerCertificateValidator": true
     },
     {
-      "UpstreamPathTemplate": "/api/auth/department/getPaginate",
+      "UpstreamPathTemplate": "/api/hr/department/getPaginate",
       "UpstreamHttpMethod": [ "GET" ],
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -401,11 +401,11 @@
           "Port": 7079
         }
       ],
-      "DownstreamPathTemplate": "/api/auth/department/getPaginate",
+      "DownstreamPathTemplate": "/api/hr/department/getPaginate",
       "DangerousAcceptAnyServerCertificateValidator": true
     },
     {
-      "UpstreamPathTemplate": "/api/auth/department/activateCondition",
+      "UpstreamPathTemplate": "/api/hr/department/activateCondition",
       "UpstreamHttpMethod": [ "GET" ],
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -414,11 +414,11 @@
           "Port": 7079
         }
       ],
-      "DownstreamPathTemplate": "/api/auth/department/activateCondition",
+      "DownstreamPathTemplate": "/api/hr/department/activateCondition",
       "DangerousAcceptAnyServerCertificateValidator": true
     },
     {
-      "UpstreamPathTemplate": "/api/auth/department/ImportDataExcelFile",
+      "UpstreamPathTemplate": "/api/hr/department/ImportDataExcelFile",
       "UpstreamHttpMethod": [ "POST" ],
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -427,13 +427,13 @@
           "Port": 7079
         }
       ],
-      "DownstreamPathTemplate": "/api/auth/department/ImportDataExcelFile",
+      "DownstreamPathTemplate": "/api/hr/department/ImportDataExcelFile",
       "DangerousAcceptAnyServerCertificateValidator": true
     },
     //Leave API
     {
 
-      "UpstreamPathTemplate": "/api/auth/leave/get",
+      "UpstreamPathTemplate": "/api/hr/leave/get",
       "UpstreamHttpMethod": [ "GET" ],
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -442,12 +442,12 @@
           "Port": 7079
         }
       ],
-      "DownstreamPathTemplate": "/api/auth/leave/get",
+      "DownstreamPathTemplate": "/api/hr/leave/get",
       "DangerousAcceptAnyServerCertificateValidator": true
     },
     {
 
-      "UpstreamPathTemplate": "/api/auth/leave/get/{id}",
+      "UpstreamPathTemplate": "/api/hr/leave/get/{id}",
       "UpstreamHttpMethod": [ "GET" ],
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -456,13 +456,13 @@
           "Port": 7079
         }
       ],
-      "DownstreamPathTemplate": "/api/auth/leave/get/{id}",
+      "DownstreamPathTemplate": "/api/hr/leave/get/{id}",
       "DangerousAcceptAnyServerCertificateValidator": true
     },
 
     {
 
-      "UpstreamPathTemplate": "/api/auth/leave/addnew",
+      "UpstreamPathTemplate": "/api/hr/leave/addnew",
       "UpstreamHttpMethod": [ "POST" ],
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -471,12 +471,12 @@
           "Port": 7079
         }
       ],
-      "DownstreamPathTemplate": "/api/auth/leave/addnew",
+      "DownstreamPathTemplate": "/api/hr/leave/addnew",
       "DangerousAcceptAnyServerCertificateValidator": true
     },
     {
 
-      "UpstreamPathTemplate": "/api/auth/leave/update",
+      "UpstreamPathTemplate": "/api/hr/leave/update",
       "UpstreamHttpMethod": [ "PUT" ],
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -485,11 +485,11 @@
           "Port": 7079
         }
       ],
-      "DownstreamPathTemplate": "/api/auth/leave/update",
+      "DownstreamPathTemplate": "/api/hr/leave/update",
       "DangerousAcceptAnyServerCertificateValidator": true
     },
     {
-      "UpstreamPathTemplate": "/api/auth/leave/delete/{id}",
+      "UpstreamPathTemplate": "/api/hr/leave/delete/{id}",
       "UpstreamHttpMethod": [ "DELETE" ],
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -498,11 +498,11 @@
           "Port": 7079
         }
       ],
-      "DownstreamPathTemplate": "/api/auth/leave/delete/{id}",
+      "DownstreamPathTemplate": "/api/hr/leave/delete/{id}",
       "DangerousAcceptAnyServerCertificateValidator": true
     },
     {
-      "UpstreamPathTemplate": "/api/auth/leave/getPaginate",
+      "UpstreamPathTemplate": "/api/hr/leave/getPaginate",
       "UpstreamHttpMethod": [ "GET" ],
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -511,11 +511,11 @@
           "Port": 7079
         }
       ],
-      "DownstreamPathTemplate": "/api/auth/leave/getPaginate",
+      "DownstreamPathTemplate": "/api/hr/leave/getPaginate",
       "DangerousAcceptAnyServerCertificateValidator": true
     },
     {
-      "UpstreamPathTemplate": "/api/auth/leave/activateCondition",
+      "UpstreamPathTemplate": "/api/hr/leave/activateCondition",
       "UpstreamHttpMethod": [ "GET" ],
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -524,11 +524,11 @@
           "Port": 7079
         }
       ],
-      "DownstreamPathTemplate": "/api/auth/leave/activateCondition",
+      "DownstreamPathTemplate": "/api/hr/leave/activateCondition",
       "DangerousAcceptAnyServerCertificateValidator": true
     },
     {
-      "UpstreamPathTemplate": "/api/auth/leave/ImportDataExcelFile",
+      "UpstreamPathTemplate": "/api/hr/leave/ImportDataExcelFile",
       "UpstreamHttpMethod": [ "POST" ],
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -537,7 +537,7 @@
           "Port": 7079
         }
       ],
-      "DownstreamPathTemplate": "/api/auth/leave/ImportDataExcelFile",
+      "DownstreamPathTemplate": "/api/hr/leave/ImportDataExcelFile",
       "DangerousAcceptAnyServerCertificateValidator": true
     },
     //Position API
@@ -649,9 +649,10 @@
       "DownstreamPathTemplate": "/api/position/ImportDataExcelFile",
       "DangerousAcceptAnyServerCertificateValidator": true
     },
-    //Candidate API
+    //Candidates API
     {
-      "UpstreamPathTemplate": "/api/auth/candidate/get",
+
+      "UpstreamPathTemplate": "/api/hr/candidates/get",
       "UpstreamHttpMethod": [ "GET" ],
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -660,12 +661,12 @@
           "Port": 7079
         }
       ],
-      "DownstreamPathTemplate": "/api/auth/candidate/get",
+      "DownstreamPathTemplate": "/api/hr/candidates/get",
       "DangerousAcceptAnyServerCertificateValidator": true
     },
     {
 
-      "UpstreamPathTemplate": "/api/auth/candidate/get/{id}",
+      "UpstreamPathTemplate": "/api/hr/candidates/get/{id}",
       "UpstreamHttpMethod": [ "GET" ],
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -674,13 +675,13 @@
           "Port": 7079
         }
       ],
-      "DownstreamPathTemplate": "/api/auth/candidate/get/{id}",
+      "DownstreamPathTemplate": "/api/hr/candidates/get/{id}",
       "DangerousAcceptAnyServerCertificateValidator": true
     },
 
     {
 
-      "UpstreamPathTemplate": "/api/auth/candidate/addnew",
+      "UpstreamPathTemplate": "/api/hr/candidates/addnew",
       "UpstreamHttpMethod": [ "POST" ],
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -689,12 +690,12 @@
           "Port": 7079
         }
       ],
-      "DownstreamPathTemplate": "/api/auth/candidate/addnew",
+      "DownstreamPathTemplate": "/api/hr/candidates/addnew",
       "DangerousAcceptAnyServerCertificateValidator": true
     },
     {
 
-      "UpstreamPathTemplate": "/api/auth/candidate/update",
+      "UpstreamPathTemplate": "/api/hr/candidates/update",
       "UpstreamHttpMethod": [ "PUT" ],
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -703,11 +704,11 @@
           "Port": 7079
         }
       ],
-      "DownstreamPathTemplate": "/api/auth/candidate/update",
+      "DownstreamPathTemplate": "/api/hr/candidates/update",
       "DangerousAcceptAnyServerCertificateValidator": true
     },
     {
-      "UpstreamPathTemplate": "/api/auth/candidate/delete/{id}",
+      "UpstreamPathTemplate": "/api/hr/candidates/delete/{id}",
       "UpstreamHttpMethod": [ "DELETE" ],
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -716,11 +717,11 @@
           "Port": 7079
         }
       ],
-      "DownstreamPathTemplate": "/api/auth/candidate/delete/{id}",
+      "DownstreamPathTemplate": "/api/hr/candidates/delete/{id}",
       "DangerousAcceptAnyServerCertificateValidator": true
     },
     {
-      "UpstreamPathTemplate": "/api/auth/candidate/getPaginate",
+      "UpstreamPathTemplate": "/api/hr/candidates/getPaginate",
       "UpstreamHttpMethod": [ "GET" ],
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -729,11 +730,11 @@
           "Port": 7079
         }
       ],
-      "DownstreamPathTemplate": "/api/auth/candidate/getPaginate",
+      "DownstreamPathTemplate": "/api/hr/candidates/getPaginate",
       "DangerousAcceptAnyServerCertificateValidator": true
     },
     {
-      "UpstreamPathTemplate": "/api/auth/candidate/activateCondition",
+      "UpstreamPathTemplate": "/api/hr/candidates/activateCondition",
       "UpstreamHttpMethod": [ "GET" ],
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -742,11 +743,11 @@
           "Port": 7079
         }
       ],
-      "DownstreamPathTemplate": "/api/auth/candidate/activateCondition",
+      "DownstreamPathTemplate": "/api/hr/candidates/activateCondition",
       "DangerousAcceptAnyServerCertificateValidator": true
     },
     {
-      "UpstreamPathTemplate": "/api/auth/candidate/ImportDataExcelFile",
+      "UpstreamPathTemplate": "/api/hr/candidates/ImportDataExcelFile",
       "UpstreamHttpMethod": [ "POST" ],
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -755,7 +756,7 @@
           "Port": 7079
         }
       ],
-      "DownstreamPathTemplate": "/api/auth/candidate/ImportDataExcelFile",
+      "DownstreamPathTemplate": "/api/hr/candidates/ImportDataExcelFile",
       "DangerousAcceptAnyServerCertificateValidator": true
     }
 
