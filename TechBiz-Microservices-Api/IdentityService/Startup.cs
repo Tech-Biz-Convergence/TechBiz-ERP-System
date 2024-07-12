@@ -22,7 +22,7 @@ public class Startup(IConfiguration configuration)
     {
         services.AddControllers();
         services.AddMongoDb(Configuration);
-        services.AddJwt(Configuration);
+        services.AddJwtAuthentication(Configuration);
         services.AddTransient<IEncryptor, Encryptor>();
        // services.AddSingleton<IUserRepository,UserRepository>();
         services.AddSwaggerGen(c =>

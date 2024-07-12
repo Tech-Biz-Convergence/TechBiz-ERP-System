@@ -6,7 +6,7 @@ using Utilities;
 
 namespace HrService.Controllers;
 
-[Route("Api/Auth/[controller]")]
+[Route("api/hr/[controller]")]
 [Authorize]
 [ApiController]
 public class CompanyInfoController : ControllerBase

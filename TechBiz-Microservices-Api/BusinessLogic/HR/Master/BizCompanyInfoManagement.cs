@@ -16,9 +16,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BusinessLogic.HR.Master
 {
     public class BizCompanyInfoManagement
-    {
-        const double PI = 3.14158;
-        const int VAT_THAI = 7;
+    {       
         private CompanyInfoRepository m_CompanyInfoRepository;
 
         public BizCompanyInfoManagement()

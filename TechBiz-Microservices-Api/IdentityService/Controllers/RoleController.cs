@@ -1,5 +1,5 @@
-﻿using BusinessEntities.HR.MasterModels;
-using BusinessLogic.HR.Master;
+﻿using BusinessEntities.Identity;
+using BusinessLogic.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Utilities;
@@ -59,6 +59,29 @@ public class RoleController : Controller
         ResultMessage res = new ResultMessage();
         res = m_BizRoleMgr.DeleteRole(id);
         return Ok(res);
+    }
+
+    [HttpGet("GetPaginate")]
+    public IActionResult GetAllRole([FromQuery] QueryParameter queryParameters)
+    {
+        ResultMessage res = new ResultMessage();
+        //  User.FindFirst("Codemobiles");
+        res = m_BizRoleMgr.GetAllRole(queryParameters);
+        return Ok(res);
+    }
+
+    [HttpGet("ActivateCondition")]
+    public IActionResult ActivateCondition(int id, int loginId, bool is_active)
+    {
+        ResultMessage resultMessage = m_BizRoleMgr.ActivateCondition(id, loginId, is_active);
+        return Ok(resultMessage);
+    }
+
+    [HttpPost("ImportDataExcelFile")]
+    public IActionResult ImportDataExcelFile([FromBody] IFormFile file)
+    {
+        ResultMessage resultMessage = m_BizRoleMgr.ImportDataExcelFile(file);
+        return Ok(resultMessage);
     }
 }
 

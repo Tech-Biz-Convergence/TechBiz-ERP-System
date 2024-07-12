@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace BusinessEntities.HR.MasterModels
+namespace BusinessEntities.Identity
 {
     public class tbm_role
     {
@@ -14,10 +14,8 @@ namespace BusinessEntities.HR.MasterModels
         public string? create_by { get; set; }
         public DateTime? update_date { get; set; }
         public string? update_by { get; set; }
-        public Int64? role_id { get; set; }
+        public long? role_id { get; set; }
         public string? role_name { get; set; }
         public string? role_status { get; set; }
-        public Int64? app_grp_id { get; set; }
-        public Int64? dept_id { get; set; }
     }
 }

@@ -82,14 +82,14 @@ $(document).ready(function() {
             
             //formData.create_by = username;
             var type = 'POST';
-            var url =config.apiUrl.base+'/api/auth/CompanyInfo/addnew';
+            var url =config.apiUrl.base+'/api/hr/CompanyInfo/addnew';
         }else{
             //update
             
             //formData.update_by = username;   
             //formData.company_id = company_id;           
             type = 'PUT';
-            url = config.apiUrl.base+'/api/auth/CompanyInfo/update';                                  
+            url = config.apiUrl.base+'/api/hr/CompanyInfo/update';                                  
         }        
         
         await $.ajax({
@@ -126,13 +126,15 @@ $(document).ready(function() {
 
         // Page.mainTableControl.ajax.reload();
 
+        location.reload();
+
     }
 
 
     async function ShowForm()
     {
         await $.ajax({
-            url: config.apiUrl.base+'/api/auth/CompanyInfo/get',
+            url: config.apiUrl.base+'/api/hr/CompanyInfo/get',
             type: 'GET',
             contentType: 'application/json; charset=utf-8',
             // data: {
@@ -144,7 +146,7 @@ $(document).ready(function() {
                 
                 addStatus = true;
                 
-                $('#AddFormId [name=create_by]').val(username);
+                $('#AddFormId [name=create_by]').val(username);                
 
                 if(response.status == true){
                     addStatus = false;
@@ -152,8 +154,9 @@ $(document).ready(function() {
                     
                     company_id = res.company_id;                                        
                     $('#AddFormId [name=id]').val(res.company_id); 
-                    $('#AddFormId [name=company_id]').val(res.company_id);                    
-                    $('#AddFormId [name=update_by]').val(username);
+                    $('#AddFormId [name=company_id]').val(res.company_id);   
+                    $('#AddFormId [name=update_by]').val(username);                 
+                    $('#AddFormId [name=update_by_show]').val(res.update_by);
                     $('#AddFormId [name=company_tax_id]').val(res.company_tax_id);
                     $('#AddFormId [name=company_name_th]').val(res.company_name_th);
                     $('#AddFormId [name=company_name_en]').val(res.company_name_en);
@@ -167,6 +170,7 @@ $(document).ready(function() {
                     $('#AddFormId [name=company_fax_no]').val(res.company_fax_no);
                     $('#AddFormId [name=company_email]').val(res.company_email);
                     $('#AddFormId [name=company_url]').val(res.company_url);
+                    $('#AddFormId [name=create_by_show]').val(res.create_by);
                     $('#AddFormId [name=create_date]').val(res.create_date);
                     $('#AddFormId [name=update_date]').val(res.update_date);
 
