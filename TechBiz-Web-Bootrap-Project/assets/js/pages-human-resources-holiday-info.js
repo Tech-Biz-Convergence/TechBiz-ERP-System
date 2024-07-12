@@ -90,6 +90,8 @@ $(document).ready(function() {
         $('#saveId').prop('disabled', false);
         var id = $(this).attr('data-id');
         RenderAddNewForm(id);
+
+        // console.log(formData);
         
 
         $('.SlideTabSearch').hide();
@@ -115,7 +117,7 @@ $(document).ready(function() {
             type: 'DELETE',
             headers: {"Authorization": "Bearer " + token},
             contentType: 'application/json; charset=utf-8',
-            url: config.apiUrl.base + '/Api/Auth/Holiday/Delete/' + id
+            url: config.apiUrl.base + '/Api/Hr/Holiday/Delete/' + id
           }).then((response) => {
             return true;
           }).catch((error) => {
@@ -138,7 +140,7 @@ $(document).ready(function() {
         if (button.hasClass('btn-success')) {
             button.removeClass('btn-success').addClass('btn-secondary');
             $.ajax({
-                url: config.apiUrl.base + '/Api/Auth/Holiday/activateCondition' + id + '&user_id=' + loginId + '&is_active=false',
+                url: config.apiUrl.base + '/Api/Hr/Holiday/activateCondition' + id + '&user_id=' + loginId + '&is_active=false',
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
                 data: {
@@ -169,7 +171,7 @@ $(document).ready(function() {
         } else {
             button.removeClass('btn-secondary').addClass('btn-success');
             $.ajax({
-                url: config.apiUrl.base + '/Api/Auth/Holiday/activateCondition' + id + '&user_id=' + loginId + '&is_active=true',
+                url: config.apiUrl.base + '/Api/Hr/Holiday/activateCondition' + id + '&user_id=' + loginId + '&is_active=true',
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
                 data: {
@@ -257,7 +259,7 @@ $(document).ready(function() {
             ajax: (data, callback) => {
                 $.ajax({
                     
-                    url: config.apiUrl.base+'/api/auth/holiday/GetPaginate',
+                    url: config.apiUrl.base+'/api/hr/holiday/GetPaginate',
                     type: 'GET',
                     contentType: 'application/json; charset=utf-8',
                     headers: {"Authorization": "Bearer " + token},
@@ -320,7 +322,7 @@ $(document).ready(function() {
         var formData = new FormData(this);
 
         $.ajax({
-            url: config.apiUrl.base+'/api/auth/holiday/ImportDataExcelFile',
+            url: config.apiUrl.base+'/api/hr/holiday/ImportDataExcelFile',
             headers: {"Authorization": "Bearer " + token},
             type: 'POST',
             data: formData,
@@ -353,25 +355,24 @@ $(document).ready(function() {
     {
         var type;
         var url;
-        var jsonData = JSON.parse(formData);
        
         //check insert or update
-        if (jsonData.holiday_id == '0') {
+        if (formData.holiday_id == '0') {
             //insert 
-            jsonData.created_by = userId;
+            formData.created_by = username;
             var type = 'POST';
-            var url =config.apiUrl.base+'/api/auth/holiday/addnew';
+            var url =config.apiUrl.base+'/api/hr/holiday/addnew';
         }else{
             //update
-            jsonData.update_by = userId;
+            formData.updated_by = username;
             type = 'PUT';
-            url = config.apiUrl.base+'/api/auth/holiday/update';
+            url = config.apiUrl.base+'/api/hr/holiday/update';
         }
         await $.ajax({
             url: url,
             type: type,
             contentType: 'application/json; charset=utf-8',
-            data: formData,
+            data: JSON.stringify(formData),
             headers: {"Authorization": "Bearer " + token},
             success: function(response) {
                 console.log(response);
@@ -409,7 +410,7 @@ $(document).ready(function() {
     async function RenderAddNewForm(id)
     {
         await $.ajax({
-            url: config.apiUrl.base+'/api/auth/holiday/get/'+id,
+            url: config.apiUrl.base+'/api/hr/holiday/get/'+id,
             type: 'GET',
             contentType: 'application/json; charset=utf-8',
             // data: {
@@ -418,15 +419,14 @@ $(document).ready(function() {
             headers: {"Authorization": "Bearer " + token},
             success: function(response) {
                 console.log(response);
-                console.log(username);
                 if(response.status == true){
                     var res = response.data;
                     $('#AddFormId [name=holiday_id]').val(res.holiday_id);
                     $('#AddFormId [name=holiday_name]').val(res.holiday_name);
                     $('#AddFormId [name=holiday_year]').val(res.holiday_year);
                     $('#AddFormId [name=holiday_day]').val(res.holiday_day);
-                    $('#AddFormId [name=created_by]').val(username);
-                    $('#AddFormId [name=updated_by]').val(username);
+                    // $('#AddFormId [name=created_by]').val(username);
+                    // $('#AddFormId [name=updated_by]').val(username);
                 }else{
                     MessageBox.ErrorMessage(response.code,response.description);
                     
@@ -451,7 +451,7 @@ $(document).ready(function() {
         $('#AddFormId').trigger('reset');
         $('#AddFormId [name=holiday_id]').val('0');
         $('#AddFormId [name=created_by]').val(username);
-        $('#AddFormId [name=updated_by]').val(username);
+        // $('#AddFormId [name=updated_by]').val(username);
         $('#saveId').prop('disabled', false);
         
        

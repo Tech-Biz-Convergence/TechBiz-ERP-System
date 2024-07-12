@@ -14,7 +14,7 @@ $(document).ready(function() {
             url: config.apiUrl.base+'/api/identity/login',
             type: 'POST',
             contentType: 'application/json; charset=utf-8',
-            data: formData,
+            data: JSON.stringify(formData),
             success: function(response) {
                 console.log(response);
                 if(response.status == true){

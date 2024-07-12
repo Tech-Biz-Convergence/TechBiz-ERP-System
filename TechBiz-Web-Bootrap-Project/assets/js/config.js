@@ -37,10 +37,17 @@ $.fn.serializeObject = function () {
   var result = {};
   var formData = this.serializeArray();
   $.each(formData, function () {
-      result[this.name] = this.value;
+    if (result[this.name]) {
+      if (!result[this.name].push) {
+        result[this.name] = [result[this.name]];
+      }
+      result[this.name].push(this.value || '');
+    } else {
+      result[this.name] = this.value || '';
+    }
   });
-  return JSON.stringify(result);;
-};
+  return result;
+}
 
 class MessageBox {
   static SuccessMessage(code, description) {
