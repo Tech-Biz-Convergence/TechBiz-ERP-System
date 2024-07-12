@@ -423,10 +423,17 @@ $(document).ready(function() {
                     var res = response.data;
                     $('#AddFormId [name=dept_id]').val(res.dept_id);
                     $('#AddFormId [name=dept_name]').val(res.dept_name);
-                    // $('#AddFormId [name=dept_status]').val(res.dept_status);
+                    $('#AddFormId [name=dept_status]').val(res.dept_status);
                     $('#AddFormId [name=dept_manager]').val(res.dept_manager);
-                    // $('#AddFormId [name=create_by]').val(username);
-                    // $('#AddFormId [name=update_by]').val(username);
+
+                    // ตั้งค่า dept_status
+                    if (res.dept_status === 'INACTIVE') {
+                        $('#dept_status').prop('checked', false); // ตั้งค่าเป็น unchecked
+                        $('#dept_status').next('.form-check-label').text('In Active'); // เปลี่ยนข้อความ
+                    } else {
+                        $('#dept_status').prop('checked', true); // ตั้งค่าเป็น checked
+                        $('#dept_status').next('.form-check-label').text('Active'); // เปลี่ยนข้อความ
+                    }
                 }else{
                     MessageBox.ErrorMessage(response.code,response.description);
                     
