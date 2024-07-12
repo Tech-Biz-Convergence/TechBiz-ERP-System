@@ -114,7 +114,7 @@ $(document).ready(function() {
             type: 'DELETE',
             headers: {"Authorization": "Bearer " + token},
             contentType: 'application/json; charset=utf-8',
-            url: config.apiUrl.base + '/Api/Auth/Department/Delete/' + id
+            url: config.apiUrl.base + '/Api/Hr/Department/Delete/' + id
           }).then((response) => {
             return true;
           }).catch((error) => {
@@ -137,7 +137,7 @@ $(document).ready(function() {
         if (button.hasClass('btn-success')) {
             button.removeClass('btn-success').addClass('btn-secondary');
             $.ajax({
-                url: config.apiUrl.base + '/Api/Auth/Department/activateCondition' + id + '&user_id=' + loginId + '&is_active=false',
+                url: config.apiUrl.base + '/Api/Hr/Department/activateCondition' + id + '&user_id=' + loginId + '&is_active=false',
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
                 data: {
@@ -168,7 +168,7 @@ $(document).ready(function() {
         } else {
             button.removeClass('btn-secondary').addClass('btn-success');
             $.ajax({
-                url: config.apiUrl.base + '/Api/Auth/Department/activateCondition' + id + '&user_id=' + loginId + '&is_active=true',
+                url: config.apiUrl.base + '/Api/Hr/Department/activateCondition' + id + '&user_id=' + loginId + '&is_active=true',
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
                 data: {
@@ -256,7 +256,7 @@ $(document).ready(function() {
             ajax: (data, callback) => {
                 $.ajax({
                     
-                    url: config.apiUrl.base+'/api/auth/department/GetPaginate',
+                    url: config.apiUrl.base+'/api/hr/department/GetPaginate',
                     type: 'GET',
                     contentType: 'application/json; charset=utf-8',
                     headers: {"Authorization": "Bearer " + token},
@@ -295,7 +295,6 @@ $(document).ready(function() {
            columnDefs: [
                 { targets: 0, data: 'dept_name', ordering: true },
                 { targets: 1, data: 'dept_manager', ordering: true },
-                // { targets: 2, data: 'dept_manager', ordering: true },
                 {
                     targets: 2,
                     data: null,
@@ -319,7 +318,7 @@ $(document).ready(function() {
         var formData = new FormData(this);
 
         $.ajax({
-            url: config.apiUrl.base+'/api/auth/department/ImportDataExcelFile',
+            url: config.apiUrl.base+'/api/hr/department/ImportDataExcelFile',
             headers: {"Authorization": "Bearer " + token},
             type: 'POST',
             data: formData,
@@ -342,8 +341,6 @@ $(document).ready(function() {
                 return 'dept_name';
             case 1:
                 return 'dept_manager';
-            // case 2:
-            //     return 'holiday_year';
             default:
                 return null;
         }
@@ -352,25 +349,29 @@ $(document).ready(function() {
     {
         var type;
         var url;
-        var jsonData = JSON.parse(formData);
        
         //check insert or update
-        if (jsonData.dept_id == '0') {
+        if (formData.dept_id == '0') {
             //insert 
-            jsonData.created_by = userId;
+            formData.create_by = username;
             var type = 'POST';
-            var url =config.apiUrl.base+'/api/auth/department/addnew';
+            var url =config.apiUrl.base+'/api/hr/department/addnew';
         }else{
             //update
-            jsonData.update_by = userId;
+            formData.update_by = username;
             type = 'PUT';
-            url = config.apiUrl.base+'/api/auth/department/update';
+            url = config.apiUrl.base+'/api/hr/department/update';
         }
+
+        // เพิ่มข้อมูลสถานะของ checkbox
+        var isChecked = $('#dept_status').is(':checked');
+        formData.dept_status = isChecked ? 'ACTIVE' : 'INACTIVE';
+
         await $.ajax({
             url: url,
             type: type,
             contentType: 'application/json; charset=utf-8',
-            data: formData,
+            data: JSON.stringify(formData),
             headers: {"Authorization": "Bearer " + token},
             success: function(response) {
                 console.log(response);
@@ -408,7 +409,7 @@ $(document).ready(function() {
     async function RenderAddNewForm(id)
     {
         await $.ajax({
-            url: config.apiUrl.base+'/api/auth/department/get/'+id,
+            url: config.apiUrl.base+'/api/hr/department/get/'+id,
             type: 'GET',
             contentType: 'application/json; charset=utf-8',
             // data: {
@@ -422,10 +423,10 @@ $(document).ready(function() {
                     var res = response.data;
                     $('#AddFormId [name=dept_id]').val(res.dept_id);
                     $('#AddFormId [name=dept_name]').val(res.dept_name);
-                    $('#AddFormId [name=dept_status]').val(res.dept_status);
+                    // $('#AddFormId [name=dept_status]').val(res.dept_status);
                     $('#AddFormId [name=dept_manager]').val(res.dept_manager);
-                    $('#AddFormId [name=create_by]').val(username);
-                    $('#AddFormId [name=update_by]').val(username);
+                    // $('#AddFormId [name=create_by]').val(username);
+                    // $('#AddFormId [name=update_by]').val(username);
                 }else{
                     MessageBox.ErrorMessage(response.code,response.description);
                     

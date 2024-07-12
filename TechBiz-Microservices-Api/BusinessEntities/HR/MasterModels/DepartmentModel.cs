@@ -14,10 +14,10 @@ namespace BusinessEntities.HR.MasterModels
     {
         [Key]
         public System.DateTime create_date { get; set; }
-        public string create_by { get; set; }
+        public string? create_by { get; set; }
         public System.DateTime update_date { get; set; }
-        public string update_by { get; set; }
-        public long? dept_id { get; set; }
+        public string? update_by { get; set; }
+        public long dept_id { get; set; }
         public string dept_name { get; set; }
         public long? dept_manager { get; set; }
         public string dept_status { get; set; }

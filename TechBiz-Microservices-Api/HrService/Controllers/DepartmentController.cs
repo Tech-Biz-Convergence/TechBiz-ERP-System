@@ -7,7 +7,7 @@ using Utilities;
 namespace DepartmentService.Controllers
 {
 
-    [Route("Api/Auth/[controller]")]
+    [Route("Api/Hr/[controller]")]
     [Authorize]
     [ApiController]
     public class DepartmentController : ControllerBase

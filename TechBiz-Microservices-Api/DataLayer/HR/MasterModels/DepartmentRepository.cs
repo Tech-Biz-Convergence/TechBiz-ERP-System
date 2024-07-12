@@ -100,13 +100,11 @@ namespace DataLayer.HR.MasterModels
             {
                 string sql = @"INSERT INTO hr.tbm_dept_info 											
                                 (create_by,
-                                update_by,
                                 dept_name,
                                 dept_status,
                                 dept_manager) 											
                             VALUES 											
                                 (@create_by,
-                                @update_by,
                                 @dept_name,
                                 @dept_status,
                                 @dept_manager) 
@@ -115,7 +113,6 @@ namespace DataLayer.HR.MasterModels
                 using (var cmd = new NpgsqlCommand(sql, conn))
                 {
                     cmd.Parameters.Add("@create_by", NpgsqlDbType.Varchar).Value = model.create_by;
-                    cmd.Parameters.Add("@update_by", NpgsqlDbType.Varchar).Value = model.update_by;
                     cmd.Parameters.Add("@dept_name", NpgsqlDbType.Varchar).Value = model.dept_name;
                     cmd.Parameters.Add("@dept_status", NpgsqlDbType.Varchar).Value = model.dept_status;
                     cmd.Parameters.Add("@dept_manager", NpgsqlDbType.Bigint).Value = model.dept_manager;
@@ -143,8 +140,7 @@ namespace DataLayer.HR.MasterModels
             try
             {
                 string sql = @"UPDATE hr.tbm_dept_info
-                       SET  create_by = @create_by,
-                            update_by = @update_by,
+                       SET  update_by = @update_by,
                             dept_name = @dept_name,
                             dept_status = @dept_status,
                             dept_manager = @dept_manager
@@ -152,7 +148,6 @@ namespace DataLayer.HR.MasterModels
 
                 using (var cmd = new NpgsqlCommand(sql, conn))
                 {
-                    cmd.Parameters.Add("@create_by", NpgsqlDbType.Varchar).Value = model.create_by;
                     cmd.Parameters.Add("@update_by", NpgsqlDbType.Varchar).Value = model.update_by;
                     cmd.Parameters.Add("@dept_name", NpgsqlDbType.Varchar).Value = model.dept_name;
                     cmd.Parameters.Add("@dept_status", NpgsqlDbType.Varchar).Value = model.dept_status;
