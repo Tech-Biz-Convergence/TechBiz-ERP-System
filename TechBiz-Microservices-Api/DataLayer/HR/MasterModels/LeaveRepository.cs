@@ -100,14 +100,12 @@ namespace DataLayer.HR.MasterModels
             {
                 string sql = @"INSERT INTO hr.tbm_leave_type 											
                                 (created_by,
-                                updated_by,
                                 leave_type_name,
                                 leave_max_days,
                                 leave_type_comment,
                                 leave_type_status) 											
                             VALUES 											
                                 (@created_by,
-                                @updated_by,
                                 @leave_type_name,
                                 @leave_max_days,
                                 @leave_type_comment,									
@@ -117,7 +115,6 @@ namespace DataLayer.HR.MasterModels
                 using (var cmd = new NpgsqlCommand(sql, conn))
                 {
                     cmd.Parameters.Add("@created_by", NpgsqlDbType.Varchar).Value = model.created_by;
-                    cmd.Parameters.Add("@updated_by", NpgsqlDbType.Varchar).Value = model.updated_by;
                     cmd.Parameters.Add("@leave_type_name", NpgsqlDbType.Varchar).Value = model.leave_type_name;
                     cmd.Parameters.Add("@leave_max_days", NpgsqlDbType.Integer).Value = model.leave_max_days;
                     cmd.Parameters.Add("@leave_type_comment", NpgsqlDbType.Varchar).Value = model.leave_type_comment;
@@ -145,8 +142,7 @@ namespace DataLayer.HR.MasterModels
             try
             {
                 string sql = @"UPDATE hr.tbm_leave_type
-                       SET  created_by = @created_by,
-                            updated_by = @updated_by,
+                       SET  updated_by = @updated_by,
                             leave_type_name = @leave_type_name,
                             leave_max_days = @leave_max_days,
                             leave_type_comment = @leave_type_comment
@@ -154,7 +150,6 @@ namespace DataLayer.HR.MasterModels
 
                 using (var cmd = new NpgsqlCommand(sql, conn))
                 {
-                    cmd.Parameters.Add("@created_by", NpgsqlDbType.Varchar).Value = model.created_by;
                     cmd.Parameters.Add("@updated_by", NpgsqlDbType.Varchar).Value = model.updated_by;
                     cmd.Parameters.Add("@leave_type_name", NpgsqlDbType.Varchar).Value = model.leave_type_name;
                     cmd.Parameters.Add("@leave_max_days", NpgsqlDbType.Integer).Value = model.leave_max_days;

@@ -115,7 +115,7 @@ $(document).ready(function() {
             type: 'DELETE',
             headers: {"Authorization": "Bearer " + token},
             contentType: 'application/json; charset=utf-8',
-            url: config.apiUrl.base + '/Api/Auth/Leave/Delete/' + id
+            url: config.apiUrl.base + '/Api/Hr/Leave/Delete/' + id
           }).then((response) => {
             return true;
           }).catch((error) => {
@@ -138,7 +138,7 @@ $(document).ready(function() {
         if (button.hasClass('btn-success')) {
             button.removeClass('btn-success').addClass('btn-secondary');
             $.ajax({
-                url: config.apiUrl.base + '/Api/Auth/Leave/activateCondition' + id + '&user_id=' + loginId + '&is_active=false',
+                url: config.apiUrl.base + '/Api/Hr/Leave/activateCondition' + id + '&user_id=' + loginId + '&is_active=false',
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
                 data: {
@@ -169,7 +169,7 @@ $(document).ready(function() {
         } else {
             button.removeClass('btn-secondary').addClass('btn-success');
             $.ajax({
-                url: config.apiUrl.base + '/Api/Auth/Leave/activateCondition' + id + '&user_id=' + loginId + '&is_active=true',
+                url: config.apiUrl.base + '/Api/Hr/Leave/activateCondition' + id + '&user_id=' + loginId + '&is_active=true',
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
                 data: {
@@ -257,7 +257,7 @@ $(document).ready(function() {
             ajax: (data, callback) => {
                 $.ajax({
                     
-                    url: config.apiUrl.base+'/api/auth/leave/GetPaginate',
+                    url: config.apiUrl.base+'/api/hr/leave/GetPaginate',
                     type: 'GET',
                     contentType: 'application/json; charset=utf-8',
                     headers: {"Authorization": "Bearer " + token},
@@ -320,7 +320,7 @@ $(document).ready(function() {
         var formData = new FormData(this);
 
         $.ajax({
-            url: config.apiUrl.base+'/api/auth/leave/ImportDataExcelFile',
+            url: config.apiUrl.base+'/api/hr/leave/ImportDataExcelFile',
             headers: {"Authorization": "Bearer " + token},
             type: 'POST',
             data: formData,
@@ -353,25 +353,29 @@ $(document).ready(function() {
     {
         var type;
         var url;
-        var jsonData = JSON.parse(formData);
        
         //check insert or update
-        if (jsonData.leave_type_id == '0') {
+        if (formData.leave_type_id == '0') {
             //insert 
-            jsonData.created_by = userId;
+            formData.created_by = username;
             var type = 'POST';
-            var url =config.apiUrl.base+'/api/auth/leave/addnew';
+            var url =config.apiUrl.base+'/api/hr/leave/addnew';
         }else{
             //update
-            jsonData.update_by = userId;
+            formData.updated_by = username;
             type = 'PUT';
-            url = config.apiUrl.base+'/api/auth/leave/update';
+            url = config.apiUrl.base+'/api/hr/leave/update';
         }
+
+        // เพิ่มข้อมูลสถานะของ checkbox
+        var isChecked = $('#leave_type_status').is(':checked');
+        formData.leave_type_status = isChecked ? 'ACTIVE' : 'INACTIVE';
+
         await $.ajax({
             url: url,
             type: type,
             contentType: 'application/json; charset=utf-8',
-            data: formData,
+            data: JSON.stringify(formData),
             headers: {"Authorization": "Bearer " + token},
             success: function(response) {
                 console.log(response);
@@ -409,7 +413,7 @@ $(document).ready(function() {
     async function RenderAddNewForm(id)
     {
         await $.ajax({
-            url: config.apiUrl.base+'/api/auth/leave/get/'+id,
+            url: config.apiUrl.base+'/api/hr/leave/get/'+id,
             type: 'GET',
             contentType: 'application/json; charset=utf-8',
             // data: {
@@ -424,8 +428,16 @@ $(document).ready(function() {
                     $('#AddFormId [name=leave_type_name]').val(res.leave_type_name);
                     $('#AddFormId [name=leave_max_days]').val(res.leave_max_days);
                     $('#AddFormId [name=leave_type_comment]').val(res.leave_type_comment);
-                    $('#AddFormId [name=created_by]').val(username);
-                    $('#AddFormId [name=updated_by]').val(username);
+                    $('#AddFormId [name=leave_type_status]').val(res.leave_status);
+
+                    // ตั้งค่า leave_type_status
+                    if (res.leave_type_status === 'INACTIVE') {
+                        $('#leave_type_status').prop('checked', false); // ตั้งค่าเป็น unchecked
+                        $('#leave_type_status').next('.form-check-label').text('In Active'); // เปลี่ยนข้อความ
+                    } else {
+                        $('#leave_type_status').prop('checked', true); // ตั้งค่าเป็น checked
+                        $('#leave_type_status').next('.form-check-label').text('Active'); // เปลี่ยนข้อความ
+                    }
                 }else{
                     MessageBox.ErrorMessage(response.code,response.description);
                     
@@ -450,7 +462,7 @@ $(document).ready(function() {
         $('#AddFormId').trigger('reset');
         $('#AddFormId [name=leave_type_id]').val('0');
         $('#AddFormId [name=created_by]').val(username);
-        $('#AddFormId [name=updated_by]').val(username);
+        // $('#AddFormId [name=updated_by]').val(username);
         $('#saveId').prop('disabled', false);
         
        
