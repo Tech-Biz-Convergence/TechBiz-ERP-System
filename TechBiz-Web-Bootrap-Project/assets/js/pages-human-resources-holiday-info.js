@@ -368,6 +368,11 @@ $(document).ready(function() {
             type = 'PUT';
             url = config.apiUrl.base+'/api/hr/holiday/update';
         }
+
+        // เพิ่มข้อมูลสถานะของ checkbox
+        var isChecked = $('#holiday_status').is(':checked');
+        formData.holiday_status = isChecked ? 'ACTIVE' : 'INACTIVE';
+
         await $.ajax({
             url: url,
             type: type,
@@ -424,9 +429,25 @@ $(document).ready(function() {
                     $('#AddFormId [name=holiday_id]').val(res.holiday_id);
                     $('#AddFormId [name=holiday_name]').val(res.holiday_name);
                     $('#AddFormId [name=holiday_year]').val(res.holiday_year);
-                    $('#AddFormId [name=holiday_day]').val(res.holiday_day);
-                    // $('#AddFormId [name=created_by]').val(username);
-                    // $('#AddFormId [name=updated_by]').val(username);
+
+                    // แปลงรูปแบบวันที่ให้เป็น YYYY-MM-DD
+                    var holidayDay = new Date(res.holiday_day);
+                    var day = holidayDay.getDate().toString().padStart(2, '0');
+                    var month = (holidayDay.getMonth() + 1).toString().padStart(2, '0');
+                    var year = holidayDay.getFullYear();
+                    var formattedDate = `${year}-${month}-${day}`;
+
+                    $('#AddFormId [name=holiday_day]').val(formattedDate);
+                    $('#AddFormId [name=holiday_status]').val(res.holiday_status);
+
+                    // ตั้งค่า holiday_status
+                    if (res.holiday_status === 'INACTIVE') {
+                        $('#holiday_status').prop('checked', false); // ตั้งค่าเป็น unchecked
+                        $('#holiday_status').next('.form-check-label').text('In Active'); // เปลี่ยนข้อความ
+                    } else {
+                        $('#holiday_status').prop('checked', true); // ตั้งค่าเป็น checked
+                        $('#holiday_status').next('.form-check-label').text('Active'); // เปลี่ยนข้อความ
+                    }
                 }else{
                     MessageBox.ErrorMessage(response.code,response.description);
                     

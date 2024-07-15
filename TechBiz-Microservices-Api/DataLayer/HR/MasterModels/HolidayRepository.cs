@@ -145,7 +145,8 @@ namespace DataLayer.HR.MasterModels
                        SET  updated_by = @updated_by,
                             holiday_year = @holiday_year,
                             holiday_name = @holiday_name,
-                            holiday_day = @holiday_day
+                            holiday_day = @holiday_day,
+                            holiday_status = @holiday_status
                        WHERE holiday_id = @holiday_id";
 
                 using (var cmd = new NpgsqlCommand(sql, conn))
@@ -154,6 +155,7 @@ namespace DataLayer.HR.MasterModels
                     cmd.Parameters.Add("@holiday_year", NpgsqlDbType.Varchar).Value = model.holiday_year;
                     cmd.Parameters.Add("@holiday_name", NpgsqlDbType.Varchar).Value = model.holiday_name;
                     cmd.Parameters.Add("@holiday_day", NpgsqlDbType.Date).Value = model.holiday_day;
+                    cmd.Parameters.Add("@holiday_status", NpgsqlDbType.Varchar).Value = model.holiday_status;
                     cmd.Parameters.Add("@holiday_id", NpgsqlDbType.Bigint).Value = model.holiday_id;
 
 

@@ -631,9 +631,6 @@
                           <div class="card-body">
                             <form id="AddFormId" >
                               <input type="hidden" name="holiday_id" value="0">
-                              <!-- <input type="hidden" name="created_by" value="created_by"> -->
-                              <!-- <input type="hidden" name="updated_by" value="updated_by"> -->
-                              <input type="hidden" name="holiday_status" value="ACTIVE">
                               <div class="row">
                                 <div class="mb-3 col-md-6">
                                   <label for="Name" class="form-label">Name</label>
@@ -662,20 +659,25 @@
                                   />
                                 </div>
                                 <div class="mb-3 col-md-6">
-                                <label for="Upload File" class="form-label">Upload File</label>
-                                <input
-                                  type="file"
-                                  class="form-control"
-                                  id="fileInput"
-                                  name="fileInput"
-                                  accept="application/vnd.ms-excel"
-                                  
-                                />
-                              </div>
-                                <div class="mb-3 col-md-6">
-                                  <label class="form-label" data-lang="status">Active</label>
-                                  <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
+                                  <label for="Upload File" class="form-label">Upload File</label>
+                                  <input
+                                    type="file"
+                                    class="form-control"
+                                    id="fileInput"
+                                    name="fileInput"
+                                    accept="application/vnd.ms-excel"
+                                    
+                                  />
                                 </div>
+                                <div class="mb-3 col-md-6">
+                                  <label for="dept_status" class="form-label">Holiday Status</label>
+                                  <div class="form-check form-switch mb-2">
+                                    <input class="form-check-input" type="checkbox" id="holiday_status" name="holiday_status" checked />
+                                    <label class="form-check-label" for="holiday_status">Active</label
+                                    >
+                                  </div>
+                                </div>
+
                               </div>
                               <div class="mt-2">
                                 <button type="submit" class="btn btn-primary me-2" id="saveId">Save changes</button>
