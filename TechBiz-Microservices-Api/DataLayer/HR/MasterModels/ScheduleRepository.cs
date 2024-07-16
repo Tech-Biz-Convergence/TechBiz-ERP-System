@@ -167,6 +167,7 @@ namespace DataLayer.HR.MasterModels
                     cmd.Parameters.Add("@schedule_status", NpgsqlDbType.Varchar).Value = model.schedule_status;                   
                     cmd.Parameters.Add("@update_by", NpgsqlDbType.Varchar).Value = model.update_by;
                     cmd.Parameters.Add("@update_date", NpgsqlDbType.Timestamp).Value = DateTime.Now;
+                    cmd.Parameters.Add("@schedule_id", NpgsqlDbType.Bigint).Value = model.schedule_id;
 
                     if (transaction != null)
                     {
@@ -237,7 +238,7 @@ namespace DataLayer.HR.MasterModels
                                     SET 											
                                         isActive = @isActive														
                                     WHERE  											
-                                        schedule = @id";
+                                        schedule_id = @id";
 
                 using (var cmd = new NpgsqlCommand(sql, conn))
                 {

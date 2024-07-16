@@ -167,6 +167,7 @@ namespace DataLayer.HR.MasterModels
                     cmd.Parameters.Add("@recuit_stage_status", NpgsqlDbType.Varchar).Value = model.recuit_stage_status;                   
                     cmd.Parameters.Add("@update_by", NpgsqlDbType.Varchar).Value = model.update_by;
                     cmd.Parameters.Add("@update_date", NpgsqlDbType.Timestamp).Value = DateTime.Now;
+                    cmd.Parameters.Add("@recuit_stage_id", NpgsqlDbType.Bigint).Value = model.recuit_stage_id;
 
                     if (transaction != null)
                     {

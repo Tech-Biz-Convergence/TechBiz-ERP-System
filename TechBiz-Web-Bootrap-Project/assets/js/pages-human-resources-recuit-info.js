@@ -70,7 +70,7 @@ $(document).ready(function() {
     });
 
     $(document).on('click', '#AddNewId', function() {
-        $('#ToppicActionId').text('Add Resume');
+        $('#ToppicActionId').text('Add Recuit');
         ClearAddNew();
         $('.SlideTabSearch').hide();
         $('#AreaAddId').show();
@@ -85,7 +85,7 @@ $(document).ready(function() {
 
     $(document).on('click', '.EditButton', function() {
         console.log("Edit");
-        $('#ToppicActionId').text('Edit Resume');
+        $('#ToppicActionId').text('Edit Recuit');
         $('#saveId').prop('disabled', false);
         var id = $(this).attr('data-id');
         RenderAddNewForm(id);
@@ -97,7 +97,7 @@ $(document).ready(function() {
     
     $(document).on('click', '.ViewButton',async function() {
         console.log("View");
-        $('#ToppicActionId').text('View Resume');
+        $('#ToppicActionId').text('View Recuit');
         $('#saveId').prop('disabled', true);
         // alert("Test");
         var id = $(this).attr('data-id');
@@ -114,7 +114,7 @@ $(document).ready(function() {
             type: 'DELETE',
             headers: {"Authorization": "Bearer " + token},
             contentType: 'application/json; charset=utf-8',
-            url: config.apiUrl.base + '/api/hr/resume/Delete/' + id
+            url: config.apiUrl.base + '/api/hr/recuit/Delete/' + id
           }).then((response) => {
             return true;
           }).catch((error) => {
@@ -137,7 +137,7 @@ $(document).ready(function() {
         if (button.hasClass('btn-success')) {
             button.removeClass('btn-success').addClass('btn-secondary');
             $.ajax({
-                url: config.apiUrl.base + '/api/hr/resume/activateCondition' + id + '&user_id=' + loginId + '&is_active=false',
+                url: config.apiUrl.base + '/api/hr/recuit/activateCondition' + id + '&user_id=' + loginId + '&is_active=false',
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
                 data: {
@@ -168,7 +168,7 @@ $(document).ready(function() {
         } else {
             button.removeClass('btn-secondary').addClass('btn-success');
             $.ajax({
-                url: config.apiUrl.base + '/api/hr/resume/activateCondition' + id + '&user_id=' + loginId + '&is_active=true',
+                url: config.apiUrl.base + '/api/hr/recuit/activateCondition' + id + '&user_id=' + loginId + '&is_active=true',
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
                 data: {
@@ -256,7 +256,7 @@ $(document).ready(function() {
             ajax: (data, callback) => {
                 $.ajax({
                     
-                    url: config.apiUrl.base+'/api/hr/resume/GetPaginate',
+                    url: config.apiUrl.base+'/api/hr/recuit/GetPaginate',
                     type: 'GET',
                     contentType: 'application/json; charset=utf-8',
                     headers: {"Authorization": "Bearer " + token},
@@ -302,19 +302,19 @@ $(document).ready(function() {
                         return '<button type="button" class="btn ' + (row.is_active ? 'btn-success' : 'btn-secondary') + ' btn-sm  ActiveButton" data-id="${row.id}"><i class="bx bx-power-off me-1"></i></button>';
                     }
                 },
-                { targets: 1, data: 'hr_job_id', ordering: true },
-                { targets: 2, data: 'hr_candidate_id', ordering: true },
-                { targets: 3, data: 'resume_path', ordering: true },
-                { targets: 4, data: 'resume_status', ordering: true },                
+                { targets: 1, data: 'candidate_id', ordering: true },
+                { targets: 2, data: 'job_id', ordering: true },
+                { targets: 3, data: 'pay_amount', ordering: true },
+                { targets: 4, data: 'recuit_stage_status', ordering: true },                
                 {
                     targets: 5,
                     data: null,
                     orderable: false,
                     className: 'dt-head-center dt-body-center',
                     render: function (data, type, row) {
-                        return `<div class="row"><button type="button" class="btn btn btn-info btn-sm ViewButton col-4" data-id="${row.hr_resume_id}" ><i class="bx bx-list-ul me-1"></i></button> ` +
-                            ` <button type="button" class="btn btn-primary btn-sm EditButton col-4" data-id="${row.hr_resume_id}"><i class="bx bx-edit me-1"></i></button> `+
-                            ` <button type="button" class="btn btn-danger btn-sm DeleteButton col-4" data-id="${row.hr_resume_id}"><i class="bx bx-trash me-1"></i></button> </div>`;
+                        return `<div class="row"><button type="button" class="btn btn btn-info btn-sm ViewButton col-4" data-id="${row.recuit_stage_id}" ><i class="bx bx-list-ul me-1"></i></button> ` +
+                            ` <button type="button" class="btn btn-primary btn-sm EditButton col-4" data-id="${row.recuit_stage_id}"><i class="bx bx-edit me-1"></i></button> `+
+                            ` <button type="button" class="btn btn-danger btn-sm DeleteButton col-4" data-id="${row.recuit_stage_id}"><i class="bx bx-trash me-1"></i></button> </div>`;
                     }
                 }
             ]
@@ -329,7 +329,7 @@ $(document).ready(function() {
         var formData = new FormData(this);
 
         $.ajax({
-            url: config.apiUrl.base+'/api/hr/resume/ImportDataExcelFile',
+            url: config.apiUrl.base+'/api/hr/recuit/ImportDataExcelFile',
             headers: {"Authorization": "Bearer " + token},
             type: 'POST',
             data: formData,
@@ -349,13 +349,13 @@ $(document).ready(function() {
     function getTableSortBy(column){
         switch (column) {
             case 1:
-                return 'hr_job_id';
+                return 'candidate_id';
             case 2:
-                return 'hr_candidate_id';
+                return 'job_id';
             case 3:
-                return 'resume_path';
+                return 'pay_amount';
             case 4:
-                return 'resume_status';            
+                return 'recuit_stage_status';            
             default:
                 return null;
         }
@@ -367,23 +367,23 @@ $(document).ready(function() {
         var url;
                
         //check insert or update
-        if (formData.hr_resume_id == '0') {
+        if (formData.recuit_stage_id == '0') {
             //insert 
             formData.create_by = username;                                
-           
+            console.log("Add New");
             var type = 'POST';
-            var url =config.apiUrl.base+'/api/hr/resume/addnew';
+            var url =config.apiUrl.base+'/api/hr/recuit/addnew';
         }else{
             //update
             formData.update_by = username;
 
             type = 'PUT';
-            url = config.apiUrl.base+'/api/hr/resume/update';
+            url = config.apiUrl.base+'/api/hr/recuit/update';
         }
         
         // เพิ่มข้อมูลสถานะของ checkbox
-        var isChecked = $('#resume_status').is(':checked');
-        formData.resume_status = isChecked ? 'ACTIVE' : 'INACTIVE';
+        var isChecked = $('#recuit_stage_status').is(':checked');
+        formData.recuit_stage_status = isChecked ? 'ACTIVE' : 'INACTIVE';
 
         await $.ajax({
             url: url,
@@ -427,7 +427,7 @@ $(document).ready(function() {
     async function RenderAddNewForm(id)
     {        
         await $.ajax({
-            url: config.apiUrl.base+'/api/hr/resume/get/'+id,
+            url: config.apiUrl.base+'/api/hr/recuit/get/'+id,
             type: 'GET',
             contentType: 'application/json; charset=utf-8',
             // data: {
@@ -439,17 +439,17 @@ $(document).ready(function() {
                 if(response.status == true){
                     var res = response.data;
                    
-                    $('#AddFormId [name=hr_resume_id').val(res.hr_resume_id);
-                    $('#AddFormId [name=hr_job_id').val(res.hr_job_id);
-                    $('#AddFormId [name=hr_candidate_id]').val(res.hr_candidate_id);
-                    $('#AddFormId [name=resume_path]').val(res.resume_path);
+                    $('#AddFormId [name=recuit_stage_id').val(res.recuit_stage_id);
+                    $('#AddFormId [name=candidate_id]').val(res.candidate_id);
+                    $('#AddFormId [name=job_id').val(res.job_id);                    
+                    $('#AddFormId [name=pay_amount]').val(res.pay_amount);
                     
                     // ตั้งค่า dept_status
-                    if (res.resume_status === 'INACTIVE') {
-                        $('#resume_status').prop('checked', false); // ตั้งค่าเป็น unchecked
+                    if (res.recuit_stage_status === 'INACTIVE') {
+                        $('#recuit_stage_status').prop('checked', false); // ตั้งค่าเป็น unchecked
                         $('#label_status').next('.form-check-label').text('In Active'); // เปลี่ยนข้อความ
                     } else {
-                        $('#resume_status').prop('checked', true); // ตั้งค่าเป็น checked
+                        $('#recuit_stage_status').prop('checked', true); // ตั้งค่าเป็น checked
                         $('#label_status').next('.form-check-label').text('Active'); // เปลี่ยนข้อความ
                     }                        
                 }else{

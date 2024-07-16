@@ -27,7 +27,7 @@
       content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
     />
 
-    <title>Human Resource - Resume Management </title>
+    <title>Human Resource - Recuit Management </title>
 
     <meta name="description" content="" />
 
@@ -577,7 +577,7 @@
             <!-- Content -->
 
             <div class="container-xxl flex-grow-1 container-p-y">
-              <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Human Resources /</span> Resume Management</h4>
+              <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Human Resources /</span> Recuit Management</h4>
 
               <div class="row">
                 <div id="tabs" class="col-md-12">
@@ -609,9 +609,9 @@
                               <thead>
                                 <tr>
                                   <th style="width:5%;" class="text-center">Active</th>
-                                  <th>Job ID</th>
                                   <th>Candidate ID</th>
-                                  <th>Resume Path</th>                                  
+                                  <th>Job ID</th>
+                                  <th>Pay Amount</th>                                  
                                   <th>Status</th>
                                   <th style="width:15%;" class="text-center">Actions</th>
                                 </tr>
@@ -623,30 +623,30 @@
                           
                         </div>
                         <div id="AreaAddId" class="card mb-4 SlideTabSearch" style="display: none;">
-                          <h5 class="card-header" id = "ToppicActionId">Add Resume</h5>
+                          <h5 class="card-header" id = "ToppicActionId">Add Recuit</h5>
                           <!-- Account -->                          
                           <div class="card-body">
                             <form id="AddFormId" >
-                              <input type="hidden" name="hr_resume_id" value="0">   
+                              <input type="hidden" name="recuit_stage_id" value="0">   
                                                            
                               <div class="row">
                                 <div class="mb-3 col-md-6">
-                                  <label for="hr_job_id" class="form-label">Job ID</label>
-                                  <input class="form-control" type="text" id="hr_job_id" name="hr_job_id" placeholder="Enter Job ID" autofocus />
+                                  <label for="candidate_id" class="form-label">Candidate ID</label>
+                                  <input class="form-control" type="text" id="candidate_id" name="candidate_id" placeholder="Enter Candidate ID" autofocus />
                                 </div>
                                 <div class="mb-3 col-md-6">
-                                  <label for="hr_candidate_id" class="form-label">Candidate ID</label>
-                                  <input class="form-control" type="text" name="hr_candidate_id" id="hr_candidate_id" placeholder="Enter Candidate ID" />
+                                  <label for="job_id" class="form-label">Job ID</label>
+                                  <input class="form-control" type="text" name="job_id" id="job_id" placeholder="Enter Job ID" />
                                 </div>
                               
                                 <div class="mb-3 col-md-6">
-                                  <label for="resume_path" class="form-label">Resume Path</label>
-                                  <input type="text" class="form-control" id="resume_path" name="resume_path" placeholder="Enter Resume Path" />
+                                  <label for="pay_amount" class="form-label">Pay Amount</label>
+                                  <input type="text" class="form-control" id="pay_amount" name="pay_amount" placeholder="Enter Pay Amount" />
                                 </div>                                                                                              
                                 <div class="mb-3 col-md-6">
                                   <div class="form-check form-switch mb-2">
-                                    <label class="form-check-label" for="resume_status" id="label_status" name="label_status">Active</label>
-                                    <input class="form-check-input" type="checkbox" id="resume_status" name="resume_status" checked>
+                                    <label class="form-check-label" for="recuit_stage_status" id="label_status" name="label_status">Active</label>
+                                    <input class="form-check-input" type="checkbox" id="recuit_stage_status" name="recuit_stage_status" checked>
                                   </div>                                  
                                 </div>                                
                               </div>
@@ -740,7 +740,7 @@
     <script src="../assets/js/main.js"></script>
 
     <!-- Page JS -->
-    <script src="../assets/js/pages-human-resources-resume-info.js"></script>
+    <script src="../assets/js/pages-human-resources-recuit-info.js"></script>
 
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>

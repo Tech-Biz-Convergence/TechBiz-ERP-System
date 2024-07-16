@@ -174,10 +174,10 @@ namespace DataLayer.HR.MasterModels
                     cmd.Parameters.Add("@hr_job_types", NpgsqlDbType.Varchar).Value = model.hr_job_types;
                     cmd.Parameters.Add("@hr_job_start_date", NpgsqlDbType.Date).Value = model.hr_job_start_date;
                     cmd.Parameters.Add("@hr_job_expire_date", NpgsqlDbType.Date).Value = model.hr_job_expire_date;
-                    cmd.Parameters.Add("@hr_job_status", NpgsqlDbType.Varchar).Value = model.hr_job_status;
-                    cmd.Parameters.Add("@hr_job_id", NpgsqlDbType.Bigint).Value = model.hr_job_id;
+                    cmd.Parameters.Add("@hr_job_status", NpgsqlDbType.Varchar).Value = model.hr_job_status;                    
                     cmd.Parameters.Add("@update_by", NpgsqlDbType.Varchar).Value = model.update_by;
                     cmd.Parameters.Add("@update_date", NpgsqlDbType.Timestamp).Value = DateTime.Now;
+                    cmd.Parameters.Add("@hr_job_id", NpgsqlDbType.Bigint).Value = model.hr_job_id;
 
 
                     if (transaction != null)
