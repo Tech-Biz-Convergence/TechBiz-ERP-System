@@ -13,14 +13,14 @@ using Utilities;
 
 namespace DataLayer.HR.MasterModels
 {
-    public class ResumeRepository : IDataRepository<tbm_hr_resume>
+    public class ScheduleRepository : IDataRepository<tbm_hr_schedule>
     {
         public int Delete(int Key, NpgsqlConnection conn, NpgsqlTransaction transaction = null)
         {
             int result = 0;
             try
             {
-                string sql = @"DELETE FROM hr.tbm_hr_resume WHERE hr_resume_id = @id";
+                string sql = @"DELETE FROM hr.tbm_hr_schedule WHERE schedule_id = @id";
 
                 using (var cmd = new NpgsqlCommand(sql, conn))
                 {
@@ -49,7 +49,7 @@ namespace DataLayer.HR.MasterModels
                 DataTable dataTable = new DataTable();
 
                 String select = @" SELECT * ";
-                String from = @" FROM  hr.tbm_hr_resume  ";
+                String from = @" FROM  hr.tbm_hr_schedule  ";
 
 
                 sqlCommand.Connection = conn;
@@ -73,8 +73,8 @@ namespace DataLayer.HR.MasterModels
                 DataTable dataTable = new DataTable();
 
                 String select = @" SELECT * ";
-                String from   = @" FROM  hr.tbm_hr_resume  ";
-                String where  = @" WHERE  hr_resume_id = @key  ";
+                String from   = @" FROM  hr.tbm_hr_schedule  ";
+                String where  = @" WHERE  schedule_id = @key  ";
 
                 sqlCommand.Parameters.Add(new NpgsqlParameter("@key", NpgsqlDbType.Integer)).Value = Key;
 
@@ -93,36 +93,36 @@ namespace DataLayer.HR.MasterModels
             }
         }
 
-        public int Insert(tbm_hr_resume model, NpgsqlConnection conn, NpgsqlTransaction transaction = null) 
+        public int Insert(tbm_hr_schedule model, NpgsqlConnection conn, NpgsqlTransaction transaction = null) 
         {
             int result = 0;
             try
             {
-                string sql = @"INSERT INTO hr.tbm_hr_resume 											
+                string sql = @"INSERT INTO hr.tbm_hr_schedule 											
                                         (											
-                                        hr_job_id,											
-                                        hr_candidate_id,
-                                        resume_path,                                        
-                                        resume_status,
+                                        candidate_id,											                                        
+                                        user_interview_id,                                        
+                                        available_time_slots,
+                                        schedule_status,
                                         create_by,
                                         create_date
                                         ) 											
                                     VALUES 											
-                                        (@hr_job_id,											
-                                        @hr_candidate_id,		
-                                        @resume_path,                                       
-                                        @resume_status,
+                                        (@candidate_id,											
+                                        @user_interview_id,		
+                                        @available_time_slots,                                       
+                                        @schedule_status,
                                         @create_by,
                                         @create_date
-                                        ) RETURNING hr_job_id;";
+                                        ) RETURNING schedule_id;";
 
                 using (var cmd = new NpgsqlCommand(sql, conn))
                 {
                     
-                    cmd.Parameters.Add("@hr_job_id", NpgsqlDbType.Bigint).Value = model.hr_job_id;
-                    cmd.Parameters.Add("@hr_candidate_id", NpgsqlDbType.Bigint).Value = model.hr_candidate_id;
-                    cmd.Parameters.Add("@resume_path", NpgsqlDbType.Varchar).Value = model.resume_path;                    
-                    cmd.Parameters.Add("@resume_status", NpgsqlDbType.Varchar).Value = model.resume_status;
+                    cmd.Parameters.Add("@candidate_id", NpgsqlDbType.Bigint).Value = model.candidate_id;
+                    cmd.Parameters.Add("@user_interview_id", NpgsqlDbType.Bigint).Value = model.user_interview_id;
+                    cmd.Parameters.Add("@available_time_slots", NpgsqlDbType.Varchar).Value = model.available_time_slots;                    
+                    cmd.Parameters.Add("@schedule_status", NpgsqlDbType.Varchar).Value = model.schedule_status;
                     cmd.Parameters.Add("@create_by", NpgsqlDbType.Varchar).Value = model.create_by;
                     cmd.Parameters.Add("@create_date", NpgsqlDbType.Timestamp).Value = DateTime.Now;
 
@@ -145,26 +145,26 @@ namespace DataLayer.HR.MasterModels
 
         }
 
-        public int Update(tbm_hr_resume model, NpgsqlConnection conn, NpgsqlTransaction transaction = null)
+        public int Update(tbm_hr_schedule model, NpgsqlConnection conn, NpgsqlTransaction transaction = null)
         {
             int result = 0;
             try
             {
-                string sql = @"UPDATE hr.tbm_hr_resume
-                       SET hr_job_id = @hr_job_id,
-                           hr_candidate_id = @hr_candidate_id,
-                           resume_path = @resume_path,                          
-                           resume_status = @resume_status,
+                string sql = @"UPDATE hr.tbm_hr_schedule
+                       SET candidate_id = @candidate_id,
+                           user_interview_id = @user_interview_id, 
+                           available_time_slots = @available_time_slots,
+                           schedule_status = @schedule_status,
                            update_by = @update_by,
                            update_date = @update_date
-                       WHERE hr_resume_id = @hr_resume_id";
+                       WHERE schedule_id = @schedule_id";
 
                 using (var cmd = new NpgsqlCommand(sql, conn))
-                {
-                    cmd.Parameters.Add("@hr_job_id", NpgsqlDbType.Bigint).Value = model.hr_job_id;
-                    cmd.Parameters.Add("@hr_candidate_id", NpgsqlDbType.Bigint).Value = model.hr_candidate_id;
-                    cmd.Parameters.Add("@resume_path", NpgsqlDbType.Varchar).Value = model.resume_path;                    
-                    cmd.Parameters.Add("@resume_status", NpgsqlDbType.Varchar).Value = model.resume_status;                   
+                {                    
+                    cmd.Parameters.Add("@candidate_id", NpgsqlDbType.Bigint).Value = model.candidate_id;
+                    cmd.Parameters.Add("@user_interview_id", NpgsqlDbType.Bigint).Value = model.user_interview_id;
+                    cmd.Parameters.Add("@available_time_slots", NpgsqlDbType.Varchar).Value = model.available_time_slots;                        
+                    cmd.Parameters.Add("@schedule_status", NpgsqlDbType.Varchar).Value = model.schedule_status;                   
                     cmd.Parameters.Add("@update_by", NpgsqlDbType.Varchar).Value = model.update_by;
                     cmd.Parameters.Add("@update_date", NpgsqlDbType.Timestamp).Value = DateTime.Now;
 
@@ -191,8 +191,8 @@ namespace DataLayer.HR.MasterModels
 
                 string selectCount = @"SELECT count(1) ";
                 String select = @" SELECT * ";
-                String from = @"   FROM  hr.tbm_hr_resume ";
-                String where = @" WHERE hr_resume_id ILIKE '%' || @searchValue || '%'";                    
+                String from = @"   FROM  hr.tbm_hr_schedule ";
+                String where = @" WHERE schedule_id ILIKE '%' || @searchValue || '%'";                    
                 String orderBy = @" ORDER BY " + queryParameter.sortBy + " " + queryParameter.sortType + @"
                               OFFSET (@page - 1) * @limit 
                               FETCH NEXT @limit ROWS ONLY ";
@@ -233,11 +233,11 @@ namespace DataLayer.HR.MasterModels
             try
             {
                 string sql = @"UPDATE 											
-                                        hr.tbm_hr_resume											
+                                        hr.tbm_hr_schedule											
                                     SET 											
                                         isActive = @isActive														
                                     WHERE  											
-                                        hr_resume_id = @id";
+                                        schedule = @id";
 
                 using (var cmd = new NpgsqlCommand(sql, conn))
                 {
