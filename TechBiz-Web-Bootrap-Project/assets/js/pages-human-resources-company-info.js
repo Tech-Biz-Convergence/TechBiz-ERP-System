@@ -9,8 +9,8 @@ $(document).ready(function() {
 
     //============================================================================
     // ZONE : RUN INIT
-    // create date   : 20240619 
-    // create by     : Game
+    // create date   : 20240710 
+    // create by     : Nat
     // detail        :
     //============================================================================
    
@@ -19,23 +19,20 @@ $(document).ready(function() {
     if (!token || !username) {
         window.location.href= 'login.html';
     }       
-
-    console.log("username"+username);
-    var addStatus = true;
-    var company_id;
+      
     ShowForm(); 
    
     //============================================================================
     // ZONE : SUBMIT
-    // create date   : 20240619 
-    // create by     : Game
+    // create date   : 20240710 
+    // create by     : Nat
     // detail        :
     //============================================================================
     $('#AddFormId').submit(async function(event) {
         event.preventDefault();
 
         var formData = $(this).serializeObject (); 
-        console.log(formData);        
+             
         AddFromSubmit(formData);
         
     });
@@ -44,16 +41,15 @@ $(document).ready(function() {
         event.preventDefault();
 
         var formData = new FormData(this); 
-        console.log(formData);
-        
+                
         ShowUploadListDataTable(formData)
         
     });
     
     //============================================================================
     // ZONE : EVENT CLICK
-    // create date   : 20240619 
-    // create by     : Game
+    // create date   : 20240710 
+    // create by     : Nat
     // detail        :
     //============================================================================
 
@@ -65,29 +61,29 @@ $(document).ready(function() {
 
     //============================================================================
     // ZONE : CUSTOM FUNCTION
-    // create date   : 20240619 
-    // create by     : Game
+    // create date   : 20240710
+    // create by     : Nat
     // detail        :
     //============================================================================
             
     async function  AddFromSubmit(formData)
     {
         var type;
-        var url;
-        var jsonData = JSON.parse(formData);       
+        var url;              
              
         //check insert or update
-        if (jsonData.id == '0') {
+        if (formData.company_id == '0') {
             //insert 
             
-            //formData.create_by = username;
+            formData.create_by = username;
+
             var type = 'POST';
             var url =config.apiUrl.base+'/api/hr/CompanyInfo/addnew';
         }else{
             //update
             
-            //formData.update_by = username;   
-            //formData.company_id = company_id;           
+            formData.update_by = username;   
+            
             type = 'PUT';
             url = config.apiUrl.base+'/api/hr/CompanyInfo/update';                                  
         }        
@@ -96,7 +92,7 @@ $(document).ready(function() {
             url: url,
             type: type,
             contentType: 'application/json; charset=utf-8',
-            data: formData,
+            data: JSON.stringify(formData),
             headers: {"Authorization": "Bearer " + token},
             success: function(response) {
                 console.log(response);
@@ -142,20 +138,12 @@ $(document).ready(function() {
             // },
             headers: {"Authorization": "Bearer " + token},
             success: function(response) {
-                console.log(response);           
-                
-                addStatus = true;
-                
-                $('#AddFormId [name=create_by]').val(username);                
+                console.log(response);                                                                                      
 
-                if(response.status == true){
-                    addStatus = false;
+                if(response.status == true){                   
                     var res = response.data[0];
-                    
-                    company_id = res.company_id;                                        
-                    $('#AddFormId [name=id]').val(res.company_id); 
-                    $('#AddFormId [name=company_id]').val(res.company_id);   
-                    $('#AddFormId [name=update_by]').val(username);                 
+                                                                                                
+                    $('#AddFormId [name=company_id]').val(res.company_id);                                    
                     $('#AddFormId [name=update_by_show]').val(res.update_by);
                     $('#AddFormId [name=company_tax_id]').val(res.company_tax_id);
                     $('#AddFormId [name=company_name_th]').val(res.company_name_th);
@@ -170,8 +158,9 @@ $(document).ready(function() {
                     $('#AddFormId [name=company_fax_no]').val(res.company_fax_no);
                     $('#AddFormId [name=company_email]').val(res.company_email);
                     $('#AddFormId [name=company_url]').val(res.company_url);
-                    $('#AddFormId [name=create_by_show]').val(res.create_by);
+                    $('#AddFormId [name=create_by]').val(res.create_by);                    
                     $('#AddFormId [name=create_date]').val(res.create_date);
+                    $('#AddFormId [name=update_by]').val(res.update_by); 
                     $('#AddFormId [name=update_date]').val(res.update_date);
 
                 }else{                    

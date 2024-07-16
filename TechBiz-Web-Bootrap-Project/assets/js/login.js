@@ -23,7 +23,7 @@ $(document).ready(function() {
                     localStorage.setItem('user_name', response.data.user_name);
                     console.log("Token saved to localStorage: " + response.data.token);
                     MessageBox.SuccessMessage(response.description, response.code).then(() => {
-                        window.location.href = 'pages-human-resources-employee-management.html';
+                        window.location.href = 'pages-human-resources-job-info.html';
                       });
                 }else{
                     MessageBox.ErrorMessage(response.description,response.code).then(() => {
@@ -44,6 +44,6 @@ $(document).ready(function() {
 
 
     
-}); //edn ready 
+}); //end ready 
 
 

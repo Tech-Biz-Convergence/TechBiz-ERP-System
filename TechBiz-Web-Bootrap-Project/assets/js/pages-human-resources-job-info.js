@@ -9,8 +9,8 @@ $(document).ready(function() {
 
     //============================================================================
     // ZONE : RUN INIT
-    // create date   : 20240619 
-    // create by     : Game
+    // create date   : 20240712 
+    // create by     : Nat
     // detail        :
     //============================================================================
 
@@ -34,8 +34,8 @@ $(document).ready(function() {
    
     //============================================================================
     // ZONE : SUBMIT
-    // create date   : 20240619 
-    // create by     : Game
+    // create date   : 20240712 
+    // create by     : Nat
     // detail        :
     //============================================================================
     $('#AddFormId').submit(async function(event) {
@@ -59,8 +59,8 @@ $(document).ready(function() {
     
     //============================================================================
     // ZONE : EVENT CLICK
-    // create date   : 20240619 
-    // create by     : Game
+    // create date   : 20240712 
+    // create by     : Nat
     // detail        :
     //============================================================================
 
@@ -206,8 +206,8 @@ $(document).ready(function() {
 
     //============================================================================
     // ZONE : CUSTOM FUNCTION
-    // create date   : 20240619 
-    // create by     : Game
+    // create date   : 20240712 
+    // create by     : Nat
     // detail        :
     //============================================================================
 
@@ -373,21 +373,23 @@ $(document).ready(function() {
         if (formData.hr_job_id == '0') {
             //insert 
             formData.create_by = username;
-            formData.dept_id = 0;
-            formData.hr_job_status = "ACTIVE";
-
+            formData.dept_id = 0;                       
+           
             var type = 'POST';
             var url =config.apiUrl.base+'/api/hr/job/addnew';
         }else{
             //update
             formData.update_by = username;
-            formData.dept_id = 0;
-            formData.hr_job_status = "ACTIVE";
+            formData.dept_id = 0;  
 
             type = 'PUT';
             url = config.apiUrl.base+'/api/hr/job/update';
         }
-        console.log(formData);
+        
+        // เพิ่มข้อมูลสถานะของ checkbox
+        var isChecked = $('#hr_job_status').is(':checked');
+        formData.hr_job_status = isChecked ? 'ACTIVE' : 'INACTIVE';
+
         await $.ajax({
             url: url,
             type: type,
@@ -441,13 +443,21 @@ $(document).ready(function() {
                 console.log(response);
                 if(response.status == true){
                     var res = response.data;
-                    $('#AddFormId [name=id]').val(res.hr_job_id);
+                   
                     $('#AddFormId [name=hr_job_id').val(res.hr_job_id);
                     $('#AddFormId [name=hr_job_title]').val(res.hr_job_title);
                     $('#AddFormId [name=hr_job_types]').val(res.hr_job_types);
                     $('#AddFormId [name=hr_job_start_date]').val(res.hr_job_start_date);
                     $('#AddFormId [name=hr_job_expire_date]').val(res.hr_job_expire_date);
-                    $('#AddFormId [name=hr_job_status]').val(res.hr_job_status);        
+
+                    // ตั้งค่า dept_status
+                    if (res.hr_job_status === 'INACTIVE') {
+                        $('#hr_job_status').prop('checked', false); // ตั้งค่าเป็น unchecked
+                        $('#label_status').next('.form-check-label').text('In Active'); // เปลี่ยนข้อความ
+                    } else {
+                        $('#hr_job_status').prop('checked', true); // ตั้งค่าเป็น checked
+                        $('#label_status').next('.form-check-label').text('Active'); // เปลี่ยนข้อความ
+                    }                        
                 }else{
                     MessageBox.ErrorMessage(response.code,response.description);
                     
