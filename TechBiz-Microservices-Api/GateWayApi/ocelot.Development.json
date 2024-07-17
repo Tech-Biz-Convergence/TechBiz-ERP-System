@@ -1317,6 +1317,102 @@
       ],
       "DownstreamPathTemplate": "/api/hr/Schedule/activateCondition",
       "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    //Over Time Type API
+    {
+
+      "UpstreamPathTemplate": "/api/hr/overtimetype/get",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7079
+        }
+      ],
+      "DownstreamPathTemplate": "/api/hr/overtimetype/get",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+
+      "UpstreamPathTemplate": "/api/hr/overtimetype/get/{id}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7079
+        }
+      ],
+      "DownstreamPathTemplate": "/api/hr/overtimetype/get/{id}",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+
+      "UpstreamPathTemplate": "/api/hr/overtimetype/addnew",
+      "UpstreamHttpMethod": [ "POST" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7079
+        }
+      ],
+      "DownstreamPathTemplate": "/api/hr/overtimetype/addnew",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+
+      "UpstreamPathTemplate": "/api/hr/overtimetype/update",
+      "UpstreamHttpMethod": [ "PUT" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7079
+        }
+      ],
+      "DownstreamPathTemplate": "/api/hr/overtimetype/update",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "UpstreamPathTemplate": "/api/hr/overtimetype/delete/{id}",
+      "UpstreamHttpMethod": [ "DELETE" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7079
+        }
+      ],
+      "DownstreamPathTemplate": "/api/hr/overtimetype/delete/{id}",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "UpstreamPathTemplate": "/api/hr/overtimetype/getPaginate",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7079
+        }
+      ],
+      "DownstreamPathTemplate": "/api/hr/overtimetype/getPaginate",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "UpstreamPathTemplate": "/api/hr/overtimetype/activateCondition",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7079
+        }
+      ],
+      "DownstreamPathTemplate": "/api/hr/overtimetype/activateCondition",
+      "DangerousAcceptAnyServerCertificateValidator": true
     }
 
     //{
