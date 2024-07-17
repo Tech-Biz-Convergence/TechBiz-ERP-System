@@ -40,7 +40,7 @@ namespace BusinessLogic.HR.Master
                 {
                     conn.Open();
                     dt = m_EmployeeRepository.GetAll(conn);
-                    var data = dt.DataTableToList<tm_employee_info>();
+                    var data = dt.DataTableToList<tbm_employee_info>();
                     resultMessage.status = true;
                     resultMessage.code = GlobalMessage.SELECT_SUCCESS_CODE;
                     resultMessage.data = data;
@@ -80,7 +80,7 @@ namespace BusinessLogic.HR.Master
                 {
                     conn.Open();
                     dt = m_EmployeeRepository.GetByKey(id,conn);
-                    var data = dt.DataTableToList<tm_employee_info>().FirstOrDefault();
+                    var data = dt.DataTableToList<employeeInforModel>().FirstOrDefault();
                     if(data is null)
                     {
                         throw new Exception("Data not found!");
@@ -110,7 +110,7 @@ namespace BusinessLogic.HR.Master
             return resultMessage;
         } 
 
-        public ResultMessage AddNewEmployee(tm_employee_info model)
+        public ResultMessage AddNewEmployee(tbm_employee_info model)
         {
             ResultMessage resultMessage = new ResultMessage();
 
@@ -120,7 +120,7 @@ namespace BusinessLogic.HR.Master
                 {
                     conn.Open();
                     int id = m_EmployeeRepository.Insert(model, conn);
-                    model.id = id;
+                    model.emp_id = id;
 
                     resultMessage.data = model;
                     resultMessage.code = GlobalMessage.INSERT_SUCCESS_CODE;
@@ -143,7 +143,7 @@ namespace BusinessLogic.HR.Master
             return resultMessage;
         }
 
-        public ResultMessage UpdateEmployee(tm_employee_info model)
+        public ResultMessage UpdateEmployee(tbm_employee_info model)
         {
             ResultMessage resultMessage = new ResultMessage();
             using (NpgsqlConnection conn = new NpgsqlConnection(GlobalVariables.ConnectionString))
@@ -152,7 +152,7 @@ namespace BusinessLogic.HR.Master
                 {
                     conn.Open();
                     int id = m_EmployeeRepository.Update(model, conn);
-                    model.id = id;
+                    model.emp_id = id;
 
                     resultMessage.data = model;
                     resultMessage.code = GlobalMessage.UPDATE_SUCCESS_CODE;
@@ -175,7 +175,7 @@ namespace BusinessLogic.HR.Master
             return resultMessage;
         }
 
-        public ResultMessage DeleteEmployee(int key)
+        public ResultMessage DeleteEmployee(int key,string user_name)
         {
             ResultMessage resultMessage = new ResultMessage();
             using (NpgsqlConnection conn = new NpgsqlConnection(GlobalVariables.ConnectionString))
@@ -210,7 +210,6 @@ namespace BusinessLogic.HR.Master
         {
             int total = 0 ;
             ResultMessage resultMessage = new ResultMessage();
-            List<tm_employee_info> assyPartControlModel = new List<tm_employee_info>();
             DataTable dt = new DataTable();
 
             using (NpgsqlConnection conn = new NpgsqlConnection(GlobalVariables.ConnectionString))
@@ -221,7 +220,7 @@ namespace BusinessLogic.HR.Master
                         
                     dt = m_EmployeeRepository.GetAllPagination(queryParameter, out total, conn);
 
-                    var data = new { total = total, data = dt.DataTableToList<tm_employee_info>() };
+                    var data = new { total = total, data = dt.DataTableToList<employeeInforModel>() };
                     resultMessage.status = true;
                     resultMessage.data = data;
                 }
@@ -240,11 +239,10 @@ namespace BusinessLogic.HR.Master
 
             return resultMessage;
         }
-        public ResultMessage ActivateCondition(int id,int user_id,bool is_active)
+        public ResultMessage ActivateCondition(int id,string user_name,string status)
         {
             int total = 0;
             ResultMessage resultMessage = new ResultMessage();
-            List<tm_employee_info> assyPartControlModel = new List<tm_employee_info>();
 
             using (NpgsqlConnection conn = new NpgsqlConnection(GlobalVariables.ConnectionString))
             {
@@ -252,7 +250,7 @@ namespace BusinessLogic.HR.Master
                 {
                     conn.Open();
 
-                    int ret = m_EmployeeRepository.UpdateActive(id, user_id, is_active,conn);
+                    int ret = m_EmployeeRepository.UpdateActive(id, user_name, status, conn);
 
 
                     resultMessage.status = true;
@@ -321,7 +319,7 @@ namespace BusinessLogic.HR.Master
 
                             dataExcelList.Add(dataDic);
                         }//end for
-                        var data = new { total = countContentData, data = dt.DataTableToList<tm_employee_info>() };
+                        var data = new { total = countContentData, data = dt.DataTableToList<tbm_employee_info>() };
                         resultMessage.status = true;
                         resultMessage.data = data;
 

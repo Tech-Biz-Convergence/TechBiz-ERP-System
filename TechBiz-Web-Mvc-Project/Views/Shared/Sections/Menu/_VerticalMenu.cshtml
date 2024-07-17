@@ -1,0 +1,116 @@
+@model List<permissionRoleMappingModel>
+@{
+    TempData.Keep();
+    string? currentPage = ViewContext.HttpContext.Request.Path;
+}
+
+<!-- Menu -->
+<aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+
+    <!-- ! Hide app brand if navbar-full -->
+    <div class='app-brand demo @((@ViewData["navbarFull"] != null && Convert.ToBoolean(@ViewData["navbarFull"])) ? "d-xl-none" : "")'>
+        <a asp-controller="Dashboards" asp-action="Index" class="app-brand-link">
+            <span class="app-brand-logo demo">
+                @await Html.PartialAsync("../_Partials/_Macros")
+            </span>
+            <span class="app-brand-text demo menu-text fw-bold ms-2">@TempData.Peek("appName")</span>
+        </a>
+
+        <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+            <i class="bx bx-chevron-left bx-sm align-middle"></i>
+        </a>
+    </div>
+
+    <div class="menu-inner-shadow"></div>
+
+    <ul class="menu-inner py-1">
+        <!-- COMMON MENU -->
+        <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">Common menu</span>
+        </li>
+        <!-- Dashboards -->
+        <li class='menu-item@(currentPage.EndsWith("/") || currentPage.StartsWith("/Dashboards/") ? " active open" : "")'>
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                <div>Dashboards</div>
+                <div class="badge bg-danger rounded-pill ms-auto">5</div>
+            </a>
+            <ul class="menu-sub">
+                <li class='menu-item@(currentPage == "/" ? " active" : "")'>
+                    <a asp-controller="Dashboards" asp-action="Index" class="menu-link">
+                        <div>Analytics</div>
+                    </a>
+                </li>
+                @* <li class='menu-item@(currentPage == "/Ecommerce/Dashboard" ? " active" : "")'>
+                <a href="https://demos.themeselection.com/sneat-aspnet-core-mvc-admin-template/html/vertical-menu-template/app-ecommerce-dashboard.html" target="_blank" class="menu-link">
+                <div>eCommerce</div><div class="badge bg-label-primary fs-tiny rounded-pill ms-auto">Pro</div>
+                </a>
+                </li> *@
+            </ul>
+        </li>
+        <!-- Quick Access -->
+        <li class='menu-item@(currentPage == "/TechbizAreas/QuickAccess/Index" ? " active" : "")'>
+            <a asp-controller="QuickAccess" asp-action="Index" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-home-alt"></i>
+                <div data-i18n="Quick Access">Quick Access</div>
+            </a>
+        </li>
+        <!-- Authorize MENU -->
+        <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">Authorize menu</span>
+        </li>
+
+        @Html.Raw(BuildMenu(Model, currentPage))
+    </ul>
+
+</aside>
+
+<!-- game add 20240713-->
+@functions {
+
+    private string BuildMenu(List<permissionRoleMappingModel> menus, string currentPage, long? parentId = null)
+    {
+        // Create menu by recursive method
+        var items = menus.Where(m => m.menu_parent_id == parentId)
+                         .Select(m => new
+                         {
+                             Menu = m,
+                             SubMenu = BuildMenu(menus, currentPage, m.menu_id)
+                         });
+
+        // Check sub menu
+        if (!items.Any()) return string.Empty;
+
+        // Create HTML menu
+        var result = new System.Text.StringBuilder();
+        result.Append("<ul class='menu-inner py-1'>");
+
+        foreach (var item in items)
+        {
+            // Check if item has sub menu
+            var hasSubMenu = !string.IsNullOrEmpty(item.SubMenu);
+            var menuToggleClass = hasSubMenu ? " menu-toggle" : "";
+            var subMenuItems = hasSubMenu ? $"<ul class='menu-sub'>{item.SubMenu}</ul>" : "";
+
+            // Determine active and parent active classes
+            var isActive = currentPage.Equals(item.Menu.program_path, StringComparison.OrdinalIgnoreCase) ? " active" : "";
+            var isParentActive = hasSubMenu && item.SubMenu.Contains(" active") ? " active open" : "";
+
+            // Generate menu item
+            result.AppendFormat("<li class='menu-item{0}{1}'>", isParentActive, isActive);
+            result.AppendFormat("<a href='{0}' class='menu-link{1}' data-link='{2}' data-perm='{3}'>",
+                item.Menu.program_path == null || item.Menu.program_path.Trim().Length == 0 ? "javascript:void(0);" : Url.Action(item.Menu.GetAction(), item.Menu.GetController()),
+                menuToggleClass,
+                item.Menu.program_path ?? "javascript:void(0);",
+                item.Menu.menu_id);
+            result.AppendFormat("{0}", item.Menu.menu_icon);
+            result.AppendFormat("<div>{0}</div>", item.Menu.menu_name);
+            result.Append("</a>");
+            result.Append(subMenuItems);
+            result.Append("</li>");
+        }
+
+        result.Append("</ul>");
+        return result.ToString();
+    }
+}

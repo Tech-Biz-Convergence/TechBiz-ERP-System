@@ -13,14 +13,14 @@ using Utilities;
 
 namespace DataLayer.HR.MasterModels
 {
-    public class EmployeeRepository : IDataRepository<tm_employee_info>
+    public class EmployeeRepository : IDataRepository<tbm_employee_info>
     {
         public int Delete(int Key, NpgsqlConnection conn, NpgsqlTransaction transaction = null)
         {
             int result = 0;
             try
             {
-                string sql = @"DELETE FROM tm_employee_info WHERE id = @id";
+                string sql = @"DELETE FROM hr.tbm_employee_info WHERE emp_id = @id";
 
                 using (var cmd = new NpgsqlCommand(sql, conn))
                 {
@@ -49,7 +49,7 @@ namespace DataLayer.HR.MasterModels
                 DataTable dataTable = new DataTable();
 
                 String select = @" SELECT * ";
-                String from = @" FROM  tm_employee_info  ";
+                String from = @" FROM  hr.tbm_employee_info ";
 
 
                 sqlCommand.Connection = conn;
@@ -72,12 +72,14 @@ namespace DataLayer.HR.MasterModels
                 NpgsqlCommand sqlCommand = new NpgsqlCommand();
                 DataTable dataTable = new DataTable();
 
-                String select = @" SELECT * ";
-                String from   = @" FROM  tm_employee_info  ";
-                String where  = @" WHERE  id = @key  ";
-
+                String select = @" SELECT tbEmp.*,tbDept.dept_name ";
+                String from   = @" FROM  hr.tbm_employee_info  tbEmp
+                                 INNER JOIN hr.tbm_dept_info tbDept 
+                                 ON tbEmp.dept_id = tbDept.dept_id ";
+                String where  = @" WHERE  emp_id = @key  ";
                 sqlCommand.Parameters.Add(new NpgsqlParameter("@key", NpgsqlDbType.Integer)).Value = Key;
 
+             
 
                 sqlCommand.Connection = conn;
 
@@ -93,33 +95,49 @@ namespace DataLayer.HR.MasterModels
             }
         }
 
-        public int Insert(tm_employee_info model, NpgsqlConnection conn, NpgsqlTransaction transaction = null) 
+        public int Insert(tbm_employee_info model, NpgsqlConnection conn, NpgsqlTransaction transaction = null) 
         {
             int result = 0;
             try
             {
-                string sql = @"INSERT INTO tm_employee_info 											
-                                        (											
-                                        name,											
-                                        position,											
-                                        department,											
-                                        salary											
+                string sql = @"INSERT INTO hr.tbm_employee_info 											
+                                        (													
+                                        create_by,	
+                                        create_date,
+                                        emp_code,
+                                        emp_firstname,
+                                        emp_lastname,
+                                        emp_mobile_no,
+                                        emp_status,
+                                        start_date,
+                                        end_date,
+                                        dept_id
                                         ) 											
                                     VALUES 											
-                                        (@name,											
-                                        @position,											
-                                        @department,											
-                                        @salary										
-                                        ) RETURNING id;";
+                                        (										
+                                        @create_by,	
+                                        now(),
+                                        @emp_code,
+                                        @emp_firstname,
+                                        @emp_lastname,
+                                        @emp_mobile_no,
+                                        @emp_status,
+                                        @start_date,
+                                        @end_date,
+                                        @dept_id
+                                        ) RETURNING emp_id;";
 
                 using (var cmd = new NpgsqlCommand(sql, conn))
                 {
-                    
-                    cmd.Parameters.Add("@name", NpgsqlDbType.Varchar).Value = model.name;
-                    cmd.Parameters.Add("@position", NpgsqlDbType.Varchar).Value = model.position;
-                    cmd.Parameters.Add("@department", NpgsqlDbType.Varchar).Value = model.department;
-                    cmd.Parameters.Add("@salary", NpgsqlDbType.Double).Value = model.salary;
- 
+                    cmd.Parameters.Add("@create_by", NpgsqlDbType.Varchar).Value = model.create_by;
+                    cmd.Parameters.Add("@emp_code", NpgsqlDbType.Varchar).Value = model.emp_code;
+                    cmd.Parameters.Add("@emp_firstname", NpgsqlDbType.Varchar).Value = model.emp_firstname;
+                    cmd.Parameters.Add("@emp_lastname", NpgsqlDbType.Varchar).Value = model.emp_lastname;
+                    cmd.Parameters.Add("@emp_mobile_no", NpgsqlDbType.Varchar).Value = model.emp_mobile_no;
+                    cmd.Parameters.Add("@emp_status", NpgsqlDbType.Varchar).Value = model.emp_status;
+                    cmd.Parameters.Add("@start_date", NpgsqlDbType.Timestamp).Value = model.start_date;
+                    cmd.Parameters.Add("@end_date", NpgsqlDbType.Timestamp).Value = model.end_date ?? (object)DBNull.Value;
+                    cmd.Parameters.Add("@dept_id", NpgsqlDbType.Bigint).Value = model.dept_id;
                     if (transaction != null)
                     {
                         cmd.Transaction = transaction;
@@ -139,27 +157,37 @@ namespace DataLayer.HR.MasterModels
 
         }
 
-        public int Update(tm_employee_info model, NpgsqlConnection conn, NpgsqlTransaction transaction = null)
+        public int Update(tbm_employee_info model, NpgsqlConnection conn, NpgsqlTransaction transaction = null)
         {
             int result = 0;
             try
             {
-                string sql = @"UPDATE tm_employee_info
-                       SET name = @name,
-                           position = @position,
-                           department = @department,
-                           salary = @salary
-                           is_active = @is_active;
-                       WHERE id = @id";
+                string sql = @"UPDATE hr.tbm_employee_info
+                       SET 	
+                           update_by = @update_by,
+                           update_date = now(),
+                           emp_code = @emp_code,
+                           emp_firstname = @emp_firstname,
+                           emp_lastname = @emp_lastname,
+                           emp_mobile_no = @emp_mobile_no,
+                           emp_status = @emp_status,
+                           start_date = @start_date,
+                           end_date =  @end_date,
+                           dept_id = @dept_id
+                       WHERE emp_id = @emp_id";
 
                 using (var cmd = new NpgsqlCommand(sql, conn))
                 {
-                    cmd.Parameters.Add("@name", NpgsqlDbType.Varchar).Value = model.name;
-                    cmd.Parameters.Add("@position", NpgsqlDbType.Varchar).Value = model.position;
-                    cmd.Parameters.Add("@department", NpgsqlDbType.Varchar).Value = model.department;
-                    cmd.Parameters.Add("@salary", NpgsqlDbType.Double).Value = model.salary;
-                    cmd.Parameters.Add("@is_active", NpgsqlDbType.Integer).Value = model.is_active;
-                    cmd.Parameters.Add("@id", NpgsqlDbType.Integer).Value = model.id;
+                    cmd.Parameters.Add("@update_by", NpgsqlDbType.Varchar).Value = model.update_by;
+                    cmd.Parameters.Add("@emp_code", NpgsqlDbType.Varchar).Value = model.emp_code;
+                    cmd.Parameters.Add("@emp_firstname", NpgsqlDbType.Varchar).Value = model.emp_firstname;
+                    cmd.Parameters.Add("@emp_lastname", NpgsqlDbType.Varchar).Value = model.emp_lastname;
+                    cmd.Parameters.Add("@emp_mobile_no", NpgsqlDbType.Varchar).Value = model.emp_mobile_no;
+                    cmd.Parameters.Add("@emp_status", NpgsqlDbType.Varchar).Value = model.emp_status;
+                    cmd.Parameters.Add("@start_date", NpgsqlDbType.Timestamp).Value = model.start_date;
+                    cmd.Parameters.Add("@end_date", NpgsqlDbType.Timestamp).Value = model.end_date;
+                    cmd.Parameters.Add("@dept_id", NpgsqlDbType.Bigint).Value = model.dept_id;
+                    cmd.Parameters.Add("@emp_id", NpgsqlDbType.Integer).Value = model.emp_id;
                     
 
                     if (transaction != null)
@@ -184,12 +212,18 @@ namespace DataLayer.HR.MasterModels
                 DataTable dt = new DataTable();
 
                 string selectCount = @"SELECT count(1) ";
-                String select = @" SELECT * ";
-                String from = @"   FROM  tm_employee_info ";
-                String where =  @" WHERE name ILIKE '%' || @searchValue || '%'
-                    OR position ILIKE '%' || @searchValue || '%'
-                    OR department ILIKE '%' || @searchValue || '%'
-                    OR CAST(salary AS VARCHAR) ILIKE '%' || @searchValue || '%' ";
+                String select = @" SELECT 
+                                    tbEmp.*,
+                                    tbDept.dept_name ";
+                String from   = @" FROM 
+                                    hr.tbm_employee_info tbEmp
+                                INNER JOIN 
+                                    hr.tbm_dept_info tbDept ON tbEmp.dept_id = tbDept.dept_id ";
+                String where = @" WHERE emp_code ILIKE '%' || @searchValue || '%'
+                    OR emp_firstname ILIKE '%' || @searchValue || '%'
+                    OR emp_lastname ILIKE '%' || @searchValue || '%'
+                    OR emp_mobile_no ILIKE '%' || @searchValue || '%'
+                    OR dept_name ILIKE '%' || @searchValue || '%'  ";
                 String orderBy = @" ORDER BY " + queryParameter.sortBy + " " + queryParameter.sortType + @"
                               OFFSET (@page - 1) * @limit 
                               FETCH NEXT @limit ROWS ONLY ";
@@ -224,22 +258,22 @@ namespace DataLayer.HR.MasterModels
             }
         }
 
-        public int UpdateActive(int id, int user_id, bool is_active, NpgsqlConnection conn, NpgsqlTransaction transaction = null)
+        public int UpdateActive(int id, string user_name, string status, NpgsqlConnection conn, NpgsqlTransaction transaction = null)
         {
             int result = 0;
             try
             {
                 string sql = @"UPDATE 											
-                                        tm_employee_info											
+                                        hr.tbm_employee_info											
                                     SET 											
-                                        isActive = @isActive														
+                                        emp_status = @status														
                                     WHERE  											
-                                        id = @id";
+                                        emp_id = @id";
 
                 using (var cmd = new NpgsqlCommand(sql, conn))
                 {
-                    cmd.Parameters.Add("@id", NpgsqlDbType.Integer).Value = id;
-                    cmd.Parameters.Add("@is_active", NpgsqlDbType.Boolean).Value = is_active;// model.isActive;											
+                    cmd.Parameters.Add("@id", NpgsqlDbType.Bigint).Value = id;
+                    cmd.Parameters.Add("@status", NpgsqlDbType.Varchar).Value = status;// model.isActive;											
                   //  cmd.Parameters.Add("@update_by", SqlDbType.Int).Value = user_id;
 
                     result = 0;

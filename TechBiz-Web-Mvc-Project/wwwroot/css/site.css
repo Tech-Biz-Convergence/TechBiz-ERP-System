@@ -1,0 +1,17 @@
+/* Custom styles goes here */
+/* add by game 20240712 */
+.rounded-container-create {
+  border-radius: 10px; /* ปรับขนาดขอบโค้งตามที่ต้องการ */
+  padding: 5px; /* เพิ่ม padding หรือปรับแต่งอื่น ๆ ตามต้องการ */
+  background-color: #f0f0f0; /* เปลี่ยนสีพื้นหลังตามที่ต้องการ */
+  border: 1px solid #ccc; /* เพิ่มเส้นขอบหรือปรับแต่งเพิ่มเติม */
+  border: 1px solid transparent;
+}
+.required::before {
+  content: "* ";
+  color: red;
+}
+
+.select2-selection.select2-selection--single {
+  padding-right: 50px !important;
+}
