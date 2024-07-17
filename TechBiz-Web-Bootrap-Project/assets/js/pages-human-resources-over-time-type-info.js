@@ -470,7 +470,7 @@ $(document).ready(function() {
     function ClearAddNew()
     {
         $('#AddFormId').trigger('reset');
-        $('#AddFormId [name=id]').val('0');
+        $('#AddFormId [name=overtime_type_id]').val('0');
         $('#saveId').prop('disabled', false);
         
        
