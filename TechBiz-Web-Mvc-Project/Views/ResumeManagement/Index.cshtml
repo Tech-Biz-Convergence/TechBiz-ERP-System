@@ -1,0 +1,142 @@
+@{
+    ViewData["Title"] = "Recuit Management - My Application";
+}
+
+@section PageScripts {
+    <script src="~/js/TechbizAreas/Check-Token.js"></script>
+    <script src="~/js/TechbizAreas/Dropdown/Department.js"></script>
+    <script src="~/js/TechbizAreas/Hr/RecuitManagement/index.js"></script>
+}
+<!-- Content -->
+<div class="py-0 mb-6">
+    <div class="row">
+        <div class="d-flex align-items-center">
+            <h4 class="fw-bold py-1 mb-3" id="title-program-name"></h4>
+            <h5 class="fw-bold py-1 mb-3 ms-auto" id="title-program-id"></h5>
+        </div>
+    </div>
+
+    <div class="row">
+        <div id="tabs" class="col-md-12">
+            <ul class="nav nav-pills flex-column flex-md-row mb-3">
+                <li class="nav-item">
+                    <a class="nav-link active " role="tab" data-bs-toggle="tab" href="#TabSearchId"><i class="bx bx-user me-1"></i> Search</a>
+                </li>
+            </ul>
+            <div class="tab-content" style="padding: 0rem;">
+                <!------------------------------------------------------------------------------->
+                <!-- tap Search -->
+                <!------------------------------------------------------------------------------->
+                <div id="TabSearchId" class="tab-pane active">
+                    <div id="AreaSearchId" class="card mb-4 SlideTabSearch">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5 class="card-header">Resume List</h5>
+                            </div>
+                            <div class="col-md-6 text-right mt-3">
+                                <div class="container  d-flex justify-content-end ">
+
+                                    <div class="dropdown">
+                                        <button type="button" class="btn rounded-pill rounded-pill  btn-outline-primary" data-bs-toggle="dropdown">
+                                            <i class="bx bx-export me-sm-1"></i><b>Export</b>
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <a id="export-csv" class="dropdown-item " href="javascript:void(0);"><i class="bx bx-file me-1"></i> Csv</a>
+                                            <a id="export-excel" class="dropdown-item " href="javascript:void(0);"><i class="bx bx-copy me-1"></i> Excel</a>
+                                            <a id="export-pdf" class="dropdown-item " href="javascript:void(0);"><i class="bx bxs-file-pdf me-1"></i> Pdf</a>
+                                            <a id="export-copy" class="dropdown-item " href="javascript:void(0);"><i class="bx bx-copy me-1"></i> Copy</a>
+                                        </div>
+                                    </div>
+                                    <button id="AddNewId" type="button" class="btn rounded-pill btn-primary  ms-2" button-feature><i class="bx bx-plus-medical me-1"></i><b>Add new</b></button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Account -->
+                        <hr class="my-0" />
+                        <div class=" container table-responsive mt-1">
+                            <table class="table table-striped" id="tableShowListId">
+                                <thead>
+                                    <tr>
+                                        <th style="width:5%;" class="text-center">Active</th>
+                                        <th>Job ID</th>
+                                        <th>Candidate ID</th>
+                                        <th>Resume Path</th>
+                                        <th>Status</th>
+                                        <th class="text-center">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                    <div id="AreaAddId" class="card mb-4 SlideTabSearch" style="display: none;">
+                        <h5 class="card-header" id="ToppicActionId">Add Resume</h5>
+                        <!-- Account -->
+                        <div class="card-body">
+                            <form id="AddFormId">
+                                <input type="hidden" name="hr_resume_id" value="0">
+                                <div class="row">
+
+                                    <div class="mb-3 col-md-6">
+                                        <label for="hr_job_id" class="form-label">Job ID</label>
+                                        <input class="form-control" type="text" id="hr_job_id" name="hr_job_id" placeholder="Enter Job ID" autofocus />
+                                    </div>
+                                    <div class="mb-3 col-md-6">
+                                        <label for="hr_candidate_id" class="form-label">Candidate ID</label>
+                                        <input class="form-control" type="text" name="hr_candidate+id" id="hr_candidate_id" placeholder="Enter Candidate ID" />
+                                    </div>
+
+                                    <div class="mb-3 col-md-6">
+                                        <label for="resume_path" class="form-label">Resume Path</label>
+                                        <input type="text" class="form-control" id="resume_path" name="resume_path" placeholder="Enter Resume Path" />
+                                    </div>
+                                    <div class="mb-3 col-md-6">
+                                        <div class="form-check form-switch mb-2">
+                                            <label class="form-check-label" for="resume_status" id="label_status" name="label_status">Active</label>
+                                            <input class="form-check-input" type="checkbox" id="resume_status" name="resume_status" checked>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- --------------------------------------------------------------------------------
+                                  -------------  Zone Create by & Update by ------------------------------------------
+                                  -------------------------------------------------------------------------------- -->
+                                <div class="row">
+                                    <div class="container rounded-container-create " style="background-color: #F5F5F5;  padding: 10px;">
+                                        <div class="row">
+                                            <div class="mb-3 col-md-6">
+                                                <label for="create-by" class="form-label">Create by</label>
+                                                <input type="text" class="form-control" id="create-by" name="create_by" placeholder="Create by" disabled="true" />
+                                            </div>
+                                            <div class="mb-3 col-md-6">
+                                                <label for="create-date" class="form-label">Create date</label>
+                                                <input type="text" class="form-control" id="create-date" name="create_date" placeholder="Create date" disabled="true" />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="mb-3 col-md-6">
+                                                <label for="update-by" class="form-label">Update by</label>
+                                                <input type="text" class="form-control" id="update-by" name="update_by" placeholder="Update by" disabled="true" />
+                                            </div>
+                                            <div class="mb-3 col-md-6">
+                                                <label for="update-date" class="form-label">Update date</label>
+                                                <input type="text" class="form-control" id="update-date" name="update_date" placeholder="Update date" disabled="true" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-2">
+                                    <button type="submit" class="btn btn-primary  rounded-pill me-2" id="saveId">Save changes</button>
+                                    <button type="reset" class="btn btn-outline-secondary  rounded-pill" id="CloseId">Close</button>
+                                </div>
+                            </form>
+                        </div>
+                        <!-- /Account -->
+                    </div>
+                </div>
+            </div>  <!-- tab-content-->
+        </div>
+    </div>
+</div>
+<!-- / Content -->

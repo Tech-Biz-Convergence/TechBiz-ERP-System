@@ -1,0 +1,215 @@
+@{
+    ViewData["Title"] = "Job Management - My Application";
+}
+
+@section PageScripts {
+    <script src="~/js/TechbizAreas/Check-Token.js"></script>       
+    <script src="~/js/TechbizAreas/Hr/JobManagement/index.js"></script>
+}
+<!-- Content -->
+<div class="py-0 mb-6">
+    <div class="row">
+        <div class="d-flex align-items-center">
+            <h4 class="fw-bold py-1 mb-3" id="title-program-name"></h4>
+            <h5 class="fw-bold py-1 mb-3 ms-auto" id="title-program-id"></h5>
+        </div>
+    </div>
+
+    <div class="row">
+        <div id="tabs" class="col-md-12">
+            <ul class="nav nav-pills flex-column flex-md-row mb-3">
+                <li class="nav-item">
+                    <a class="nav-link active " role="tab" data-bs-toggle="tab" href="#TabSearchId"><i class="bx bx-user me-1"></i> Search</a>
+                </li>
+                <li class="nav-item UploadComponent">
+                    <a class="nav-link " role="tab" data-bs-toggle="tab" href="#TabUploadId"><i class="bx bx-upload me-1"></i> Upload</a>
+                </li>
+            </ul>
+            <div class="tab-content" style="padding: 0rem;">
+                <!------------------------------------------------------------------------------->
+                <!-- tap Search -->
+                <!------------------------------------------------------------------------------->
+                <div id="TabSearchId" class="tab-pane active">
+                    <div id="AreaSearchId" class="card mb-4 SlideTabSearch">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5 class="card-header">Job List</h5>
+                            </div>
+                            <div class="col-md-6 text-right mt-3">
+                                <div class="container  d-flex justify-content-end ">
+
+                                    <div class="dropdown">
+                                        <button type="button" class="btn rounded-pill rounded-pill  btn-outline-primary" data-bs-toggle="dropdown">
+                                            <i class="bx bx-export me-sm-1"></i><b>Export</b>
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <a id="export-csv" class="dropdown-item " href="javascript:void(0);"><i class="bx bx-file me-1"></i> Csv</a>
+                                            <a id="export-excel" class="dropdown-item " href="javascript:void(0);"><i class="bx bx-copy me-1"></i> Excel</a>
+                                            <a id="export-pdf" class="dropdown-item " href="javascript:void(0);"><i class="bx bxs-file-pdf me-1"></i> Pdf</a>
+                                            <a id="export-copy" class="dropdown-item " href="javascript:void(0);"><i class="bx bx-copy me-1"></i> Copy</a>
+                                        </div>
+                                    </div>
+                                    <button id="AddNewId" type="button" class="btn rounded-pill btn-primary  ms-2" button-feature><i class="bx bx-plus-medical me-1"></i><b>Add new</b></button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Account -->
+                        <hr class="my-0" />
+                        <div class=" container table-responsive mt-1">
+                            <table class="table table-striped" id="tableShowListId">
+                                <thead>
+                                    <tr>
+                                        <th style="width:5%;" class="text-center">Active</th>
+                                        <th>Job Title</th>
+                                        <th>Type</th>
+                                        <th>Start Date</th>
+                                        <th>Expire Date</th>
+                                        <th>Status</th>                                        
+                                        <th class="text-center">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                    <div id="AreaAddId" class="card mb-4 SlideTabSearch" style="display: none;">
+                        <h5 class="card-header" id="ToppicActionId">Add Employee</h5>
+                        <!-- Account -->                        
+                        <div class="card-body">
+                            <form id="AddFormId">
+                                <input type="hidden" name="hr_job_id" value="0">
+                                <div class="row">
+
+                                    <div class="mb-3 col-md-6">
+                                        <label for="hr_job_title" class="form-label required">Job Title</label>
+                                        <input class="form-control" type="text" id="hr_job_title" name="hr_job_title" placeholder="Enter Job Title" autofocus />
+                                    </div>
+                                    <div class="mb-3 col-md-6">
+                                        <label for="hr_job_types" class="form-label  required">Job Type</label>
+                                        <input class="form-control" type="text" id="hr_job_types" name="hr_job_types" placeholder="Enter Job Type" autofocus />
+                                    </div>                                    
+                                    <div class="mb-3 col-md-6">
+                                        <label for="hr_job_start_date" class="form-label  required">Start Date</label>
+                                        <input id="hr_job_start_date" class="form-control" type="date" name="hr_job_start_date">
+
+                                    </div>
+                                    <div class="mb-3 col-md-6">
+                                        <label for="hr_job_expire_date" class="form-label">Expire Date</label>
+                                        <input id="hr_job_expire_date" class="form-control" type="date" name="hr_job_expire_date">
+
+                                    </div>
+                                    <div class="mb-3 col-md-6">
+                                        <label class="form-label" data-lang="status">Active</label>
+                                        <div class="form-check form-switch mb-2">
+                                            <input class="form-check-input" type="checkbox" id="hr_job_status" name="hr_job_status" checked>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- --------------------------------------------------------------------------------
+                                  -------------  Zone Create by & Update by ------------------------------------------
+                                  -------------------------------------------------------------------------------- -->
+                                <div class="row">
+                                    <div class="container rounded-container-create " style="background-color: #F5F5F5;  padding: 10px;">
+                                        <div class="row">
+                                            <div class="mb-3 col-md-6">
+                                                <label for="create-by" class="form-label">Create by</label>
+                                                <input type="text" class="form-control" id="create-by" name="create_by" placeholder="Create by" disabled="true" />
+                                            </div>
+                                            <div class="mb-3 col-md-6">
+                                                <label for="create-date" class="form-label">Create date</label>
+                                                <input type="text" class="form-control" id="create-date" name="create_date" placeholder="Create date" disabled="true" />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="mb-3 col-md-6">
+                                                <label for="update-by" class="form-label">Update by</label>
+                                                <input type="text" class="form-control" id="update-by" name="update_by" placeholder="Update by" disabled="true" />
+                                            </div>
+                                            <div class="mb-3 col-md-6">
+                                                <label for="update-date" class="form-label">Update date</label>
+                                                <input type="text" class="form-control" id="update-date" name="update_date" placeholder="Update date" disabled="true" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-2">
+                                    <button type="submit" class="btn btn-primary  rounded-pill me-2" id="saveId">Save changes</button>
+                                    <button type="reset" class="btn btn-outline-secondary  rounded-pill" id="CloseId">Close</button>
+                                </div>
+                            </form>
+                        </div>
+                        <!-- /Account -->
+                    </div>
+                </div>
+                <!------------------------------------------------------------------------------->
+                <!-- tap upload -->
+                <!------------------------------------------------------------------------------->
+                <div id="TabUploadId" class="tab-pane button-feature UploadComponent">
+                    <!-- area upload-->
+                    <div id="AreaUploadId" class="card mb-4 $ SlideTabUpload">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5 class="card-header">Job Upload</h5>
+                            </div>
+                            <div class="col-md-6 text-right mt-3">
+                                <div class="container" style="text-align: right;">
+                                    <button id="DownloadId" type="button" class="btn btn-primary"><i class="bx bx-plus-medical me-1"></i><b>Download Template</b></button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Account -->
+                        <hr class="my-0" />
+                        <div class="card-body">
+                            <form id="UploadFormId">
+                                <div class="mb-3 col-md-12 ">
+                                    <label for="Upload File" class="form-label">Upload File</label>
+                                    <input type="file" class="form-control" name="fileInput" placeholder="Choose File" />
+                                </div>
+                                <div class="mt-2">
+                                    <button type="submit" class="btn btn-primary me-2">Upload</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div> <!-- Area upload -->
+                    <!-- Area show upload -->
+                    <div id="AreaShowUploadId" class="card mb-4 SlideTabUpload" style="display: none;">
+                        <div class="col-md-6">
+                            <h5 class="card-header">Show Upload</h5>
+                        </div>
+                        <div class="col-md-6 text-right mt-3">
+                            <div class="container" style="text-align: right;">
+                            </div>
+                        </div>
+                        <!-- Account -->
+                        <hr class="my-0" />
+                        <div class="card-body">
+                            <div class=" table-responsive">
+                                <table class="table table-striped" id="tableUploadId">
+                                    <thead>
+                                        <tr>
+                                            <th>Job Title</th>
+                                            <th>Types</th>
+                                            <th>Start Date</th>
+                                            <th>Expire Date</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="mt-2">
+                                <button type="button" class="btn btn-primary me-2" id="SaveUploadId">Save</button>
+                                <button type="button" class="btn btn-outline-secondary" id="UploadCloseId">Close</button>
+                            </div>
+                        </div>
+                    </div><!-- Area show upload -->
+
+                </div>
+            </div>  <!-- tab-content-->
+        </div>
+    </div>
+</div>
+<!-- / Content -->

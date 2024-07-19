@@ -13,7 +13,7 @@ $(document).ready(function () {
       placeholder: 'Select Department',
       //allowClear: true
       ajax: {
-        url: config.apiUrl.base + '/Api/Auth/Department/GetPaginate',
+        url: config.apiUrl.base + '/Api/auth/Department/GetPaginate',
         type: 'GET',
         dataType: 'json',
         headers: { "Authorization": "Bearer " + token },

@@ -8,7 +8,7 @@ using Utilities;
 
 namespace HrService.Controllers;
 
-[Route("Api/Auth/[controller]")]
+[Route("Api/auth/[controller]")]
 [Authorize]
 [ApiController]
 public class EmployeeController : ControllerBase

@@ -193,7 +193,7 @@ namespace BusinessLogic.Identity
         {
             int total = 0;
             ResultMessage resultMessage = new ResultMessage();
-            List<tm_employee_info> assyPartControlModel = new List<tm_employee_info>();
+            List<tbm_employee_info> assyPartControlModel = new List<tbm_employee_info>();
             DataTable dt = new DataTable();
 
             using (NpgsqlConnection conn = new NpgsqlConnection(GlobalVariables.ConnectionString))

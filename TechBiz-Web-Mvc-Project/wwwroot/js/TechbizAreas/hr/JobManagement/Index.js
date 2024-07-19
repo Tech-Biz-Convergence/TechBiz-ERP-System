@@ -60,7 +60,7 @@ $(document).ready(function () {
     messages: {
       emp_firstname: {
         required: icon + " Please enter employee firstname.",
-        maxlength:  icon + " Please enter no more than 255 characters."
+        maxlength: icon + " Please enter no more than 255 characters."
       },
       emp_lastname: {
 
@@ -68,15 +68,15 @@ $(document).ready(function () {
         maxlength: icon + " Please enter no more than 255 characters."
       },
       emp_code: {
-        required: icon + " Please enter employee code.", 
+        required: icon + " Please enter employee code.",
         maxlength: icon + " Please enter no more than 50 characters."
       },
       emp_mobile_no: {
         maxlength: icon + " Please enter no more than 10 characters."
       },
       start_date: {
-        required: icon + " Please select start date.", 
-      } ,
+        required: icon + " Please select start date.",
+      },
       dept_id: {
         required: icon + " Please select department.",
       }
@@ -113,7 +113,7 @@ $(document).ready(function () {
     ShowUploadListDataTable(formData)
 
   });
-  
+
   //============================================================================
   // ZONE : EVENT CLICK
   // create date   : 20240619
@@ -138,7 +138,7 @@ $(document).ready(function () {
 
   $(document).on('click', '#AddNewId', function () {
     ClearAddNew();
-    $('#ToppicActionId').text('Add Employee');
+    $('#ToppicActionId').text('Add Job');
     $('.SlideTabSearch').hide();
     $('#AreaAddId').show();
   });
@@ -153,7 +153,7 @@ $(document).ready(function () {
   $(document).on('click', '.EditButton', function () {
     debugger;
     console.log("Edit");
-    $('#ToppicActionId').text('Edit Employee');
+    $('#ToppicActionId').text('Edit Job');
     $('#saveId').prop('disabled', false);
     var id = $(this).attr('data-id');
     console.log('id:' + id);
@@ -166,7 +166,7 @@ $(document).ready(function () {
 
   $(document).on('click', '.ViewButton', async function () {
     console.log("View");
-    $('#ToppicActionId').text('View Employee');
+    $('#ToppicActionId').text('View Job');
     $('#saveId').prop('disabled', true);
     // alert("Test");
     var id = $(this).attr('data-id');
@@ -183,7 +183,7 @@ $(document).ready(function () {
         type: 'DELETE',
         headers: { "Authorization": "Bearer " + token },
         contentType: 'application/json; charset=utf-8',
-        url: config.apiUrl.base + '/api/auth/Employee/Delete/' + id,
+        url: config.apiUrl.base + '/Api/hr/job/Delete/' + id,
         data: {
           user_name: username
         }
@@ -212,13 +212,13 @@ $(document).ready(function () {
     if (button.hasClass('btn-primary')) {
       console.log(" hasClass('btn-primary') ");
       button.removeClass('btn-primary').addClass('btn-outline-secondary');
-      urlApi = config.apiUrl.base + '/api/auth/Employee/activateCondition/' + id;
+      urlApi = config.apiUrl.base + '/Api/hr/job/activateCondition/' + id;
       status = "INACTIVE";
       console.log('urlApi : ' + urlApi);
     } else {
       console.log(" No hasClass('btn-primary') ");
       button.removeClass('btn-outline-secondary').addClass('btn-primary');
-      urlApi = config.apiUrl.base + '/api/auth/Employee/activateCondition/' + id;
+      urlApi = config.apiUrl.base + '/Api/hr/job/activateCondition/' + id;
       status = "ACTIVE";
       console.log('urlApi : ' + urlApi);
     }
@@ -318,7 +318,7 @@ $(document).ready(function () {
       ajax: (data, callback) => {
         $.ajax({
 
-          url: config.apiUrl.base + '/api/auth/Employee/GetPaginate',
+          url: config.apiUrl.base + '/api/hr/job/GetPaginate',
           type: 'GET',
           contentType: 'application/json; charset=utf-8',
           headers: { "Authorization": "Bearer " + token },
@@ -364,41 +364,34 @@ $(document).ready(function () {
             // ตรวจสอบค่า row.emp_status
             var buttonClass = row.emp_status === 'ACTIVE' ? 'btn-primary' : 'btn-outline-secondary';
             // สร้าง HTML ของปุ่ม
-            return `<button type="button" class="btn rounded-pill btn-icon ${buttonClass} ActiveButton button-feature " data-id="${row.emp_id}">
+            return `<button type="button" class="btn rounded-pill btn-icon ${buttonClass} ActiveButton button-feature " data-id="${row.hr_job_id}">
                               <span class="tf-icons bx bx-power-off"></span>
                         </button>`;
           }
         },
-        { targets: 1, data: 'emp_code', ordering: true },
+        { targets: 1, data: 'hr_job_title', ordering: true },
+        { targets: 2, data: 'hr_job_types', ordering: true },                 
         {
-          targets: 2,
-          render: function (data, type, row) {
-            return row.emp_firstname + ' ' + row.emp_lastname; // รวม firstName และ lastName เข้าด้วยกัน
+          targets: 3,
+          data: 'hr_job_start_date',
+          render: function (data, type, row, meta) {
+            // แปลงรูปแบบวันที่ตามที่ต้องการ
+            return formatDate(row.hr_job_start_date)
           },
           ordering: true
         },
-        { targets: 3, data: 'emp_mobile_no', ordering: true },
         {
           targets: 4,
-          data: 'start_date',
+          data: 'hr_job_expire_date',
           render: function (data, type, row, meta) {
             // แปลงรูปแบบวันที่ตามที่ต้องการ
-            return formatDate(row.start_date)
+            return formatDate(row.hr_job_expire_date)
           },
           ordering: true
         },
+        { targets: 5, data: 'hr_job_status', ordering: true },
         {
-          targets: 5,
-          data: 'end_date',
-          render: function (data, type, row, meta) {
-            // แปลงรูปแบบวันที่ตามที่ต้องการ
-            return formatDate(row.end_date)
-          },
-          ordering: true
-        },
-        { targets: 6, data: 'dept_name', ordering: true },
-        {
-          targets: 7,
+          targets: 6,
           data: null,
           orderable: false,
           className: 'dt-head-center dt-body-center',
@@ -408,13 +401,13 @@ $(document).ready(function () {
                               <i class="bx bx-dots-vertical-rounded"></i>
                             </button>
                             <div class="dropdown-menu">
-                            <a class="dropdown-item ViewButton" href="javascript:void(0);" data-id="${row.emp_id}" 
+                            <a class="dropdown-item ViewButton" href="javascript:void(0);" data-id="${row.hr_job_id}" 
                                 ><i class="bx bx-list-ul me-2"></i> View</a
                               >
-                              <a class="dropdown-item EditButton" href="javascript:void(0);" data-id="${row.emp_id}" 
+                              <a class="dropdown-item EditButton" href="javascript:void(0);" data-id="${row.hr_job_id}" 
                                 ><i class="bx bx-edit-alt me-2"></i> Edit</a
                               >
-                              <a class="dropdown-item DeleteButton" href="javascript:void(0);" data-id="${row.emp_id}" 
+                              <a class="dropdown-item DeleteButton" href="javascript:void(0);" data-id="${row.hr_job_id}" 
                                 ><i class="bx bx-trash me-2"></i> Delete</a
                               >
                             </div>
@@ -432,7 +425,7 @@ $(document).ready(function () {
     var formData = new FormData(this);
 
     $.ajax({
-      url: config.apiUrl.base + '/api/auth/employee/ImportDataExcelFile',
+      url: config.apiUrl.base + '/api/hr/job/ImportDataExcelFile',
       headers: { "Authorization": "Bearer " + token },
       type: 'POST',
       data: formData,
@@ -451,56 +444,54 @@ $(document).ready(function () {
   function getTableSortBy(column) {
     switch (column) {
       case 1:
-        return 'emp_code';
+        return 'hr_job_title';
       case 2:
-        return 'emp_firstname';
+        return 'hr_job_types';
       case 3:
-        return 'emp_mobile_no';
+        return 'hr_job_start_date';
       case 4:
-        return 'start_date';
+        return 'hr_job_expire_date';
       case 5:
-        return 'end_date';
-      case 6:
-        return 'dep_name';
+        return 'hr_job_status';      
       default:
         return null;
     }
   }
 
- 
+
 
   async function AddFromSubmit(formData) {
     var type;
     var url;
-  
+
     if (formData.end_date === "") {
       formData.end_date = null;
     }
-    if ($('#AddFormId [name=emp_status]').prop('checked')) {
-      formData.emp_status = 'ACTIVE'
+    if ($('#AddFormId [name=hr_job_status]').prop('checked')) {
+      formData.hr_job_status = 'ACTIVE'
     } else {
-      formData.emp_status = 'INACTIVE'
+      formData.hr_job_status = 'INACTIVE'
     }
 
     //check insert or update
-    if (formData.emp_id == '0') {
+    if (formData.hr_job_id == '0') {
 
-     
+
       //insert
       formData.create_by = username;
       var type = 'POST';
-      var url = config.apiUrl.base + '/api/auth/employee/addnew';
+      var url = config.apiUrl.base + '/api/hr/job/addnew';
     } else {
       //update
       formData.update_by = username;
       type = 'PUT';
-      url = config.apiUrl.base + '/api/auth/employee/update';
+      url = config.apiUrl.base + '/api/hr/job/update';
     }
     await $.ajax({
       url: url,
       type: type,
       contentType: 'application/json; charset=utf-8',
-      data: JSON.stringify(formData) ,
+      data: JSON.stringify(formData),
       headers: { "Authorization": "Bearer " + token },
       success: function (response) {
         console.log(response);
@@ -523,7 +514,7 @@ $(document).ready(function () {
           window.location.href = window.location.origin + '/Auth/LoginBasic';
           localStorage.removeItem("token");
         }
-       
+
       }
     });
 
@@ -537,7 +528,7 @@ $(document).ready(function () {
 
   async function RenderAddNewForm(id) {
     await $.ajax({
-      url: config.apiUrl.base + '/api/auth/employee/get/' + id,
+      url: config.apiUrl.base + '/api/hr/job/get/' + id,
       type: 'GET',
       contentType: 'application/json; charset=utf-8',
       // data: {
@@ -549,27 +540,20 @@ $(document).ready(function () {
         if (response.status == true) {
           debugger;
           var res = response.data;
-          $('#AddFormId [name=emp_id]').val(res.emp_id);
-          $('#AddFormId [name=emp_code]').val(res.emp_code);
-          $('#AddFormId [name=emp_firstname]').val(res.emp_firstname);
-          $('#AddFormId [name=emp_lastname]').val(res.emp_lastname);
-          $('#AddFormId [name=emp_mobile_no]').val(res.emp_mobile_no);
-          $('#AddFormId [name=start_date]').val(formatDate(res.start_date));
-          $('#AddFormId [name=end_date]').val(formatDate(res.end_date));
+          $('#AddFormId [name=hr_job_id').val(res.hr_job_id);
+          $('#AddFormId [name=hr_job_title]').val(res.hr_job_title);
+          $('#AddFormId [name=hr_job_types]').val(res.hr_job_types);
+          $('#AddFormId [name=hr_job_start_date]').val(res.hr_job_start_date);
+          $('#AddFormId [name=hr_job_expire_date]').val(res.hr_job_expire_date);
           $('#AddFormId [name=create_date]').val(res.create_date);
           $('#AddFormId [name=create_by]').val(res.create_by);
           $('#AddFormId [name=update_date]').val(res.update_date);
           $('#AddFormId [name=update_by]').val(res.update_by);
           if (res.emp_status === "ACTIVE") {
-            $('#AddFormId [name=emp_status]').prop('checked', true); // ตั้งค่าให้ checkbox มีสถานะ checked
+            $('#AddFormId [name=hr_job_status]').prop('checked', true); // ตั้งค่าให้ checkbox มีสถานะ checked
           } else {
-            $('#AddFormId [name=emp_status]').prop('checked', false); // ตั้งค่าให้ checkbox ไม่มีสถานะ checked
-          }
-          $('#AddFormId [name=dept_id]').append(new Option(res.dept_name, res.dept_id, true, true)).trigger('change');
-
-
-
-
+            $('#AddFormId [name=hr_job_status]').prop('checked', false); // ตั้งค่าให้ checkbox ไม่มีสถานะ checked
+          }          
         } else {
           MessageBox.ErrorMessage(response.code, response.description);
 
@@ -591,7 +575,7 @@ $(document).ready(function () {
   }
   function ClearAddNew() {
     $('#AddFormId').trigger('reset');
-    $('#AddFormId [name=emp_id]').val('0');
+    $('#AddFormId [name=hr_job_id]').val('0');
     $('#AddFormId div.has-error').removeClass('has-error');
     $('#AddFormId label.help-block').remove();
     $('#saveId').prop('disabled', false);
