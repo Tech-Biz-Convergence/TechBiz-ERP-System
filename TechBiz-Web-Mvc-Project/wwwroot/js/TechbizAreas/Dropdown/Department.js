@@ -1,7 +1,5 @@
 'use strict';
 $(document).ready(function () {
-  //get token
-  const token = localStorage.getItem("token");
 
   debugger;
   SetDepartmentDDL();
@@ -13,7 +11,7 @@ $(document).ready(function () {
       placeholder: 'Select Department',
       //allowClear: true
       ajax: {
-        url: config.apiUrl.base + '/Api/auth/Department/GetPaginate',
+        url: config.apiUrl.base + '/Api/Auth/Department/GetPaginate',
         type: 'GET',
         dataType: 'json',
         headers: { "Authorization": "Bearer " + token },

@@ -7,7 +7,7 @@
   console.log("URL :"+config.apiUrl.base);
   $(document).ready(function () {
     localStorage.clear();
-    $('#formAuthentication').submit(function (event) {
+    $('#formAuthentication2').submit(function (event) {
       event.preventDefault(); // ป้องกันการรีเฟรชหน้า
 
       var formData = $(this).serializeObject();

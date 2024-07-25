@@ -19,9 +19,6 @@ $(document).ready(function () {
   }
   const icon = "<i class='bx bx-alarm-exclamation me-2'></i> ";
 
-  //get token
-  const token = localStorage.getItem("token");
-  const username = localStorage.getItem("user_name");
 
   ShowMainListDataTable();
 
@@ -183,7 +180,7 @@ $(document).ready(function () {
         type: 'DELETE',
         headers: { "Authorization": "Bearer " + token },
         contentType: 'application/json; charset=utf-8',
-        url: config.apiUrl.base + '/api/auth/Employee/Delete/' + id,
+        url: config.apiUrl.base + '/Api/Auth/Employee/Delete/' + id,
         data: {
           user_name: username
         }
@@ -212,13 +209,13 @@ $(document).ready(function () {
     if (button.hasClass('btn-primary')) {
       console.log(" hasClass('btn-primary') ");
       button.removeClass('btn-primary').addClass('btn-outline-secondary');
-      urlApi = config.apiUrl.base + '/api/auth/Employee/activateCondition/' + id;
+      urlApi = config.apiUrl.base + '/Api/Auth/Employee/activateCondition/' + id;
       status = "INACTIVE";
       console.log('urlApi : ' + urlApi);
     } else {
       console.log(" No hasClass('btn-primary') ");
       button.removeClass('btn-outline-secondary').addClass('btn-primary');
-      urlApi = config.apiUrl.base + '/api/auth/Employee/activateCondition/' + id;
+      urlApi = config.apiUrl.base + '/Api/Auth/Employee/activateCondition/' + id;
       status = "ACTIVE";
       console.log('urlApi : ' + urlApi);
     }
@@ -318,7 +315,7 @@ $(document).ready(function () {
       ajax: (data, callback) => {
         $.ajax({
 
-          url: config.apiUrl.base + '/api/auth/Employee/GetPaginate',
+          url: config.apiUrl.base + '/api/auth/employee/GetPaginate',
           type: 'GET',
           contentType: 'application/json; charset=utf-8',
           headers: { "Authorization": "Bearer " + token },
@@ -403,22 +400,23 @@ $(document).ready(function () {
           orderable: false,
           className: 'dt-head-center dt-body-center',
           render: function (data, type, row) {
+            var viewButton = canView ? `<a class="dropdown-item ViewButton" href="javascript:void(0);" data-id="${row.emp_id}">
+                        <i class="bx bx-list-ul me-2"></i> View</a>` : '';
+            var editButton = canEdit ? `<a class="dropdown-item EditButton" href="javascript:void(0);" data-id="${row.emp_id}">
+                        <i class="bx bx-edit-alt me-2"></i> Edit</a>` : '';
+            var deleteButton = canDelete ? `<a class="dropdown-item DeleteButton" href="javascript:void(0);" data-id="${row.emp_id}">
+                        <i class="bx bx-trash me-2"></i> Delete</a>` : '';
+
             return `<div class="dropdown">
-                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                              <i class="bx bx-dots-vertical-rounded"></i>
-                            </button>
-                            <div class="dropdown-menu">
-                            <a class="dropdown-item ViewButton" href="javascript:void(0);" data-id="${row.emp_id}" 
-                                ><i class="bx bx-list-ul me-2"></i> View</a
-                              >
-                              <a class="dropdown-item EditButton" href="javascript:void(0);" data-id="${row.emp_id}" 
-                                ><i class="bx bx-edit-alt me-2"></i> Edit</a
-                              >
-                              <a class="dropdown-item DeleteButton" href="javascript:void(0);" data-id="${row.emp_id}" 
-                                ><i class="bx bx-trash me-2"></i> Delete</a
-                              >
-                            </div>
-                          </div>`;
+                        <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                            <i class="bx bx-dots-vertical-rounded"></i>
+                        </button>
+                        <div class="dropdown-menu">
+                            ${viewButton}
+                            ${editButton}
+                            ${deleteButton}
+                        </div>
+                    </div>`;
           }
         }
       ]

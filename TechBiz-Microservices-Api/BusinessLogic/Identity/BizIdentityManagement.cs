@@ -19,11 +19,13 @@ namespace BusinessLogic.Identity
         private readonly IJwtBuilder  m_JwtBuilder;
         private readonly IEncryptor m_Encryptor;
         UserRepository m_UserRepository;
+        MenuRepository m_MenuRepository;
         public BizIdentityManagement(IJwtBuilder jwtBuilder, IEncryptor encryptor)
         {
             m_JwtBuilder = jwtBuilder;
             m_Encryptor = encryptor;
             m_UserRepository = new UserRepository();
+            m_MenuRepository = new MenuRepository();
 
 
         }
@@ -94,12 +96,15 @@ namespace BusinessLogic.Identity
 
 
                     //get token JWT
-                    string tokenString = m_JwtBuilder.GetToken(user.user_id.ToString()) ;
+                    string tokenString = m_JwtBuilder.GetToken(user.user_id.ToString());
 
+                    //get menu
+                    DataTable dt = m_MenuRepository.GetMenuUserRoleMapping(model.user_name, conn);
+                    var roleMapping = dt.DataTableToList<permissionRoleMappingModel>();
 
                     resultMessage.status = true;
                     resultMessage.code = GlobalMessage.SUCCESS_CODE;
-                    resultMessage.data = new {token = tokenString,user_id = user.user_id,user_name = user.user_name };
+                    resultMessage.data = new {token = tokenString,user_id = user.user_id,user_name = user.user_name, menu_role_mapping = roleMapping };
                 }
                 catch (Exception ex)
                 {

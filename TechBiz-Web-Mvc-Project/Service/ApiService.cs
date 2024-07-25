@@ -26,7 +26,7 @@ namespace AspnetCoreMvcFull.Service
         m_HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", m_token);
       }
     }
-    public async Task<ResponseApi> GetDataAsync(string endpoint)
+    public async Task<ResponseApiModel> GetDataAsync(string endpoint)
     {
       if (!string.IsNullOrEmpty(m_token))
       {
@@ -38,7 +38,7 @@ namespace AspnetCoreMvcFull.Service
       string responseBody = await response.Content.ReadAsStringAsync();
 
 
-      return JsonConvert.DeserializeObject<ResponseApi>(responseBody);
+      return JsonConvert.DeserializeObject<ResponseApiModel>(responseBody);
     }
 
   }

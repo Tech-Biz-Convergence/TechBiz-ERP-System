@@ -8,9 +8,6 @@
 
   <ItemGroup>
     <Folder Include="Views\TechbizAreas\Hr\" />
-    <Folder Include="wwwroot\js\TechbizAreas\hr\JobManagement\" />
-    <Folder Include="wwwroot\js\TechbizAreas\hr\ResumeManagement\" />
-    <Folder Include="wwwroot\js\TechbizAreas\hr\RecuitManagement\" />
   </ItemGroup>
 
   <ItemGroup>

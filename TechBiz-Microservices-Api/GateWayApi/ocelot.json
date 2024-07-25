@@ -239,6 +239,20 @@
       "DownstreamPathTemplate": "/api/auth/department/getDepartmentActive",
       "DangerousAcceptAnyServerCertificateValidator": true
     },
+    {
+
+      "UpstreamPathTemplate": "/api/auth/department/GetPaginate",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7079
+        }
+      ],
+      "DownstreamPathTemplate": "/api/auth/department/GetPaginate",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
     //Company API
     {
 

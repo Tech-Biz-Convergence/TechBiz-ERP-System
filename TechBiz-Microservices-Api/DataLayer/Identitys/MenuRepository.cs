@@ -95,6 +95,7 @@ namespace DataLayer.Identitys
                                     m.permiss_delete_status, 
                                     m.permiss_upload_status, 
                                     m.permiss_download_status,
+                                    m.permiss_view_status, 
                                     m.permission_id
                                 FROM 
                                     authentication.tbm_permission_role_mapping m
@@ -141,6 +142,7 @@ namespace DataLayer.Identitys
                                     m.permiss_delete_status, 
                                     m.permiss_upload_status, 
                                     m.permiss_download_status,
+                                    m.permiss_view_status,
                                     m.permission_id
                                 FROM 
                                     authentication.tbm_permission_role_mapping m

@@ -2,17 +2,32 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using AspnetCoreMvcFull.Models;
 using AspnetCoreMvcFull.Logic;
+using Newtonsoft.Json.Linq;
+using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
+using AspnetCoreMvcFull.Controllers.TechbizAreas.Attributes;
 
 
 namespace AspnetCoreMvcFull.Controllers.TechbizAreas
 {
-  public class QuickAccessController : Controller
+  [ValidateSessionAttrubute]
+  public class QuickAccessController : BaseController
   {
+    public QuickAccessController(IHttpContextAccessor httpContextAccessor):base(httpContextAccessor) { }
+
     [HttpGet]
-    public async Task<IActionResult> Index(string user_name, string token)
+    public async Task<IActionResult> Index()
     {
-      AccessMenu accessMenu = new AccessMenu();
-      var menu = await accessMenu.GetMenuDataFromApi(user_name, token);
+
+      string menuJson = _session.GetString("MenuRoleMapping");
+
+      if (string.IsNullOrEmpty(menuJson))
+      {
+        return View(new List<permissionRoleMappingModel>());
+      }
+
+      var menu = JsonConvert.DeserializeObject<List<permissionRoleMappingModel>>(menuJson);
+
       return View(menu);
     }
   }
