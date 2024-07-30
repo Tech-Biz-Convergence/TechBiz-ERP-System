@@ -1,5 +1,6 @@
 ﻿using BusinessEntities.HR.MasterModels;
 using BusinessLogic.HR.Master;
+using BusinessLogic.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Utilities;
@@ -11,12 +12,13 @@ namespace HrService.Controllers;
 [ApiController]
 public class JobController : ControllerBase
 {
+    BizPermissionRoleMappingManagement m_BizPerMgr;
     BizJobManagement m_BizJobMgr;
 
     public JobController()
     {
-
-        m_BizJobMgr = new BizJobManagement();
+        m_BizPerMgr = new BizPermissionRoleMappingManagement();
+        m_BizJobMgr = new BizJobManagement();        
 
     }
     
@@ -71,10 +73,18 @@ public class JobController : ControllerBase
         return Ok(res);
     }
 
-    [HttpGet("ActivateCondition")]
-    public IActionResult ActivateCondition(int id, int loginId, bool is_active)
+    [HttpGet("ActivateCondition/{id}")]
+    public IActionResult ActivateCondition(int id, [FromQuery] string user_name, [FromQuery] string hr_job_status)
     {
-        ResultMessage resultMessage = m_BizJobMgr.ActivateCondition(id, loginId, is_active);
+        ResultMessage res = new ResultMessage();
+        res = m_BizPerMgr.CheckEditPermission(user_name);
+        if (res.status)
+        {
+            res = m_BizJobMgr.ActivateCondition(id, user_name, hr_job_status);
+        }
+        return Ok(res);
+
+        ResultMessage resultMessage = m_BizJobMgr.ActivateCondition(id, user_name, hr_job_status);
         return Ok(resultMessage);
     }
 

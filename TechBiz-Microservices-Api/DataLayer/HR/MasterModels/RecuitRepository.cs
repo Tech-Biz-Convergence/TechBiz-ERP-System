@@ -48,8 +48,8 @@ namespace DataLayer.HR.MasterModels
                 NpgsqlCommand sqlCommand = new NpgsqlCommand();
                 DataTable dataTable = new DataTable();
 
-                String select = @" SELECT * ";
-                String from = @" FROM  hr.tbm_recuit_stage  ";
+                String select = @" SELECT *  ";
+                String from = @" FROM  hr.tbm_recuit_stage ";
 
 
                 sqlCommand.Connection = conn;
@@ -72,8 +72,10 @@ namespace DataLayer.HR.MasterModels
                 NpgsqlCommand sqlCommand = new NpgsqlCommand();
                 DataTable dataTable = new DataTable();
 
-                String select = @" SELECT * ";
-                String from   = @" FROM  hr.tbm_recuit_stage  ";
+                String select = @" SELECT tbRe.*, tbJob.hr_job_title, tbCan.hr_candidate_name ";
+                String from   = @" FROM  hr.tbm_recuit_stage tbRe 
+                                 INNER JOIN hr.tbm_hr_job tbJob ON tbJob.hr_job_id = tbRe.hr_job_id 
+                                 LEFT JOIN hr.tbm_hr_candidates tbCan ON tbCan.hr_candidate_id = tbRe.hr_candidate_id ";
                 String where  = @" WHERE  recuit_stage_id = @key  ";
 
                 sqlCommand.Parameters.Add(new NpgsqlParameter("@key", NpgsqlDbType.Integer)).Value = Key;
@@ -100,16 +102,16 @@ namespace DataLayer.HR.MasterModels
             {
                 string sql = @"INSERT INTO hr.tbm_recuit_stage 											
                                         (											
-                                        candidate_id,											                                        
-                                        job_id,                                        
+                                        hr_candidate_id,											                                        
+                                        hr_job_id,                                        
                                         pay_amount,
                                         recuit_stage_status,
                                         create_by,
                                         create_date
                                         ) 											
                                     VALUES 											
-                                        (@candidate_id,											
-                                        @job_id,		
+                                        (@hr_candidate_id,											
+                                        @hr_job_id,		
                                         @pay_amount,                                       
                                         @recuit_stage_status,
                                         @create_by,
@@ -119,8 +121,8 @@ namespace DataLayer.HR.MasterModels
                 using (var cmd = new NpgsqlCommand(sql, conn))
                 {
                     
-                    cmd.Parameters.Add("@candidate_id", NpgsqlDbType.Bigint).Value = model.candidate_id;
-                    cmd.Parameters.Add("@job_id", NpgsqlDbType.Bigint).Value = model.job_id;
+                    cmd.Parameters.Add("@hr_candidate_id", NpgsqlDbType.Bigint).Value = model.hr_candidate_id;
+                    cmd.Parameters.Add("@hr_job_id", NpgsqlDbType.Bigint).Value = model.hr_job_id;
                     cmd.Parameters.Add("@pay_amount", NpgsqlDbType.Bigint).Value = model.pay_amount;                    
                     cmd.Parameters.Add("@recuit_stage_status", NpgsqlDbType.Varchar).Value = model.recuit_stage_status;
                     cmd.Parameters.Add("@create_by", NpgsqlDbType.Varchar).Value = model.create_by;
@@ -151,8 +153,8 @@ namespace DataLayer.HR.MasterModels
             try
             {
                 string sql = @"UPDATE hr.tbm_recuit_stage
-                       SET candidate_id = @candidate_id,
-                           job_id = @job_id,
+                       SET hr_candidate_id = @hr_candidate_id,
+                           hr_job_id = @hr_job_id,
                            pay_amount = @pay_amount,                          
                            recuit_stage_status = @recuit_stage_status,
                            update_by = @update_by,
@@ -161,8 +163,8 @@ namespace DataLayer.HR.MasterModels
 
                 using (var cmd = new NpgsqlCommand(sql, conn))
                 {                    
-                    cmd.Parameters.Add("@candidate_id", NpgsqlDbType.Bigint).Value = model.candidate_id;
-                    cmd.Parameters.Add("@job_id", NpgsqlDbType.Bigint).Value = model.job_id;
+                    cmd.Parameters.Add("@hr_candidate_id", NpgsqlDbType.Bigint).Value = model.hr_candidate_id;
+                    cmd.Parameters.Add("@hr_job_id", NpgsqlDbType.Bigint).Value = model.hr_job_id;
                     cmd.Parameters.Add("@pay_amount", NpgsqlDbType.Bigint).Value = model.pay_amount;                    
                     cmd.Parameters.Add("@recuit_stage_status", NpgsqlDbType.Varchar).Value = model.recuit_stage_status;                   
                     cmd.Parameters.Add("@update_by", NpgsqlDbType.Varchar).Value = model.update_by;
@@ -191,8 +193,10 @@ namespace DataLayer.HR.MasterModels
                 DataTable dt = new DataTable();
 
                 string selectCount = @"SELECT count(1) ";
-                String select = @" SELECT * ";
-                String from = @"   FROM  hr.tbm_recuit_stage ";
+                String select = @" SELECT tbRe.*, tbJob.hr_job_title, tbCan.hr_candidate_name ";
+                String from = @" FROM  hr.tbm_recuit_stage tbRe 
+                                 INNER JOIN hr.tbm_hr_job tbJob ON tbJob.hr_job_id = tbRe.hr_job_id 
+                                 LEFT JOIN hr.tbm_hr_candidates tbCan ON tbCan.hr_candidate_id = tbRe.hr_candidate_id ";
                 String where = @" WHERE recuit_stage_id ILIKE '%' || @searchValue || '%'";                    
                 String orderBy = @" ORDER BY " + queryParameter.sortBy + " " + queryParameter.sortType + @"
                               OFFSET (@page - 1) * @limit 
@@ -228,7 +232,7 @@ namespace DataLayer.HR.MasterModels
             }
         }
 
-        public int UpdateActive(int id, int user_id, bool is_active, NpgsqlConnection conn, NpgsqlTransaction transaction = null)
+        public int UpdateActive(int id, string user_name, string status, NpgsqlConnection conn, NpgsqlTransaction transaction = null)
         {
             int result = 0;
             try
@@ -236,14 +240,14 @@ namespace DataLayer.HR.MasterModels
                 string sql = @"UPDATE 											
                                         hr.tbm_recuit_stage											
                                     SET 											
-                                        isActive = @isActive														
+                                        recuit_stage_status = @status														
                                     WHERE  											
                                         recuit_stage_id = @id";
 
                 using (var cmd = new NpgsqlCommand(sql, conn))
                 {
                     cmd.Parameters.Add("@id", NpgsqlDbType.Integer).Value = id;
-                    cmd.Parameters.Add("@is_active", NpgsqlDbType.Boolean).Value = is_active;// model.isActive;											
+                    cmd.Parameters.Add("@status", NpgsqlDbType.Varchar).Value = status;// model.isActive;											
                   //  cmd.Parameters.Add("@update_by", SqlDbType.Int).Value = user_id;
 
                     result = 0;

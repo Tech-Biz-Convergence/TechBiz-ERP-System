@@ -72,8 +72,10 @@ namespace DataLayer.HR.MasterModels
                 NpgsqlCommand sqlCommand = new NpgsqlCommand();
                 DataTable dataTable = new DataTable();
 
-                String select = @" SELECT * ";
-                String from   = @" FROM  hr.tbm_hr_job  ";
+                String select = @" SELECT tbJob.*, tbDept.dept_name ";
+                String from   = @" FROM  hr.tbm_hr_job tbJob 
+                                   INNER JOIN hr.tbm_dept_info tbDept 
+                                   ON tbJob.dept_id = tbDept.dept_id ";
                 String where  = @" WHERE  hr_job_id = @key  ";
 
                 sqlCommand.Parameters.Add(new NpgsqlParameter("@key", NpgsqlDbType.Integer)).Value = Key;
@@ -202,12 +204,27 @@ namespace DataLayer.HR.MasterModels
                 DataTable dt = new DataTable();
 
                 string selectCount = @"SELECT count(1) ";
-                String select = @" SELECT * ";
-                String from = @"   FROM  hr.tbm_hr_job ";
-                String where = @" WHERE hr_job_title ILIKE '%' || @searchValue || '%'";                    
-                String orderBy = @" ORDER BY " + queryParameter.sortBy + " " + queryParameter.sortType + @"
+                String select = @" SELECT tbJob.*, tbDept.dept_name ";
+                String from = @"   FROM  hr.tbm_hr_job tbJob 
+                                   INNER JOIN hr.tbm_dept_info tbDept 
+                                   ON tbJob.dept_id = tbDept.dept_id ";
+                String where = @" WHERE hr_job_title ILIKE '%' || @searchValue || '%'";
+
+                string orderBy = string.Empty;
+
+                if (queryParameter.sortBy != null)
+                {
+                    orderBy = @" ORDER BY " + queryParameter.sortBy + " " + queryParameter.sortType + @"
                               OFFSET (@page - 1) * @limit 
                               FETCH NEXT @limit ROWS ONLY ";
+                }
+                else
+                {
+                    orderBy = @" ORDER BY hr_job_id asc " + queryParameter.sortType + @"
+                              OFFSET (@page - 1) * @limit 
+                              FETCH NEXT @limit ROWS ONLY ";
+                }
+                
 
                 if(queryParameter.searchValue == null || queryParameter.searchValue.Trim().Length == 0)
                 {
@@ -228,7 +245,7 @@ namespace DataLayer.HR.MasterModels
                 total = Convert.ToInt32(sqlCommand.ExecuteScalar());
 
                 //get data
-                sqlCommand.CommandText = select + from+ where+orderBy;
+                sqlCommand.CommandText = select + from + where + orderBy;
                 NpgsqlDataReader reader = sqlCommand.ExecuteReader();
                 dt.Load(reader);
                 return dt;
@@ -239,7 +256,7 @@ namespace DataLayer.HR.MasterModels
             }
         }
 
-        public int UpdateActive(int id, int user_id, bool is_active, NpgsqlConnection conn, NpgsqlTransaction transaction = null)
+        public int UpdateActive(int id, string user_name, string status, NpgsqlConnection conn, NpgsqlTransaction transaction = null)
         {
             int result = 0;
             try
@@ -247,14 +264,14 @@ namespace DataLayer.HR.MasterModels
                 string sql = @"UPDATE 											
                                         hr.tbm_hr_job											
                                     SET 											
-                                        isActive = @isActive														
+                                        hr_job_status = @status														
                                     WHERE  											
                                         hr_job_id = @id";
 
                 using (var cmd = new NpgsqlCommand(sql, conn))
                 {
                     cmd.Parameters.Add("@id", NpgsqlDbType.Integer).Value = id;
-                    cmd.Parameters.Add("@is_active", NpgsqlDbType.Boolean).Value = is_active;// model.isActive;											
+                    cmd.Parameters.Add("@status", NpgsqlDbType.Varchar).Value = status;// model.isActive;											
                   //  cmd.Parameters.Add("@update_by", SqlDbType.Int).Value = user_id;
 
                     result = 0;

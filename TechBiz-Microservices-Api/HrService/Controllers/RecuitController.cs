@@ -1,5 +1,6 @@
 ﻿using BusinessEntities.HR.MasterModels;
 using BusinessLogic.HR.Master;
+using BusinessLogic.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Utilities;
@@ -11,11 +12,12 @@ namespace HrService.Controllers;
 [ApiController]
 public class RecuitController : ControllerBase
 {
+    BizPermissionRoleMappingManagement m_BizPerMgr;
     BizRecuitManagement m_BizRecuitMgr;
 
     public RecuitController()
     {
-
+        m_BizPerMgr = new BizPermissionRoleMappingManagement();
         m_BizRecuitMgr = new BizRecuitManagement();
 
     }
@@ -71,11 +73,19 @@ public class RecuitController : ControllerBase
         return Ok(res);
     }
 
-    [HttpGet("ActivateCondition")]
-    public IActionResult ActivateCondition(int id, int loginId, bool is_active)
+    [HttpGet("ActivateCondition/{id}")]
+    public IActionResult ActivateCondition(int id, [FromQuery] string user_name, [FromQuery] string recuit_stage_status)
     {
-        ResultMessage resultMessage = m_BizRecuitMgr.ActivateCondition(id, loginId, is_active);
+        ResultMessage res = new ResultMessage();
+        res = m_BizPerMgr.CheckEditPermission(user_name);
+        if (res.status)
+        {
+            res = m_BizRecuitMgr.ActivateCondition(id, user_name, recuit_stage_status);
+        }
+        return Ok(res);
+
+        ResultMessage resultMessage = m_BizRecuitMgr.ActivateCondition(id, user_name, recuit_stage_status);
         return Ok(resultMessage);
-    }    
+    }
 }
 

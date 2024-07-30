@@ -1,17 +1,43 @@
+@inject IHttpContextAccessor context
+@using Newtonsoft.Json
+@model List<permissionRoleMappingModel>
+
+@{
+    var token = context.HttpContext.Session.GetString("Token");
+    var userName = context.HttpContext.Session.GetString("UserName");
+
+    var menuPermissions = Model;
+    var currentController = ViewContext.RouteData.Values["controller"].ToString();
+    var currentAction = ViewContext.RouteData.Values["action"].ToString();
+
+    bool canAdd = menuPermissions.Any(p => p.program_path == $"/{currentController}/{currentAction}" && p.permiss_add_status == "ACTIVE");
+    bool canDownload = menuPermissions.Any(p => p.program_path == $"/{currentController}/{currentAction}" && p.permiss_download_status == "ACTIVE");
+    bool canUpload = menuPermissions.Any(p => p.program_path == $"/{currentController}/{currentAction}" && p.permiss_upload_status == "ACTIVE");
+    var programCode = menuPermissions.FirstOrDefault(p => p.program_path == $"/{currentController}/{currentAction}")?.program_code;
+    var programName = menuPermissions.FirstOrDefault(p => p.program_path == $"/{currentController}/{currentAction}")?.menu_name;
+}
+
 @{
     ViewData["Title"] = "Job Management - My Application";
 }
 
 @section PageScripts {
-    <script src="~/js/TechbizAreas/Check-Token.js"></script>       
+    <script>
+        var token = '@token';
+        var username = '@userName';
+        var canEdit = @Html.Raw(JsonConvert.SerializeObject(menuPermissions.Any(p => p.program_path == $"/{currentController}/{currentAction}" && p.permiss_edit_status == "ACTIVE")));
+        var canView = @Html.Raw(JsonConvert.SerializeObject(menuPermissions.Any(p => p.program_path == $"/{currentController}/{currentAction}" && p.permiss_view_status == "ACTIVE")));
+        var canDelete = @Html.Raw(JsonConvert.SerializeObject(menuPermissions.Any(p => p.program_path == $"/{currentController}/{currentAction}" && p.permiss_delete_status == "ACTIVE")));
+    </script>
+    <script src="~/js/TechbizAreas/Dropdown/Department.js"></script>
     <script src="~/js/TechbizAreas/Hr/JobManagement/index.js"></script>
 }
 <!-- Content -->
 <div class="py-0 mb-6">
     <div class="row">
         <div class="d-flex align-items-center">
-            <h4 class="fw-bold py-1 mb-3" id="title-program-name"></h4>
-            <h5 class="fw-bold py-1 mb-3 ms-auto" id="title-program-id"></h5>
+            <h4 class="fw-bold py-1 mb-3">@programName</h4>
+            <h5 class="fw-bold py-1 mb-3 ms-auto">@programCode</h5>
         </div>
     </div>
 
@@ -21,9 +47,12 @@
                 <li class="nav-item">
                     <a class="nav-link active " role="tab" data-bs-toggle="tab" href="#TabSearchId"><i class="bx bx-user me-1"></i> Search</a>
                 </li>
-                <li class="nav-item UploadComponent">
-                    <a class="nav-link " role="tab" data-bs-toggle="tab" href="#TabUploadId"><i class="bx bx-upload me-1"></i> Upload</a>
-                </li>
+                @if (canUpload)
+                {
+                    <li class="nav-item UploadComponent">
+                        <a class="nav-link " role="tab" data-bs-toggle="tab" href="#TabUploadId"><i class="bx bx-upload me-1"></i> Upload</a>
+                    </li>
+                }
             </ul>
             <div class="tab-content" style="padding: 0rem;">
                 <!------------------------------------------------------------------------------->
@@ -37,19 +66,24 @@
                             </div>
                             <div class="col-md-6 text-right mt-3">
                                 <div class="container  d-flex justify-content-end ">
-
-                                    <div class="dropdown">
-                                        <button type="button" class="btn rounded-pill rounded-pill  btn-outline-primary" data-bs-toggle="dropdown">
-                                            <i class="bx bx-export me-sm-1"></i><b>Export</b>
-                                        </button>
-                                        <div class="dropdown-menu">
-                                            <a id="export-csv" class="dropdown-item " href="javascript:void(0);"><i class="bx bx-file me-1"></i> Csv</a>
-                                            <a id="export-excel" class="dropdown-item " href="javascript:void(0);"><i class="bx bx-copy me-1"></i> Excel</a>
-                                            <a id="export-pdf" class="dropdown-item " href="javascript:void(0);"><i class="bx bxs-file-pdf me-1"></i> Pdf</a>
-                                            <a id="export-copy" class="dropdown-item " href="javascript:void(0);"><i class="bx bx-copy me-1"></i> Copy</a>
+                                    @if (canDownload)
+                                    {
+                                        <div class="dropdown">
+                                            <button type="button" class="btn rounded-pill rounded-pill  btn-outline-primary" data-bs-toggle="dropdown">
+                                                <i class="bx bx-export me-sm-1"></i><b>Export</b>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <a id="export-csv" class="dropdown-item " href="javascript:void(0);"><i class="bx bx-file me-1"></i> Csv</a>
+                                                <a id="export-excel" class="dropdown-item " href="javascript:void(0);"><i class="bx bx-copy me-1"></i> Excel</a>
+                                                <a id="export-pdf" class="dropdown-item " href="javascript:void(0);"><i class="bx bxs-file-pdf me-1"></i> Pdf</a>
+                                                <a id="export-copy" class="dropdown-item " href="javascript:void(0);"><i class="bx bx-copy me-1"></i> Copy</a>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <button id="AddNewId" type="button" class="btn rounded-pill btn-primary  ms-2" button-feature><i class="bx bx-plus-medical me-1"></i><b>Add new</b></button>
+                                    }
+                                    @if (canAdd)
+                                    {
+                                        <button id="AddNewId" type="button" class="btn rounded-pill btn-primary  ms-2" button-feature><i class="bx bx-plus-medical me-1"></i><b>Add new</b></button>
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -64,7 +98,7 @@
                                         <th>Type</th>
                                         <th>Start Date</th>
                                         <th>Expire Date</th>
-                                        <th>Status</th>                                        
+                                        <th>Status</th>
                                         <th class="text-center">Actions</th>
                                     </tr>
                                 </thead>
@@ -75,8 +109,9 @@
 
                     </div>
                     <div id="AreaAddId" class="card mb-4 SlideTabSearch" style="display: none;">
-                        <h5 class="card-header" id="ToppicActionId">Add Employee</h5>
+                        <h5 class="card-header" id="ToppicActionId">Add Job</h5>
                         <!-- Account -->                        
+                        <hr class="my-0" />
                         <div class="card-body">
                             <form id="AddFormId">
                                 <input type="hidden" name="hr_job_id" value="0">
@@ -89,7 +124,7 @@
                                     <div class="mb-3 col-md-6">
                                         <label for="hr_job_types" class="form-label  required">Job Type</label>
                                         <input class="form-control" type="text" id="hr_job_types" name="hr_job_types" placeholder="Enter Job Type" autofocus />
-                                    </div>                                    
+                                    </div>
                                     <div class="mb-3 col-md-6">
                                         <label for="hr_job_start_date" class="form-label  required">Start Date</label>
                                         <input id="hr_job_start_date" class="form-control" type="date" name="hr_job_start_date">
@@ -99,6 +134,11 @@
                                         <label for="hr_job_expire_date" class="form-label">Expire Date</label>
                                         <input id="hr_job_expire_date" class="form-control" type="date" name="hr_job_expire_date">
 
+                                    </div>
+                                    <div class="mb-3 col-md-6">
+                                        <label for="department" class="form-label  required">Department</label>
+                                        <select class="form-control" id="department" name="dept_id">
+                                        </select>
                                     </div>
                                     <div class="mb-3 col-md-6">
                                         <label class="form-label" data-lang="status">Active</label>
@@ -146,70 +186,78 @@
                 <!------------------------------------------------------------------------------->
                 <!-- tap upload -->
                 <!------------------------------------------------------------------------------->
-                <div id="TabUploadId" class="tab-pane button-feature UploadComponent">
-                    <!-- area upload-->
-                    <div id="AreaUploadId" class="card mb-4 $ SlideTabUpload">
-                        <div class="row">
+                @if (canUpload)
+                {
+                    <div id="TabUploadId" class="tab-pane button-feature UploadComponent">
+                        <!-- area upload-->
+                        <div id="AreaUploadId" class="card mb-4 $ SlideTabUpload">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5 class="card-header">Job Upload</h5>
+                                </div>
+                                <div class="col-md-6 text-right mt-3">
+                                    <div class="container" style="text-align: right;">
+                                        <button id="DownloadId" type="button" class="btn btn-primary"><i class="bx bx-plus-medical me-1"></i><b>Download Template</b></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Account -->
+                            <hr class="my-0" />
+                            <div class="card-body">
+                                <form id="UploadFormId">
+                                    <div class="mb-3 col-md-12 ">
+                                        <label for="Upload File" class="form-label">Upload File</label>
+                                        <input type="file"
+                                               class="form-control"
+                                               name="fileInput"
+                                               placeholder="Choose File" />
+                                    </div>
+                                    <div class="mt-2">
+                                        <button type="submit" class="btn btn-primary me-2">Upload</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div> <!-- Area upload -->
+                        <!-- Area show upload -->
+                        <div id="AreaShowUploadId" class="card mb-4 SlideTabUpload" style="display: none;">
                             <div class="col-md-6">
-                                <h5 class="card-header">Job Upload</h5>
+                                <h5 class="card-header">Show Upload</h5>
                             </div>
                             <div class="col-md-6 text-right mt-3">
                                 <div class="container" style="text-align: right;">
-                                    <button id="DownloadId" type="button" class="btn btn-primary"><i class="bx bx-plus-medical me-1"></i><b>Download Template</b></button>
                                 </div>
                             </div>
-                        </div>
-                        <!-- Account -->
-                        <hr class="my-0" />
-                        <div class="card-body">
-                            <form id="UploadFormId">
-                                <div class="mb-3 col-md-12 ">
-                                    <label for="Upload File" class="form-label">Upload File</label>
-                                    <input type="file" class="form-control" name="fileInput" placeholder="Choose File" />
+                            <!-- Account -->
+                            <hr class="my-0" />
+                            <div class="card-body">
+                                <div class=" table-responsive">
+                                    <table class="table table-striped" id="tableUploadId">
+                                        <thead>
+                                            <tr>
+                                                <th>Job Title</th>
+                                                <th>Types</th>
+                                                <th>Start Date</th>
+                                                <th>Expire Date</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
                                 </div>
                                 <div class="mt-2">
-                                    <button type="submit" class="btn btn-primary me-2">Upload</button>
+                                    <button type="button" class="btn btn-primary me-2" id="SaveUploadId">Save</button>
+                                    <button type="button" class="btn btn-outline-secondary" id="UploadCloseId">Close</button>
                                 </div>
-                            </form>
-                        </div>
-                    </div> <!-- Area upload -->
-                    <!-- Area show upload -->
-                    <div id="AreaShowUploadId" class="card mb-4 SlideTabUpload" style="display: none;">
-                        <div class="col-md-6">
-                            <h5 class="card-header">Show Upload</h5>
-                        </div>
-                        <div class="col-md-6 text-right mt-3">
-                            <div class="container" style="text-align: right;">
                             </div>
-                        </div>
-                        <!-- Account -->
-                        <hr class="my-0" />
-                        <div class="card-body">
-                            <div class=" table-responsive">
-                                <table class="table table-striped" id="tableUploadId">
-                                    <thead>
-                                        <tr>
-                                            <th>Job Title</th>
-                                            <th>Types</th>
-                                            <th>Start Date</th>
-                                            <th>Expire Date</th>
-                                            <th>Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="mt-2">
-                                <button type="button" class="btn btn-primary me-2" id="SaveUploadId">Save</button>
-                                <button type="button" class="btn btn-outline-secondary" id="UploadCloseId">Close</button>
-                            </div>
-                        </div>
-                    </div><!-- Area show upload -->
+                        </div><!-- Area show upload -->
 
-                </div>
+                    </div>
+                }
+
             </div>  <!-- tab-content-->
         </div>
     </div>
 </div>
 <!-- / Content -->
+

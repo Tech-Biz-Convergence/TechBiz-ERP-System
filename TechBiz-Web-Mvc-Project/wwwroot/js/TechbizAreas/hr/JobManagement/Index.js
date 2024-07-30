@@ -19,10 +19,6 @@ $(document).ready(function () {
   }
   const icon = "<i class='bx bx-alarm-exclamation me-2'></i> ";
 
-  //get token
-  const token = localStorage.getItem("token");
-  const username = localStorage.getItem("user_name");
-
   ShowMainListDataTable();
 
   //============================================================================
@@ -35,22 +31,18 @@ $(document).ready(function () {
   //>>>>>> Event Add PartNumber submit 
   $("#AddFormId").validate({
     rules: {
-      emp_firstname: {
+      hr_job_title: {
         required: true,
         maxlength: 255
       },
-      emp_lastname: {
+      hr_job_types: {
         required: true,
         maxlength: 255
-      },
-      emp_code: {
+      },     
+      hr_job_start_date: {
         required: true,
-        maxlength: 50
       },
-      emp_mobile_no: {
-        maxlength: 10
-      },
-      start_date: {
+      hr_job_expire_date: {
         required: true,
       },
       dept_id: {
@@ -58,24 +50,20 @@ $(document).ready(function () {
       }
     },
     messages: {
-      emp_firstname: {
-        required: icon + " Please enter employee firstname.",
+      hr_job_title: {
+        required: icon + " Please enter job title.",
         maxlength: icon + " Please enter no more than 255 characters."
       },
-      emp_lastname: {
+      hr_job_types: {
 
-        required: icon + " Please enter employee lastname.",
+        required: icon + " Please enter job type.",
         maxlength: icon + " Please enter no more than 255 characters."
-      },
-      emp_code: {
-        required: icon + " Please enter employee code.",
-        maxlength: icon + " Please enter no more than 50 characters."
-      },
-      emp_mobile_no: {
-        maxlength: icon + " Please enter no more than 10 characters."
-      },
-      start_date: {
+      },      
+      hr_job_start_date: {
         required: icon + " Please select start date.",
+      },
+      hr_job_expire_date: {
+        required: icon + " Please select expire date.",
       },
       dept_id: {
         required: icon + " Please select department.",
@@ -232,7 +220,7 @@ $(document).ready(function () {
       contentType: 'application/json; charset=utf-8',
       data: {
         user_name: username,
-        emp_status: status
+        hr_job_status: status
       },
       headers: { "Authorization": "Bearer " + token },
       success: function (response) {
@@ -256,6 +244,7 @@ $(document).ready(function () {
       }
     });
 
+    window.location.reload();
   });
 
 
@@ -362,7 +351,7 @@ $(document).ready(function () {
           className: 'dt-body-center',
           render: function (data, type, row) {
             // ตรวจสอบค่า row.emp_status
-            var buttonClass = row.emp_status === 'ACTIVE' ? 'btn-primary' : 'btn-outline-secondary';
+            var buttonClass = row.hr_job_status === 'ACTIVE' ? 'btn-primary' : 'btn-outline-secondary';
             // สร้าง HTML ของปุ่ม
             return `<button type="button" class="btn rounded-pill btn-icon ${buttonClass} ActiveButton button-feature " data-id="${row.hr_job_id}">
                               <span class="tf-icons bx bx-power-off"></span>
@@ -389,9 +378,10 @@ $(document).ready(function () {
           },
           ordering: true
         },
-        { targets: 5, data: 'hr_job_status', ordering: true },
+        { targets: 5, data: 'dept_name', ordering: true },
+        { targets: 6, data: 'hr_job_status', ordering: true },
         {
-          targets: 6,
+          targets: 7,
           data: null,
           orderable: false,
           className: 'dt-head-center dt-body-center',
@@ -401,17 +391,11 @@ $(document).ready(function () {
                               <i class="bx bx-dots-vertical-rounded"></i>
                             </button>
                             <div class="dropdown-menu">
-                            <a class="dropdown-item ViewButton" href="javascript:void(0);" data-id="${row.hr_job_id}" 
-                                ><i class="bx bx-list-ul me-2"></i> View</a
-                              >
-                              <a class="dropdown-item EditButton" href="javascript:void(0);" data-id="${row.hr_job_id}" 
-                                ><i class="bx bx-edit-alt me-2"></i> Edit</a
-                              >
-                              <a class="dropdown-item DeleteButton" href="javascript:void(0);" data-id="${row.hr_job_id}" 
-                                ><i class="bx bx-trash me-2"></i> Delete</a
-                              >
+                              <a class="dropdown-item ViewButton" href="javascript:void(0);" data-id="${row.hr_job_id}"><i class="bx bx-list-ul me-2"></i> View</a>
+                              <a class="dropdown-item EditButton" href="javascript:void(0);" data-id="${row.hr_job_id}"><i class="bx bx-edit-alt me-2"></i> Edit</a>
+                              <a class="dropdown-item DeleteButton" href="javascript:void(0);" data-id="${row.hr_job_id}"><i class="bx bx-trash me-2"></i> Delete</a>
                             </div>
-                          </div>`;
+                    </div>`;
           }
         }
       ]
@@ -452,7 +436,7 @@ $(document).ready(function () {
       case 4:
         return 'hr_job_expire_date';
       case 5:
-        return 'hr_job_status';      
+        return 'hr_job_status';     
       default:
         return null;
     }
@@ -543,17 +527,20 @@ $(document).ready(function () {
           $('#AddFormId [name=hr_job_id').val(res.hr_job_id);
           $('#AddFormId [name=hr_job_title]').val(res.hr_job_title);
           $('#AddFormId [name=hr_job_types]').val(res.hr_job_types);
-          $('#AddFormId [name=hr_job_start_date]').val(res.hr_job_start_date);
-          $('#AddFormId [name=hr_job_expire_date]').val(res.hr_job_expire_date);
-          $('#AddFormId [name=create_date]').val(res.create_date);
+          $('#AddFormId [name=hr_job_start_date]').val(formatDate(res.hr_job_start_date));
+          $('#AddFormId [name=hr_job_expire_date]').val(formatDate(res.hr_job_expire_date));
+          $('#AddFormId [name=create_date]').val(formatDateTime(res.create_date));
           $('#AddFormId [name=create_by]').val(res.create_by);
-          $('#AddFormId [name=update_date]').val(res.update_date);
+          $('#AddFormId [name=update_date]').val(formatDateTime(res.update_date));
           $('#AddFormId [name=update_by]').val(res.update_by);
-          if (res.emp_status === "ACTIVE") {
+          
+          if (res.hr_job_status === "ACTIVE") {
             $('#AddFormId [name=hr_job_status]').prop('checked', true); // ตั้งค่าให้ checkbox มีสถานะ checked
           } else {
             $('#AddFormId [name=hr_job_status]').prop('checked', false); // ตั้งค่าให้ checkbox ไม่มีสถานะ checked
-          }          
+          }
+          
+          $('#AddFormId [name=dept_id]').append(new Option(res.dept_name, res.dept_id, true, true)).trigger('change');
         } else {
           MessageBox.ErrorMessage(response.code, response.description);
 

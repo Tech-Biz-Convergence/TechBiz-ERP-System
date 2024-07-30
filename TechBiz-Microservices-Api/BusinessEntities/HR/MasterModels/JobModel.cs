@@ -8,6 +8,7 @@ using System.Xml.Serialization;
 
 namespace BusinessEntities.HR.MasterModels
 {
+    #region tbm_hr_job 
     public class tbm_hr_job
     {
         public DateTime ? create_date { get; set; }
@@ -20,6 +21,15 @@ namespace BusinessEntities.HR.MasterModels
         public string ? hr_job_types { get; set; }
         public DateTime ? hr_job_start_date { get; set; }
         public DateTime ? hr_job_expire_date { get; set; }       
-        public string ? hr_job_status { get; set; }
+        public string ? hr_job_status { get; set; }       
     }
+    #endregion
+
+    #region JobModel 
+    public class JobModel : tbm_hr_job
+    {
+        public string dept_name { get; set; }
+
+    }
+    #endregion
 }

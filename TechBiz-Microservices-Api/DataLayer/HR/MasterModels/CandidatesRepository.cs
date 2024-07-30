@@ -193,9 +193,22 @@ namespace DataLayer.HR.MasterModels
                     OR CAST(hr_job_id AS TEXT) ILIKE '%' || @searchValue || '%'
                     OR email ILIKE '%' || @searchValue || '%' 
                     OR hr_candidate_status ILIKE '%' || @searchValue || '%' ";
-                String orderBy = @" ORDER BY " + queryParameter.sortBy + " " + queryParameter.sortType + @"
+
+                string orderBy = string.Empty;
+
+                if(queryParameter.sortBy != null)
+                {
+                    orderBy = @" ORDER BY " + queryParameter.sortBy + " " + queryParameter.sortType + @"
                               OFFSET (@page - 1) * @limit 
                               FETCH NEXT @limit ROWS ONLY ";
+                }
+                else
+                {
+                    orderBy = @" ORDER BY hr_candidate_id asc " + queryParameter.sortType + @"
+                              OFFSET (@page - 1) * @limit 
+                              FETCH NEXT @limit ROWS ONLY ";
+                }
+                
 
                 if(queryParameter.searchValue == null || queryParameter.searchValue.Trim().Length == 0)
                 {
@@ -214,10 +227,9 @@ namespace DataLayer.HR.MasterModels
                 //get total
                 sqlCommand.CommandText = selectCount + from + where;
                 total = Convert.ToInt32(sqlCommand.ExecuteScalar());
-                Console.WriteLine(select + from + where + orderBy);
-
+               
                 //get data
-                sqlCommand.CommandText = select + from+ where+orderBy;
+                sqlCommand.CommandText = select + from + where + orderBy;
                 NpgsqlDataReader reader = sqlCommand.ExecuteReader();
                 dt.Load(reader);
                 return dt;

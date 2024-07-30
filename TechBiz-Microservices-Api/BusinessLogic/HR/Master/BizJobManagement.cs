@@ -39,7 +39,7 @@ namespace BusinessLogic.HR.Master
                 {
                     conn.Open();
                     dt = m_JobRepository.GetAll(conn);
-                    var data = dt.DataTableToList<tbm_hr_job>();
+                    var data = dt.DataTableToList<JobModel>();
                     resultMessage.status = true;
                     resultMessage.code = GlobalMessage.SELECT_SUCCESS_CODE;
                     resultMessage.data = data;
@@ -73,7 +73,7 @@ namespace BusinessLogic.HR.Master
                 {
                     conn.Open();
                     dt = m_JobRepository.GetByKey(id,conn);
-                    var data = dt.DataTableToList<tbm_hr_job>().FirstOrDefault();
+                    var data = dt.DataTableToList<JobModel>().FirstOrDefault();
                     if(data is null)
                     {
                         throw new Exception("Data not found!");
@@ -202,8 +202,7 @@ namespace BusinessLogic.HR.Master
         public ResultMessage GetAllJob(QueryParameter queryParameter)
         {
             int total = 0 ;
-            ResultMessage resultMessage = new ResultMessage();
-            List<tbm_hr_job> assyPartControlModel = new List<tbm_hr_job>();
+            ResultMessage resultMessage = new ResultMessage();           
             DataTable dt = new DataTable();
 
             using (NpgsqlConnection conn = new NpgsqlConnection(GlobalVariables.ConnectionString))
@@ -214,7 +213,7 @@ namespace BusinessLogic.HR.Master
                         
                     dt = m_JobRepository.GetAllPagination(queryParameter, out total, conn);
 
-                    var data = new { total = total, data = dt.DataTableToList<tbm_hr_job>() };
+                    var data = new { total = total, data = dt.DataTableToList<JobModel>() };
                     resultMessage.status = true;
                     resultMessage.data = data;
                 }
@@ -233,7 +232,7 @@ namespace BusinessLogic.HR.Master
 
             return resultMessage;
         }
-        public ResultMessage ActivateCondition(int id,int user_id,bool is_active)
+        public ResultMessage ActivateCondition(int id, string user_name, string status)
         {
             int total = 0;
             ResultMessage resultMessage = new ResultMessage();
@@ -245,7 +244,7 @@ namespace BusinessLogic.HR.Master
                 {
                     conn.Open();
 
-                    int ret = m_JobRepository.UpdateActive(id, user_id, is_active,conn);
+                    int ret = m_JobRepository.UpdateActive(id, user_name, status, conn);
 
 
                     resultMessage.status = true;

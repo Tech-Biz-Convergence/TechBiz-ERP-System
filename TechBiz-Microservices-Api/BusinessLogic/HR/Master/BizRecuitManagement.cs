@@ -39,7 +39,7 @@ namespace BusinessLogic.HR.Master
                 {
                     conn.Open();
                     dt = m_RecuitRepository.GetAll(conn);
-                    var data = dt.DataTableToList<tbm_recuit_stage>();
+                    var data = dt.DataTableToList<RecuitModel>();
                     resultMessage.status = true;
                     resultMessage.code = GlobalMessage.SELECT_SUCCESS_CODE;
                     resultMessage.data = data;
@@ -73,7 +73,7 @@ namespace BusinessLogic.HR.Master
                 {
                     conn.Open();
                     dt = m_RecuitRepository.GetByKey(id,conn);
-                    var data = dt.DataTableToList<tbm_recuit_stage>().FirstOrDefault();
+                    var data = dt.DataTableToList<RecuitModel>().FirstOrDefault();
                     if(data is null)
                     {
                         throw new Exception("Data not found!");
@@ -202,8 +202,7 @@ namespace BusinessLogic.HR.Master
         public ResultMessage GetAllRecuit(QueryParameter queryParameter)
         {
             int total = 0 ;
-            ResultMessage resultMessage = new ResultMessage();
-            List<tbm_recuit_stage> assyPartControlModel = new List<tbm_recuit_stage>();
+            ResultMessage resultMessage = new ResultMessage();            
             DataTable dt = new DataTable();
 
             using (NpgsqlConnection conn = new NpgsqlConnection(GlobalVariables.ConnectionString))
@@ -214,7 +213,7 @@ namespace BusinessLogic.HR.Master
                         
                     dt = m_RecuitRepository.GetAllPagination(queryParameter, out total, conn);
 
-                    var data = new { total = total, data = dt.DataTableToList<tbm_recuit_stage>() };
+                    var data = new { total = total, data = dt.DataTableToList<RecuitModel>() };
                     resultMessage.status = true;
                     resultMessage.data = data;
                 }
@@ -233,11 +232,10 @@ namespace BusinessLogic.HR.Master
 
             return resultMessage;
         }
-        public ResultMessage ActivateCondition(int id,int user_id,bool is_active)
+        public ResultMessage ActivateCondition(int id, string user_name, string status)
         {
             int total = 0;
-            ResultMessage resultMessage = new ResultMessage();
-            List<tbm_recuit_stage> assyPartControlModel = new List<tbm_recuit_stage>();
+            ResultMessage resultMessage = new ResultMessage();           
 
             using (NpgsqlConnection conn = new NpgsqlConnection(GlobalVariables.ConnectionString))
             {
@@ -245,7 +243,7 @@ namespace BusinessLogic.HR.Master
                 {
                     conn.Open();
 
-                    int ret = m_RecuitRepository.UpdateActive(id, user_id, is_active,conn);
+                    int ret = m_RecuitRepository.UpdateActive(id, user_name, status, conn);
 
 
                     resultMessage.status = true;
