@@ -21,8 +21,18 @@ namespace BusinessEntities.HR.MasterModels
         public long job_id { get; set; }
         public string interview_quest { get; set; }
         public string interview_status { get; set; }
+        public string? hr_job_title { get; set; }
 
     }
     #endregion
+    #region interviewforModel 
+    public class interviewforModel : tbm_interview
+    {
+        public long hr_job_id { get; set; }
+        public string? hr_job_title { get; set; }
+        public string? hr_job_status { get; set; }
+
+    }
 
 }
+#endregion

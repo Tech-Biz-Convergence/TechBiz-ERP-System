@@ -16,8 +16,8 @@ namespace BusinessEntities.HR.MasterModels
         public long? dept_id { get; set; }
         public string? dept_name { get; set; }
         public string dept_status { get; set; }
-        public long emp_id { get; set; }
-        public string emp_name { get; set; }
+        public long? emp_id { get; set; }
+        public string? emp_name { get; set; }
 
     }
     #endregion

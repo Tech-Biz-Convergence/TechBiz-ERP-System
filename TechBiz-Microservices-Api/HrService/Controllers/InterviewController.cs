@@ -73,5 +73,12 @@ namespace InterviewService.Controllers
             ResultMessage resultMessage = m_BizInterviewMgr.ImportDataExcelFile(file);
             return Ok(resultMessage);
         }
+
+        [HttpGet("GetJobName")]
+        public IActionResult GetJobName()
+        {
+            ResultMessage res = m_BizInterviewMgr.GetJobName();
+            return Ok(res);
+        }
     }
 }

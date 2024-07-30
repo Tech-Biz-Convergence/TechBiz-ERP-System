@@ -331,6 +331,37 @@ namespace BusinessLogic.HR.Master
             return resultMessage;
         }
 
+        public ResultMessage GetJobName()
+        {
+            ResultMessage resultMessage = new ResultMessage();
+            List<interviewforModel> assyPartControlModel = new List<interviewforModel>();
+            DataTable dt = new DataTable();
+            try
+            {
+                using (NpgsqlConnection conn = new NpgsqlConnection(GlobalVariables.ConnectionString))
+                {
+                    conn.Open();
+                    dt = m_InterviewRepository.GetJobName(conn);
 
+                    if (dt.Rows.Count == 0)
+                    {
+                        throw new Exception("No Job data found.");
+                    }
+
+                    var data = dt.DataTableToList<interviewforModel>();
+                    resultMessage.status = true;
+                    resultMessage.code = GlobalMessage.SELECT_SUCCESS_CODE;
+                    resultMessage.data = data;
+                }
+            }
+            catch (Exception ex)
+            {
+                resultMessage.description = ex.Message;
+                resultMessage.code = GlobalMessage.SELECT_ERROR_CODE;
+                resultMessage.status = false;
+            }
+
+            return resultMessage;
+        }
     }
 }

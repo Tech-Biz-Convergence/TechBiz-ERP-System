@@ -176,11 +176,10 @@ namespace DataLayer.HR.MasterModels
                 DataTable dt = new DataTable();
 
                 string selectCount = @"SELECT count(1) ";
-                String select = @" SELECT * ";
-                String from = @"   FROM  hr.tbm_interview ";
-                String where = @" WHERE interview_quest ILIKE '%' || @searchValue || '%'
-                    OR interview_status ILIKE '%' || @searchValue || '%'
-                    OR CAST(job_id AS TEXT) ILIKE '%' || @searchValue || '%' ";
+                String select = @" SELECT job.hr_job_title, inv.interview_id, inv.interview_quest ";
+                String from = @"   FROM  hr.tbm_interview inv LEFT JOIN hr.tbm_hr_job job ON job.hr_job_id = inv.job_id ";
+                String where = @" WHERE job.hr_job_title ILIKE '%' || @searchValue || '%'
+                    OR inv.interview_quest ILIKE '%' || @searchValue || '%' ";
                 String orderBy = @" ORDER BY " + queryParameter.sortBy + " " + queryParameter.sortType + @"
                               OFFSET (@page - 1) * @limit 
                               FETCH NEXT @limit ROWS ONLY ";
@@ -216,42 +215,28 @@ namespace DataLayer.HR.MasterModels
             }
         }
 
-        /*
-        public int UpdateActive(int id, int user_id, bool is_active, NpgsqlConnection conn, NpgsqlTransaction transaction = null)
+        public DataTable GetJobName(NpgsqlConnection conn)
         {
-            int result = 0;
             try
             {
-                string sql = @"UPDATE 											
-                                        tm_employee_info											
-                                    SET 											
-                                        isActive = @isActive														
-                                    WHERE  											
-                                        id = @id";
+                NpgsqlCommand sqlCommand = new NpgsqlCommand();
+                DataTable dataTable = new DataTable();
 
-                using (var cmd = new NpgsqlCommand(sql, conn))
-                {
-                    cmd.Parameters.Add("@id", NpgsqlDbType.Integer).Value = id;
-                    cmd.Parameters.Add("@is_active", NpgsqlDbType.Boolean).Value = is_active;// model.isActive;											
-                  //  cmd.Parameters.Add("@update_by", SqlDbType.Int).Value = user_id;
+                string sql = @" SELECT hr_job_id, hr_job_title
+	                            FROM  hr.tbm_hr_job WHERE hr_job_status = 'ACTIVE'";
 
-                    result = 0;
-                    if (transaction != null)
-                    {
-                        cmd.Transaction = transaction;
-                    }
-                    result = cmd.ExecuteNonQuery();
-                }
+                sqlCommand.CommandText = sql;
+                sqlCommand.Connection = conn;
+
+                NpgsqlDataReader reader = sqlCommand.ExecuteReader();
+                dataTable.Load(reader);
+                return dataTable;
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw new Exception("Error retrieving Job data", ex);
             }
-            return result;
         }
-        */
-
-       
 
     }
 }
