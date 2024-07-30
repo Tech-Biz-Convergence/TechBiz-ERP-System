@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <Folder Include="HR\ReportModels\" />
-    <Folder Include="HR\ProcessModels\" />
   </ItemGroup>
 
   <ItemGroup>
