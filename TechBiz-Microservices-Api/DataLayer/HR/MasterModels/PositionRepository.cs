@@ -1,4 +1,4 @@
-﻿using BusinessEntities.Identity;
+﻿using BusinessEntities.HR.MasterModels;
 using DataLayer.Core;
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Npgsql;
@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Utilities;
 
-namespace DataLayer.Identitys
+namespace DataLayer.HR.MasterModels
 {
     public class PositionRepository : IDataRepository<tbm_position>
     {
@@ -20,7 +20,7 @@ namespace DataLayer.Identitys
             int result = 0;
             try
             {
-                string sql = @"DELETE FROM authentication.tbm_position WHERE position_id = @position_id";
+                string sql = @"DELETE FROM hr.tbm_position WHERE position_id = @position_id";
 
                 using (var cmd = new NpgsqlCommand(sql, conn))
                 {
@@ -49,7 +49,7 @@ namespace DataLayer.Identitys
                 DataTable dataTable = new DataTable();
 
                 String select = @" SELECT * ";
-                String from = @" FROM  authentication.tbm_position  ";
+                String from = @" FROM  hr.tbm_position  ";
 
 
                 sqlCommand.Connection = conn;
@@ -59,10 +59,9 @@ namespace DataLayer.Identitys
                 NpgsqlDataReader reader = sqlCommand.ExecuteReader();
                 dataTable.Load(reader);
                 return dataTable;
-            }
-            catch (Exception ex)
-            {
-                throw;
+            }catch (Exception ex) 
+            { 
+                throw; 
             }
         }
 
@@ -74,8 +73,8 @@ namespace DataLayer.Identitys
                 DataTable dataTable = new DataTable();
 
                 String select = @" SELECT * ";
-                String from = @" FROM  authentication.tbm_position  ";
-                String where = @" WHERE  position_id = @key  ";
+                String from   = @" FROM  hr.tbm_position  ";
+                String where  = @" WHERE  position_id = @key  ";
 
                 sqlCommand.Parameters.Add(new NpgsqlParameter("@key", NpgsqlDbType.Integer)).Value = Key;
 
@@ -83,7 +82,7 @@ namespace DataLayer.Identitys
                 sqlCommand.Connection = conn;
 
                 //get data
-                sqlCommand.CommandText = select + from + where;
+                sqlCommand.CommandText = select + from+ where;
                 NpgsqlDataReader reader = sqlCommand.ExecuteReader();
                 dataTable.Load(reader);
                 return dataTable;
@@ -94,37 +93,81 @@ namespace DataLayer.Identitys
             }
         }
 
+        //public int Insert(tbm_position model, NpgsqlConnection conn, NpgsqlTransaction transaction = null)
+        //{
+        //    long result = 0;
+        //    try
+        //    {
+        //        string sql = @"INSERT INTO hr.tbm_position 											
+        //                (create_by,
+        //                status,
+        //                dept_id,
+        //                position_name,
+        //                level) 											
+        //            VALUES 											
+        //                (@create_by,
+        //                @status,
+        //                @dept_id,
+        //                @position_name,									
+        //                @level) 
+        //            RETURNING position_id;";
+
+        //        using (var cmd = new NpgsqlCommand(sql, conn))
+        //        {
+        //            cmd.Parameters.Add("@create_by", NpgsqlDbType.Varchar).Value = model.create_by;
+        //            cmd.Parameters.Add("@status", NpgsqlDbType.Varchar).Value = model.status;
+        //            cmd.Parameters.Add("@dept_id", NpgsqlDbType.Bigint).Value = model.dept_id;
+        //            cmd.Parameters.Add("@position_name", NpgsqlDbType.Varchar).Value = model.position_name;
+        //            cmd.Parameters.Add("@level", NpgsqlDbType.Integer).Value = model.level;
+
+        //            if (transaction != null)
+        //            {
+        //                cmd.Transaction = transaction;
+        //            }
+
+        //            result = Convert.ToInt32(cmd.ExecuteScalar());
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("An error occurred while inserting the position", ex);
+        //    }
+        //    return result;
+        //}
+
         public int Insert(tbm_position model, NpgsqlConnection conn, NpgsqlTransaction transaction = null)
         {
             int result = 0;
             try
             {
-                string sql = @"INSERT INTO authentication.tbm_position 											
-                                    (create_by,
-                                    status, 
-                                    dept_id, 
-                                    position_name) 											
-                                VALUES 											
-                                    ( @create_by, 
-                                    @status,
-                                    @dept_id, 
-                                    @position_name
-                                    ) RETURNING position_id;";
+                string sql = @"INSERT INTO hr.tbm_position 											
+                                        (create_by,
+                                        status,
+                                        dept_id,
+                                        position_name,
+                                        level) 											
+                                    VALUES 											
+                                        (@create_by,
+                                        @status,
+                                        @dept_id,
+                                        @position_name,									
+                                        @level) 
+                                    RETURNING position_id;";
 
                 using (var cmd = new NpgsqlCommand(sql, conn))
                 {
-                    cmd.Parameters.Add(new NpgsqlParameter("@create_by", NpgsqlDbType.Varchar) { Value = model.create_by });
-                    cmd.Parameters.Add(new NpgsqlParameter("@status", NpgsqlDbType.Varchar) { Value = model.status });
-                    cmd.Parameters.Add(new NpgsqlParameter("@dept_id", NpgsqlDbType.Bigint) { Value = model.dept_id });
-                    cmd.Parameters.Add(new NpgsqlParameter("@position_name", NpgsqlDbType.Varchar) { Value = model.position_name });
-                    
+                    cmd.Parameters.Add("@create_by", NpgsqlDbType.Varchar).Value = model.create_by;
+                    cmd.Parameters.Add("@status", NpgsqlDbType.Varchar).Value = model.status;
+                    cmd.Parameters.Add("@dept_id", NpgsqlDbType.Bigint).Value = model.dept_id;
+                    cmd.Parameters.Add("@position_name", NpgsqlDbType.Varchar).Value = model.position_name;
+                    cmd.Parameters.Add("@level", NpgsqlDbType.Bigint).Value = model.level;
+
                     if (transaction != null)
                     {
                         cmd.Transaction = transaction;
                     }
 
-                    result = 0;
-                    int.TryParse(cmd.ExecuteScalar().ToString(), out result);
+                    result = Convert.ToInt32(cmd.ExecuteScalar());
 
                 }
             }
@@ -133,6 +176,8 @@ namespace DataLayer.Identitys
                 throw;
             }
             return result;
+
+
         }
 
         public int Update(tbm_position model, NpgsqlConnection conn, NpgsqlTransaction transaction = null)
@@ -140,12 +185,13 @@ namespace DataLayer.Identitys
             int result = 0;
             try
             {
-                string sql = @"UPDATE authentication.tbm_position
-                       SET  update_by = @update_by,
-                            status = @status,
-                            dept_id = @dept_id,
-                            position_name = @position_name
-                       WHERE position_id = @position_id";
+                string sql = @"UPDATE hr.tbm_position
+                               SET  update_by = @update_by,
+                                    status = @status,
+                                    dept_id = @dept_id,
+                                    position_name = @position_name,
+                                    level = @level
+                               WHERE position_id = @position_id";
 
                 using (var cmd = new NpgsqlCommand(sql, conn))
                 {
@@ -153,6 +199,7 @@ namespace DataLayer.Identitys
                     cmd.Parameters.Add("@status", NpgsqlDbType.Varchar).Value = model.status;
                     cmd.Parameters.Add("@dept_id", NpgsqlDbType.Bigint).Value = model.dept_id;
                     cmd.Parameters.Add("@position_name", NpgsqlDbType.Varchar).Value = model.position_name;
+                    cmd.Parameters.Add("@level", NpgsqlDbType.Bigint).Value = model.level;
                     cmd.Parameters.Add("@position_id", NpgsqlDbType.Bigint).Value = model.position_id;
 
 
@@ -170,8 +217,7 @@ namespace DataLayer.Identitys
             }
             return result;
         }
-
-        public DataTable GetAllPagination(QueryParameter queryParameter, out int total, NpgsqlConnection conn)
+        public DataTable GetAllPagination(QueryParameter queryParameter, out int total,NpgsqlConnection conn)
         {
             try
             {
@@ -179,16 +225,16 @@ namespace DataLayer.Identitys
                 DataTable dt = new DataTable();
 
                 string selectCount = @"SELECT count(1) ";
-                String select = @" SELECT * ";
-                String from = @"   FROM  authentication.tbm_position ";
-                String where = @" WHERE position_name ILIKE '%' || @searchValue || '%'
-                    OR status ILIKE '%' || @searchValue || '%'
-                    OR CAST(dept_id AS TEXT) ILIKE '%' || @searchValue || '%' ";
+                String select = @" SELECT posi.position_id, posi.position_name, dept.dept_id, dept.dept_name, posi.level ";
+                String from = @"   FROM hr.tbm_position posi LEFT JOIN hr.tbm_dept_info dept ON dept.dept_id = posi.dept_id ";
+                String where = @" WHERE posi.position_name ILIKE '%' || @searchValue || '%'
+                    OR dept.dept_name ILIKE '%' || @searchValue || '%'
+                    OR CAST(level AS TEXT) ILIKE '%' || @searchValue || '%' ";
                 String orderBy = @" ORDER BY " + queryParameter.sortBy + " " + queryParameter.sortType + @"
                               OFFSET (@page - 1) * @limit 
                               FETCH NEXT @limit ROWS ONLY ";
 
-                if (queryParameter.searchValue == null || queryParameter.searchValue.Trim().Length == 0)
+                if(queryParameter.searchValue == null || queryParameter.searchValue.Trim().Length == 0)
                 {
                     where = "";
                 }
@@ -199,7 +245,7 @@ namespace DataLayer.Identitys
 
                 sqlCommand.Parameters.Add(new NpgsqlParameter("@page", NpgsqlDbType.Integer)).Value = queryParameter.page;
                 sqlCommand.Parameters.Add(new NpgsqlParameter("@limit", NpgsqlDbType.Integer)).Value = queryParameter.limit;
-
+               
 
                 sqlCommand.Connection = conn;
                 //get total
@@ -208,7 +254,7 @@ namespace DataLayer.Identitys
                 Console.WriteLine(select + from + where + orderBy);
 
                 //get data
-                sqlCommand.CommandText = select + from + where + orderBy;
+                sqlCommand.CommandText = select + from+ where+orderBy;
                 NpgsqlDataReader reader = sqlCommand.ExecuteReader();
                 dt.Load(reader);
                 return dt;
@@ -218,7 +264,6 @@ namespace DataLayer.Identitys
                 throw;
             }
         }
-
-
+       
     }
 }

@@ -1,4 +1,4 @@
-﻿using DataLayer.Identitys;
+﻿using DataLayer.HR.MasterModels;
 using Utilities;
 using Npgsql;
 using System;
@@ -8,18 +8,16 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Numerics;
 using System.Data;
+using BusinessEntities.HR.MasterModels;
 using Npgsql.Replication.PgOutput.Messages;
 using System.Reflection.Metadata;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using ExcelDataReader;
-using BusinessEntities.Identity;
-using BusinessEntities.HR.MasterModels;
-using DataLayer.HR.MasterModels;
 
 
 
-namespace BusinessLogic.Identity
+namespace BusinessLogic.HR.Master
 {
     public class BizPositionManagement
     {
@@ -42,7 +40,7 @@ namespace BusinessLogic.Identity
                 {
                     conn.Open();
                     dt = m_PositionRepository.GetAll(conn);
-                    var data = dt.DataTableToList<tbm_permission>();
+                    var data = dt.DataTableToList<tbm_position>();
                     resultMessage.status = true;
                     resultMessage.code = GlobalMessage.SELECT_SUCCESS_CODE;
                     resultMessage.data = data;
@@ -58,12 +56,10 @@ namespace BusinessLogic.Identity
                     if (conn.State == ConnectionState.Open) conn.Close();
 
                 }
-
-
-
             }//end using
             return resultMessage;
         }
+
         public ResultMessage GetPositionById(int id)
         {
             int total = 0;
@@ -77,12 +73,12 @@ namespace BusinessLogic.Identity
                 try
                 {
                     conn.Open();
-                    dt = m_PositionRepository.GetByKey(id, conn);
+                    dt = m_PositionRepository.GetByKey(id,conn);
                     var data = dt.DataTableToList<tbm_position>().FirstOrDefault();
-                    if (data is null)
+                    if(data is null)
                     {
                         throw new Exception("Data not found!");
-
+                        
                     }
 
                     resultMessage.status = true;
@@ -101,10 +97,9 @@ namespace BusinessLogic.Identity
                     if (conn.State == ConnectionState.Open) conn.Close();
 
                 }
-
             }//end using
             return resultMessage;
-        }
+        } 
 
         public ResultMessage AddNewPosition(tbm_position model)
         {
@@ -122,7 +117,7 @@ namespace BusinessLogic.Identity
                     resultMessage.code = GlobalMessage.INSERT_SUCCESS_CODE;
                     resultMessage.status = true;
                 }
-                catch (Exception ex)
+                catch(Exception ex)
                 {
                     resultMessage.description = ex.ToString();
                     resultMessage.code = GlobalMessage.UPDATE_ERROR_CODE;
@@ -135,7 +130,7 @@ namespace BusinessLogic.Identity
                 }
             }//end using
 
-
+           
             return resultMessage;
         }
 
@@ -204,7 +199,7 @@ namespace BusinessLogic.Identity
 
         public ResultMessage GetAllPosition(QueryParameter queryParameter)
         {
-            int total = 0;
+            int total = 0 ;
             ResultMessage resultMessage = new ResultMessage();
             List<tbm_position> assyPartControlModel = new List<tbm_position>();
             DataTable dt = new DataTable();
@@ -214,7 +209,7 @@ namespace BusinessLogic.Identity
                 try
                 {
                     conn.Open();
-
+                        
                     dt = m_PositionRepository.GetAllPagination(queryParameter, out total, conn);
 
                     var data = new { total = total, data = dt.DataTableToList<tbm_position>() };
@@ -236,7 +231,6 @@ namespace BusinessLogic.Identity
 
             return resultMessage;
         }
-
 
     }
 }
