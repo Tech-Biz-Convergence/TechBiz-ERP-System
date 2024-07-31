@@ -95,5 +95,11 @@ public class JobController : ControllerBase
         return Ok(resultMessage);
     }
 
+    [HttpGet("GetJobName")]
+    public IActionResult GetJobName()
+    {
+        ResultMessage res = m_BizJobMgr.GetJobName();
+        return Ok(res);
+    }
 }
 

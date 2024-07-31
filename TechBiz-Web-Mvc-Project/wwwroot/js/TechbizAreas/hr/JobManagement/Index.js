@@ -463,6 +463,7 @@ $(document).ready(function () {
 
       //insert
       formData.create_by = username;
+      formData.update_by = username;
       var type = 'POST';
       var url = config.apiUrl.base + '/api/hr/job/addnew';
     } else {

@@ -543,6 +543,19 @@
       "DownstreamPathTemplate": "/api/hr/job/ImportDataExcelFile",
       "DangerousAcceptAnyServerCertificateValidator": true
     },
+    {
+      "UpstreamPathTemplate": "/api/hr/job/GetJobName",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7079
+        }
+      ],
+      "DownstreamPathTemplate": "/api/hr/job/GetJobName",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
     //Resume API
     {
 

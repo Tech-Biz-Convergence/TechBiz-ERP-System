@@ -59,9 +59,9 @@ namespace DataLayer.HR.MasterModels
                 NpgsqlDataReader reader = sqlCommand.ExecuteReader();
                 dataTable.Load(reader);
                 return dataTable;
-            }catch (Exception ex) 
-            { 
-                throw; 
+            } catch (Exception ex)
+            {
+                throw;
             }
         }
 
@@ -73,10 +73,10 @@ namespace DataLayer.HR.MasterModels
                 DataTable dataTable = new DataTable();
 
                 String select = @" SELECT tbJob.*, tbDept.dept_name ";
-                String from   = @" FROM  hr.tbm_hr_job tbJob 
+                String from = @" FROM  hr.tbm_hr_job tbJob 
                                    INNER JOIN hr.tbm_dept_info tbDept 
                                    ON tbJob.dept_id = tbDept.dept_id ";
-                String where  = @" WHERE  hr_job_id = @key  ";
+                String where = @" WHERE  hr_job_id = @key  ";
 
                 sqlCommand.Parameters.Add(new NpgsqlParameter("@key", NpgsqlDbType.Integer)).Value = Key;
 
@@ -84,7 +84,7 @@ namespace DataLayer.HR.MasterModels
                 sqlCommand.Connection = conn;
 
                 //get data
-                sqlCommand.CommandText = select + from+ where;
+                sqlCommand.CommandText = select + from + where;
                 NpgsqlDataReader reader = sqlCommand.ExecuteReader();
                 dataTable.Load(reader);
                 return dataTable;
@@ -95,7 +95,7 @@ namespace DataLayer.HR.MasterModels
             }
         }
 
-        public int Insert(tbm_hr_job model, NpgsqlConnection conn, NpgsqlTransaction transaction = null) 
+        public int Insert(tbm_hr_job model, NpgsqlConnection conn, NpgsqlTransaction transaction = null)
         {
             int result = 0;
             try
@@ -109,7 +109,7 @@ namespace DataLayer.HR.MasterModels
                                         hr_job_expire_date,
                                         hr_job_status,
                                         create_by,
-                                        create_date
+                                        update_by
                                         ) 											
                                     VALUES 											
                                         (@hr_job_title,											
@@ -119,12 +119,12 @@ namespace DataLayer.HR.MasterModels
                                         @hr_job_expire_date,
                                         @hr_job_status,
                                         @create_by,
-                                        @create_date
+                                        @update_by
                                         ) RETURNING hr_job_id;";
 
                 using (var cmd = new NpgsqlCommand(sql, conn))
                 {
-                    
+
                     cmd.Parameters.Add("@hr_job_title", NpgsqlDbType.Varchar).Value = model.hr_job_title;
                     cmd.Parameters.Add("@dept_id", NpgsqlDbType.Bigint).Value = model.dept_id;
                     cmd.Parameters.Add("@hr_job_types", NpgsqlDbType.Varchar).Value = model.hr_job_types;
@@ -132,7 +132,7 @@ namespace DataLayer.HR.MasterModels
                     cmd.Parameters.Add("@hr_job_expire_date", NpgsqlDbType.Date).Value = model.hr_job_expire_date;
                     cmd.Parameters.Add("@hr_job_status", NpgsqlDbType.Varchar).Value = model.hr_job_status;
                     cmd.Parameters.Add("@create_by", NpgsqlDbType.Varchar).Value = model.create_by;
-                    cmd.Parameters.Add("@create_date", NpgsqlDbType.Timestamp).Value = DateTime.Now;
+                    cmd.Parameters.Add("@update_by", NpgsqlDbType.Varchar).Value = model.update_by;
 
                     if (transaction != null)
                     {
@@ -176,7 +176,7 @@ namespace DataLayer.HR.MasterModels
                     cmd.Parameters.Add("@hr_job_types", NpgsqlDbType.Varchar).Value = model.hr_job_types;
                     cmd.Parameters.Add("@hr_job_start_date", NpgsqlDbType.Date).Value = model.hr_job_start_date;
                     cmd.Parameters.Add("@hr_job_expire_date", NpgsqlDbType.Date).Value = model.hr_job_expire_date;
-                    cmd.Parameters.Add("@hr_job_status", NpgsqlDbType.Varchar).Value = model.hr_job_status;                    
+                    cmd.Parameters.Add("@hr_job_status", NpgsqlDbType.Varchar).Value = model.hr_job_status;
                     cmd.Parameters.Add("@update_by", NpgsqlDbType.Varchar).Value = model.update_by;
                     cmd.Parameters.Add("@update_date", NpgsqlDbType.Timestamp).Value = DateTime.Now;
                     cmd.Parameters.Add("@hr_job_id", NpgsqlDbType.Bigint).Value = model.hr_job_id;
@@ -196,7 +196,7 @@ namespace DataLayer.HR.MasterModels
             }
             return result;
         }
-        public DataTable GetAllPagination(QueryParameter queryParameter, out int total,NpgsqlConnection conn)
+        public DataTable GetAllPagination(QueryParameter queryParameter, out int total, NpgsqlConnection conn)
         {
             try
             {
@@ -224,9 +224,9 @@ namespace DataLayer.HR.MasterModels
                               OFFSET (@page - 1) * @limit 
                               FETCH NEXT @limit ROWS ONLY ";
                 }
-                
 
-                if(queryParameter.searchValue == null || queryParameter.searchValue.Trim().Length == 0)
+
+                if (queryParameter.searchValue == null || queryParameter.searchValue.Trim().Length == 0)
                 {
                     where = "";
                 }
@@ -237,7 +237,7 @@ namespace DataLayer.HR.MasterModels
 
                 sqlCommand.Parameters.Add(new NpgsqlParameter("@page", NpgsqlDbType.Integer)).Value = queryParameter.page;
                 sqlCommand.Parameters.Add(new NpgsqlParameter("@limit", NpgsqlDbType.Integer)).Value = queryParameter.limit;
-               
+
 
                 sqlCommand.Connection = conn;
                 //get total
@@ -272,7 +272,7 @@ namespace DataLayer.HR.MasterModels
                 {
                     cmd.Parameters.Add("@id", NpgsqlDbType.Integer).Value = id;
                     cmd.Parameters.Add("@status", NpgsqlDbType.Varchar).Value = status;// model.isActive;											
-                  //  cmd.Parameters.Add("@update_by", SqlDbType.Int).Value = user_id;
+                                                                                       //  cmd.Parameters.Add("@update_by", SqlDbType.Int).Value = user_id;
 
                     result = 0;
                     if (transaction != null)
@@ -289,7 +289,28 @@ namespace DataLayer.HR.MasterModels
             return result;
         }
 
-       
+        public DataTable GetJobName(NpgsqlConnection conn)
+        {
+            try
+            {
+                NpgsqlCommand sqlCommand = new NpgsqlCommand();
+                DataTable dataTable = new DataTable();
 
+                string sql = @" SELECT hr_job_id, hr_job_title
+                         FROM  hr.tbm_hr_job WHERE hr_job_status = 'ACTIVE'";
+
+                sqlCommand.CommandText = sql;
+                sqlCommand.Connection = conn;
+
+                NpgsqlDataReader reader = sqlCommand.ExecuteReader();
+                dataTable.Load(reader);
+                return dataTable;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error retrieving Job data", ex);
+            }
+
+        }
     }
 }
