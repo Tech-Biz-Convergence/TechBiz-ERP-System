@@ -1,0 +1,283 @@
+@inject IHttpContextAccessor context
+@using Newtonsoft.Json
+@model List<permissionRoleMappingModel>
+
+@{
+    var token = context.HttpContext.Session.GetString("Token");
+    var userName = context.HttpContext.Session.GetString("UserName");
+
+    var menuPermissions = Model;
+    var currentController = ViewContext.RouteData.Values["controller"].ToString();
+    var currentAction = ViewContext.RouteData.Values["action"].ToString();
+
+    bool canAdd = menuPermissions.Any(p => p.program_path == $"/{currentController}/{currentAction}" && p.permiss_add_status == "ACTIVE");
+    bool canDownload = menuPermissions.Any(p => p.program_path == $"/{currentController}/{currentAction}" && p.permiss_download_status == "ACTIVE");
+    bool canUpload = menuPermissions.Any(p => p.program_path == $"/{currentController}/{currentAction}" && p.permiss_upload_status == "ACTIVE");
+    var programCode = menuPermissions.FirstOrDefault(p => p.program_path == $"/{currentController}/{currentAction}")?.program_code;
+    var programName = menuPermissions.FirstOrDefault(p => p.program_path == $"/{currentController}/{currentAction}")?.menu_name;
+}
+
+@{
+    ViewData["Title"] = "LeaveType Management - My Application";
+}
+
+@section PageScripts {
+    <script>
+        var token = '@token';
+        var username = '@userName';
+        var canEdit = @Html.Raw(JsonConvert.SerializeObject(menuPermissions.Any(p => p.program_path == $"/{currentController}/{currentAction}" && p.permiss_edit_status == "ACTIVE")));
+        var canView = @Html.Raw(JsonConvert.SerializeObject(menuPermissions.Any(p => p.program_path == $"/{currentController}/{currentAction}" && p.permiss_view_status == "ACTIVE")));
+        var canDelete = @Html.Raw(JsonConvert.SerializeObject(menuPermissions.Any(p => p.program_path == $"/{currentController}/{currentAction}" && p.permiss_delete_status == "ACTIVE")));
+    </script>
+
+    <script src="~/js/TechbizAreas/Dropdown/Department.js"></script>
+    <script src="~/js/TechbizAreas/Hr/LeaveTypeManagement/index.js"></script>
+}
+<!-- Content -->
+<div class="py-0 mb-6">
+    <div class="row">
+        <div class="d-flex align-items-center">
+            <h4 class="fw-bold py-1 mb-3" id="title-program-name"></h4>
+            <h5 class="fw-bold py-1 mb-3 ms-auto" id="title-program-id"></h5>
+        </div>
+    </div>
+
+    <div class="row">
+        <div id="tabs" class="col-md-12">
+            <ul class="nav nav-pills flex-column flex-md-row mb-3">
+                <li class="nav-item">
+                    <a class="nav-link active " role="tab" data-bs-toggle="tab" href="#TabSearchId"><i class="bx bx-user me-1"></i> Search</a>
+                </li>
+                @if (canUpload)
+                {
+                    <li class="nav-item UploadComponent">
+                        <a class="nav-link " role="tab" data-bs-toggle="tab" href="#TabUploadId"><i class="bx bx-upload me-1"></i> Upload</a>
+                    </li>
+                }
+            </ul>
+            <div class="tab-content" style="padding: 0rem;">
+                <!------------------------------------------------------------------------------->
+                <!-- tap Search -->
+                <!------------------------------------------------------------------------------->
+                <div id="TabSearchId" class="tab-pane active">
+                    <div id="AreaSearchId" class="card mb-4 SlideTabSearch">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5 class="card-header">Leave Type List</h5>
+                            </div>
+                            <div class="col-md-6 text-right mt-3">
+                                <div class="container  d-flex justify-content-end ">
+                                    @if (canDownload)
+                                    {
+                                        <div class="dropdown">
+                                            <button type="button" class="btn rounded-pill rounded-pill  btn-outline-primary" data-bs-toggle="dropdown">
+                                                <i class="bx bx-export me-sm-1"></i><b>Export</b>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <a id="export-csv" class="dropdown-item " href="javascript:void(0);"><i class="bx bx-file me-1"></i> Csv</a>
+                                                <a id="export-excel" class="dropdown-item " href="javascript:void(0);"><i class="bx bx-copy me-1"></i> Excel</a>
+                                                <a id="export-pdf" class="dropdown-item " href="javascript:void(0);"><i class="bx bxs-file-pdf me-1"></i> Pdf</a>
+                                                <a id="export-copy" class="dropdown-item " href="javascript:void(0);"><i class="bx bx-copy me-1"></i> Copy</a>
+                                            </div>
+                                        </div>
+                                    }
+                                    @if (canAdd)
+                                    {
+                                        <button id="AddNewId" type="button" class="btn rounded-pill btn-primary  ms-2" button-feature><i class="bx bx-plus-medical me-1"></i><b>Add new</b></button>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Account -->
+                        <hr class="my-0" />
+                        <div class=" container table-responsive mt-1">
+                            <table class="table table-striped" id="tableShowListId">
+                                <thead>
+                                    <tr>
+                                        <th style="width:5%;" class="text-center">Active</th>
+                                        <th>Name Type</th>
+                                        <th>Max Day</th>
+                                        <th>Comment</th>
+                                        @* <th>Department</th> *@
+                                        <th class="text-center">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                    <div id="AreaAddId" class="card mb-4 SlideTabSearch" style="display: none;">
+                        <h5 class="card-header" id="ToppicActionId">Add Holiday</h5>
+                        <!-- Account -->
+                        <hr class="my-0" />
+                        <div class="card-body">
+                            <form id="AddFormId">
+                                <input type="hidden" name="leave_type_id" value="0">
+                                <div class="row">
+
+                                    <div class="mb-3 col-md-6">
+                                        <label for="leave-type-name" class="form-label required">Leave Type Name</label>
+                                        <input class="form-control"
+                                               type="text"
+                                               id="leave-type-name"
+                                               name="leave_type_name"
+                                               placeholder="Enter Leave Type Name"
+                                               autofocus />
+                                    </div>
+                                    <div class="mb-3 col-md-6">
+                                        <label for="Day" class="form-label required">Max Day</label>
+                                        <input class="form-control" type="number" name="leave_max_days" id="leave_max_days" placeholder="Enter Max Day of Leave Type" min="1" />
+                                        <!-- <input class="form-control" type="date" name="leave_max_days" id="leave_max_days" placeholder="Enter Day of Holiday" /> -->
+                                    </div>
+                                    <div class="mb-3 col-md-12">
+                                        <label for="leave_type_comment" class="form-label">Comment</label>
+                                        <textarea class="form-control" id="leave_type_comment" name="leave_type_comment" placeholder="Enter Comment" rows="5"></textarea>
+                                    </div>
+
+                                    @* <div class="mb-3 col-md-6">
+                                    <label for="department" class="form-label  required">Department</label>
+                                    <select class="form-control" id="department" name="dept_id">
+                                    </select>
+                                    </div> *@
+                                    <div class="mb-3 col-md-6">
+                                        <label class="form-label" data-lang="status">Active</label>
+                                        <div class="form-check form-switch mb-2">
+                                            <input class="form-check-input" type="checkbox" name="leave_type_status" checked>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- --------------------------------------------------------------------------------
+                                  -------------  Zone Create by & Update by ------------------------------------------
+                                  -------------------------------------------------------------------------------- -->
+                                <div class="row">
+                                    <div class="container rounded-container-create " style="background-color: #F5F5F5;  padding: 10px;">
+                                        <div class="row">
+                                            <div class="mb-3 col-md-6">
+                                                <label for="create-by" class="form-label">Create by</label>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       id="create-by"
+                                                       name="created_by"
+                                                       placeholder="Create by"
+                                                       disabled="true" />
+                                            </div>
+                                            <div class="mb-3 col-md-6">
+                                                <label for="create-date" class="form-label">Create date</label>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       id="create-date"
+                                                       name="created_date"
+                                                       placeholder="Create date"
+                                                       disabled="true" />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="mb-3 col-md-6">
+                                                <label for="update-by" class="form-label">Update by</label>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       id="update-by"
+                                                       name="updated_by"
+                                                       placeholder="Update by"
+                                                       disabled="true" />
+                                            </div>
+                                            <div class="mb-3 col-md-6">
+                                                <label for="update-date" class="form-label">Update date</label>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       id="update-date"
+                                                       name="updated_date"
+                                                       placeholder="Update date"
+                                                       disabled="true" />
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                                <div class="mt-2">
+                                    <button type="submit" class="btn btn-primary  rounded-pill me-2" id="saveId">Save changes</button>
+                                    <button type="reset" class="btn btn-outline-secondary  rounded-pill" id="CloseId">Close</button>
+                                </div>
+                            </form>
+                        </div>
+                        <!-- /Account -->
+                    </div>
+                </div>
+                <!------------------------------------------------------------------------------->
+                <!-- tap upload -->
+                <!------------------------------------------------------------------------------->
+                @if (canUpload)
+                {
+                    <div id="TabUploadId" class="tab-pane button-feature UploadComponent">
+                        <!-- area upload-->
+                        <div id="AreaUploadId" class="card mb-4 $ SlideTabUpload">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5 class="card-header">Employee Upload</h5>
+                                </div>
+                                <div class="col-md-6 text-right mt-3">
+                                    <div class="container" style="text-align: right;">
+                                        <button id="DownloadId" type="button" class="btn btn-primary"><i class="bx bx-plus-medical me-1"></i><b>Download Template</b></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Account -->
+                            <hr class="my-0" />
+                            <div class="card-body">
+                                <form id="UploadFormId">
+                                    <div class="mb-3 col-md-12 ">
+                                        <label for="Upload File" class="form-label">Upload File</label>
+                                        <input type="file"
+                                               class="form-control"
+                                               name="fileInput"
+                                               placeholder="Choose File" />
+                                    </div>
+                                    <div class="mt-2">
+                                        <button type="submit" class="btn btn-primary me-2">Upload</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div> <!-- Area upload -->
+                        <!-- Area show upload -->
+                        <div id="AreaShowUploadId" class="card mb-4 SlideTabUpload" style="display: none;">
+                            <div class="col-md-6">
+                                <h5 class="card-header">Show Upload</h5>
+                            </div>
+                            <div class="col-md-6 text-right mt-3">
+                                <div class="container" style="text-align: right;">
+                                </div>
+                            </div>
+                            <!-- Account -->
+                            <hr class="my-0" />
+                            <div class="card-body">
+                                <div class=" table-responsive">
+                                    <table class="table table-striped" id="tableUploadId">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Position</th>
+                                                <th>Department</th>
+                                                <th>Salary</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="mt-2">
+                                    <button type="button" class="btn btn-primary me-2" id="SaveUploadId">Save</button>
+                                    <button type="button" class="btn btn-outline-secondary" id="UploadCloseId">Close</button>
+                                </div>
+                            </div>
+                        </div><!-- Area show upload -->
+
+                    </div>
+                }
+            </div>  <!-- tab-content-->
+        </div>
+    </div>
+</div>
+<!-- / Content -->
