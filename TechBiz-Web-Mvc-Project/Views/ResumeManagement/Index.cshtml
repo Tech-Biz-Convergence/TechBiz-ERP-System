@@ -1,18 +1,44 @@
+@inject IHttpContextAccessor context
+@using Newtonsoft.Json
+@model List<permissionRoleMappingModel>
+
+@{
+    var token = context.HttpContext.Session.GetString("Token");
+    var userName = context.HttpContext.Session.GetString("UserName");
+
+    var menuPermissions = Model;
+    var currentController = ViewContext.RouteData.Values["controller"].ToString();
+    var currentAction = ViewContext.RouteData.Values["action"].ToString();
+
+    bool canAdd = menuPermissions.Any(p => p.program_path == $"/{currentController}/{currentAction}" && p.permiss_add_status == "ACTIVE");
+    bool canDownload = menuPermissions.Any(p => p.program_path == $"/{currentController}/{currentAction}" && p.permiss_download_status == "ACTIVE");
+    bool canUpload = menuPermissions.Any(p => p.program_path == $"/{currentController}/{currentAction}" && p.permiss_upload_status == "ACTIVE");
+    var programCode = menuPermissions.FirstOrDefault(p => p.program_path == $"/{currentController}/{currentAction}")?.program_code;
+    var programName = menuPermissions.FirstOrDefault(p => p.program_path == $"/{currentController}/{currentAction}")?.menu_name;
+}
+
 @{
     ViewData["Title"] = "Recuit Management - My Application";
 }
 
 @section PageScripts {
-    <script src="~/js/TechbizAreas/Check-Token.js"></script>
-    <script src="~/js/TechbizAreas/Dropdown/Department.js"></script>
-    <script src="~/js/TechbizAreas/Hr/RecuitManagement/index.js"></script>
+    <script>
+        var token = '@token';
+        var username = '@userName';
+        var canEdit = @Html.Raw(JsonConvert.SerializeObject(menuPermissions.Any(p => p.program_path == $"/{currentController}/{currentAction}" && p.permiss_edit_status == "ACTIVE")));
+        var canView = @Html.Raw(JsonConvert.SerializeObject(menuPermissions.Any(p => p.program_path == $"/{currentController}/{currentAction}" && p.permiss_view_status == "ACTIVE")));
+        var canDelete = @Html.Raw(JsonConvert.SerializeObject(menuPermissions.Any(p => p.program_path == $"/{currentController}/{currentAction}" && p.permiss_delete_status == "ACTIVE")));
+    </script>
+    <script src="~/js/TechbizAreas/Dropdown/Job.js"></script>
+    <script src="~/js/TechbizAreas/Dropdown/Candidate.js"></script>
+    <script src="~/js/TechbizAreas/Hr/ResumeManagement/index.js"></script>
 }
 <!-- Content -->
 <div class="py-0 mb-6">
     <div class="row">
         <div class="d-flex align-items-center">
-            <h4 class="fw-bold py-1 mb-3" id="title-program-name"></h4>
-            <h5 class="fw-bold py-1 mb-3 ms-auto" id="title-program-id"></h5>
+            <h4 class="fw-bold py-1 mb-3">@programName</h4>
+            <h5 class="fw-bold py-1 mb-3 ms-auto">@programCode</h5>
         </div>
     </div>
 
@@ -22,6 +48,12 @@
                 <li class="nav-item">
                     <a class="nav-link active " role="tab" data-bs-toggle="tab" href="#TabSearchId"><i class="bx bx-user me-1"></i> Search</a>
                 </li>
+                @if (canUpload)
+                {
+                    <li class="nav-item UploadComponent">
+                        <a class="nav-link " role="tab" data-bs-toggle="tab" href="#TabUploadId"><i class="bx bx-upload me-1"></i> Upload</a>
+                    </li>
+                }
             </ul>
             <div class="tab-content" style="padding: 0rem;">
                 <!------------------------------------------------------------------------------->
@@ -31,23 +63,28 @@
                     <div id="AreaSearchId" class="card mb-4 SlideTabSearch">
                         <div class="row">
                             <div class="col-md-6">
-                                <h5 class="card-header">Resume List</h5>
+                                <h5 class="card-header">Recuit List</h5>
                             </div>
                             <div class="col-md-6 text-right mt-3">
                                 <div class="container  d-flex justify-content-end ">
-
-                                    <div class="dropdown">
-                                        <button type="button" class="btn rounded-pill rounded-pill  btn-outline-primary" data-bs-toggle="dropdown">
-                                            <i class="bx bx-export me-sm-1"></i><b>Export</b>
-                                        </button>
-                                        <div class="dropdown-menu">
-                                            <a id="export-csv" class="dropdown-item " href="javascript:void(0);"><i class="bx bx-file me-1"></i> Csv</a>
-                                            <a id="export-excel" class="dropdown-item " href="javascript:void(0);"><i class="bx bx-copy me-1"></i> Excel</a>
-                                            <a id="export-pdf" class="dropdown-item " href="javascript:void(0);"><i class="bx bxs-file-pdf me-1"></i> Pdf</a>
-                                            <a id="export-copy" class="dropdown-item " href="javascript:void(0);"><i class="bx bx-copy me-1"></i> Copy</a>
+                                    @if (canDownload)
+                                    {
+                                        <div class="dropdown">
+                                            <button type="button" class="btn rounded-pill rounded-pill  btn-outline-primary" data-bs-toggle="dropdown">
+                                                <i class="bx bx-export me-sm-1"></i><b>Export</b>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <a id="export-csv" class="dropdown-item " href="javascript:void(0);"><i class="bx bx-file me-1"></i> Csv</a>
+                                                <a id="export-excel" class="dropdown-item " href="javascript:void(0);"><i class="bx bx-copy me-1"></i> Excel</a>
+                                                <a id="export-pdf" class="dropdown-item " href="javascript:void(0);"><i class="bx bxs-file-pdf me-1"></i> Pdf</a>
+                                                <a id="export-copy" class="dropdown-item " href="javascript:void(0);"><i class="bx bx-copy me-1"></i> Copy</a>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <button id="AddNewId" type="button" class="btn rounded-pill btn-primary  ms-2" button-feature><i class="bx bx-plus-medical me-1"></i><b>Add new</b></button>
+                                    }
+                                    @if (canAdd)
+                                    {
+                                        <button id="AddNewId" type="button" class="btn rounded-pill btn-primary  ms-2" button-feature><i class="bx bx-plus-medical me-1"></i><b>Add new</b></button>
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -58,8 +95,8 @@
                                 <thead>
                                     <tr>
                                         <th style="width:5%;" class="text-center">Active</th>
-                                        <th>Job ID</th>
-                                        <th>Candidate ID</th>
+                                        <th>Job Title</th>
+                                        <th>Candidate Name</th>
                                         <th>Resume Path</th>
                                         <th>Status</th>
                                         <th class="text-center">Actions</th>
@@ -72,29 +109,31 @@
 
                     </div>
                     <div id="AreaAddId" class="card mb-4 SlideTabSearch" style="display: none;">
-                        <h5 class="card-header" id="ToppicActionId">Add Resume</h5>
+                        <h5 class="card-header" id="ToppicActionId">Add Recuit</h5>
                         <!-- Account -->
+                        <hr class="my-0" />
                         <div class="card-body">
                             <form id="AddFormId">
                                 <input type="hidden" name="hr_resume_id" value="0">
                                 <div class="row">
-
+                                    
                                     <div class="mb-3 col-md-6">
-                                        <label for="hr_job_id" class="form-label">Job ID</label>
-                                        <input class="form-control" type="text" id="hr_job_id" name="hr_job_id" placeholder="Enter Job ID" autofocus />
+                                        <label for="hr_job_id" class="form-label  required">Job</label>
+                                        <select class="form-control" id="hr_job_id" name="hr_job_id">
+                                        </select>
                                     </div>
                                     <div class="mb-3 col-md-6">
-                                        <label for="hr_candidate_id" class="form-label">Candidate ID</label>
-                                        <input class="form-control" type="text" name="hr_candidate+id" id="hr_candidate_id" placeholder="Enter Candidate ID" />
-                                    </div>
-
-                                    <div class="mb-3 col-md-6">
-                                        <label for="resume_path" class="form-label">Resume Path</label>
-                                        <input type="text" class="form-control" id="resume_path" name="resume_path" placeholder="Enter Resume Path" />
+                                        <label for="hr_candidate_id" class="form-label  required">Candidate</label>
+                                        <select class="form-control" id="hr_candidate_id" name="hr_candidate_id">
+                                        </select>
                                     </div>
                                     <div class="mb-3 col-md-6">
+                                        <label for="resume_ath" class="form-label required">Resume Path</label>
+                                        <input class="form-control" type="text" id="resume_path" name="resume_path" placeholder="Enter Resume Path" autofocus />
+                                    </div>
+                                    <div class="mb-3 col-md-6">
+                                        <label class="form-label" data-lang="status">Active</label>
                                         <div class="form-check form-switch mb-2">
-                                            <label class="form-check-label" for="resume_status" id="label_status" name="label_status">Active</label>
                                             <input class="form-check-input" type="checkbox" id="resume_status" name="resume_status" checked>
                                         </div>
                                     </div>
@@ -135,6 +174,77 @@
                         <!-- /Account -->
                     </div>
                 </div>
+                <!------------------------------------------------------------------------------->
+                <!-- tap upload -->
+                <!------------------------------------------------------------------------------->
+                @if (canUpload)
+                {
+                    <div id="TabUploadId" class="tab-pane button-feature UploadComponent">
+                        <!-- area upload-->
+                        <div id="AreaUploadId" class="card mb-4 $ SlideTabUpload">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5 class="card-header">Recuit Upload</h5>
+                                </div>
+                                <div class="col-md-6 text-right mt-3">
+                                    <div class="container" style="text-align: right;">
+                                        <button id="DownloadId" type="button" class="btn btn-primary"><i class="bx bx-plus-medical me-1"></i><b>Download Template</b></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Account -->
+                            <hr class="my-0" />
+                            <div class="card-body">
+                                <form id="UploadFormId">
+                                    <div class="mb-3 col-md-12 ">
+                                        <label for="Upload File" class="form-label">Upload File</label>
+                                        <input type="file"
+                                               class="form-control"
+                                               name="fileInput"
+                                               placeholder="Choose File" />
+                                    </div>
+                                    <div class="mt-2">
+                                        <button type="submit" class="btn btn-primary me-2">Upload</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div> <!-- Area upload -->
+                        <!-- Area show upload -->
+                        <div id="AreaShowUploadId" class="card mb-4 SlideTabUpload" style="display: none;">
+                            <div class="col-md-6">
+                                <h5 class="card-header">Show Upload</h5>
+                            </div>
+                            <div class="col-md-6 text-right mt-3">
+                                <div class="container" style="text-align: right;">
+                                </div>
+                            </div>
+                            <!-- Account -->
+                            <hr class="my-0" />
+                            <div class="card-body">
+                                <div class=" table-responsive">
+                                    <table class="table table-striped" id="tableUploadId">
+                                        <thead>
+                                            <tr>
+                                                <th>Job Title</th>
+                                                <th>Candidate Name</th>                                                
+                                                <th>Resume Path</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="mt-2">
+                                    <button type="button" class="btn btn-primary me-2" id="SaveUploadId">Save</button>
+                                    <button type="button" class="btn btn-outline-secondary" id="UploadCloseId">Close</button>
+                                </div>
+                            </div>
+                        </div><!-- Area show upload -->
+
+                    </div>
+                }
+
             </div>  <!-- tab-content-->
         </div>
     </div>

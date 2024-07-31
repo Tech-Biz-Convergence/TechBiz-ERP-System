@@ -72,10 +72,10 @@ namespace DataLayer.HR.MasterModels
                 NpgsqlCommand sqlCommand = new NpgsqlCommand();
                 DataTable dataTable = new DataTable();
 
-                String select = @" SELECT tbRe.*, tbJob.hr_job_title, tbCan.hr_candidate_name ";
-                String from   = @" FROM  hr.tbm_recuit_stage tbRe 
-                                 INNER JOIN hr.tbm_hr_job tbJob ON tbJob.hr_job_id = tbRe.hr_job_id 
-                                 LEFT JOIN hr.tbm_hr_candidates tbCan ON tbCan.hr_candidate_id = tbRe.hr_candidate_id ";
+                String select = @" SELECT tbRec.*, tbJob.hr_job_title, tbCan.hr_candidate_name ";
+                String from   = @" FROM  hr.tbm_recuit_stage tbRec 
+                                 INNER JOIN hr.tbm_hr_job tbJob ON tbJob.hr_job_id = tbRec.hr_job_id 
+                                 LEFT JOIN hr.tbm_hr_candidates tbCan ON tbCan.hr_candidate_id = tbRec.hr_candidate_id ";
                 String where  = @" WHERE  recuit_stage_id = @key  ";
 
                 sqlCommand.Parameters.Add(new NpgsqlParameter("@key", NpgsqlDbType.Integer)).Value = Key;
@@ -193,10 +193,10 @@ namespace DataLayer.HR.MasterModels
                 DataTable dt = new DataTable();
 
                 string selectCount = @"SELECT count(1) ";
-                String select = @" SELECT tbRe.*, tbJob.hr_job_title, tbCan.hr_candidate_name ";
-                String from = @" FROM  hr.tbm_recuit_stage tbRe 
-                                 INNER JOIN hr.tbm_hr_job tbJob ON tbJob.hr_job_id = tbRe.hr_job_id 
-                                 LEFT JOIN hr.tbm_hr_candidates tbCan ON tbCan.hr_candidate_id = tbRe.hr_candidate_id ";
+                String select = @" SELECT tbRec.*, tbJob.hr_job_title, tbCan.hr_candidate_name ";
+                String from = @" FROM  hr.tbm_recuit_stage tbRec 
+                                 INNER JOIN hr.tbm_hr_job tbJob ON tbJob.hr_job_id = tbRec.hr_job_id 
+                                 LEFT JOIN hr.tbm_hr_candidates tbCan ON tbCan.hr_candidate_id = tbRec.hr_candidate_id ";
                 String where = @" WHERE recuit_stage_id ILIKE '%' || @searchValue || '%'";                    
                 String orderBy = @" ORDER BY " + queryParameter.sortBy + " " + queryParameter.sortType + @"
                               OFFSET (@page - 1) * @limit 

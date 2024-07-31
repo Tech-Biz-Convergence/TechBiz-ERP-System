@@ -8,6 +8,7 @@ using System.Xml.Serialization;
 
 namespace BusinessEntities.HR.MasterModels
 {
+    #region tbm_hr_resume
     public class tbm_hr_resume
     {
         public DateTime ? create_date { get; set; }
@@ -20,4 +21,13 @@ namespace BusinessEntities.HR.MasterModels
         public string ? resume_path { get; set; }            
         public string ? resume_status { get; set; }
     }
+    #endregion
+
+    #region ResumeModel 
+    public class ResumeModel : tbm_hr_resume
+    {
+        public string hr_job_title { get; set; }
+        public string hr_candidate_name { get; set; }
+    }
+    #endregion    
 }

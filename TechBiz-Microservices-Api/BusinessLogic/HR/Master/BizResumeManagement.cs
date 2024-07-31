@@ -39,7 +39,7 @@ namespace BusinessLogic.HR.Master
                 {
                     conn.Open();
                     dt = m_ResumeRepository.GetAll(conn);
-                    var data = dt.DataTableToList<tbm_hr_resume>();
+                    var data = dt.DataTableToList<ResumeModel>();
                     resultMessage.status = true;
                     resultMessage.code = GlobalMessage.SELECT_SUCCESS_CODE;
                     resultMessage.data = data;
@@ -73,7 +73,7 @@ namespace BusinessLogic.HR.Master
                 {
                     conn.Open();
                     dt = m_ResumeRepository.GetByKey(id,conn);
-                    var data = dt.DataTableToList<tbm_hr_resume>().FirstOrDefault();
+                    var data = dt.DataTableToList<ResumeModel>().FirstOrDefault();
                     if(data is null)
                     {
                         throw new Exception("Data not found!");
@@ -202,8 +202,7 @@ namespace BusinessLogic.HR.Master
         public ResultMessage GetAllResume(QueryParameter queryParameter)
         {
             int total = 0 ;
-            ResultMessage resultMessage = new ResultMessage();
-            List<tbm_hr_resume> assyPartControlModel = new List<tbm_hr_resume>();
+            ResultMessage resultMessage = new ResultMessage();           
             DataTable dt = new DataTable();
 
             using (NpgsqlConnection conn = new NpgsqlConnection(GlobalVariables.ConnectionString))
@@ -214,7 +213,7 @@ namespace BusinessLogic.HR.Master
                         
                     dt = m_ResumeRepository.GetAllPagination(queryParameter, out total, conn);
 
-                    var data = new { total = total, data = dt.DataTableToList<tbm_hr_resume>() };
+                    var data = new { total = total, data = dt.DataTableToList<ResumeModel>() };
                     resultMessage.status = true;
                     resultMessage.data = data;
                 }
@@ -233,19 +232,18 @@ namespace BusinessLogic.HR.Master
 
             return resultMessage;
         }
-        public ResultMessage ActivateCondition(int id,int user_id,bool is_active)
+        public ResultMessage ActivateCondition(int id, string user_name, string resume_status)
         {
             int total = 0;
             ResultMessage resultMessage = new ResultMessage();
-            List<tbm_hr_resume> assyPartControlModel = new List<tbm_hr_resume>();
-
+            
             using (NpgsqlConnection conn = new NpgsqlConnection(GlobalVariables.ConnectionString))
             {
                 try
                 {
                     conn.Open();
 
-                    int ret = m_ResumeRepository.UpdateActive(id, user_id, is_active,conn);
+                    int ret = m_ResumeRepository.UpdateActive(id, user_name, resume_status, conn);
 
 
                     resultMessage.status = true;

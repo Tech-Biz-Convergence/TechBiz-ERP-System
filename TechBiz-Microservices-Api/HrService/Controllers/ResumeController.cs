@@ -71,10 +71,10 @@ public class ResumeController : ControllerBase
         return Ok(res);
     }
 
-    [HttpGet("ActivateCondition")]
-    public IActionResult ActivateCondition(int id, int loginId, bool is_active)
+    [HttpGet("ActivateCondition/{id}")]
+    public IActionResult ActivateCondition(int id, [FromQuery] string user_name, [FromQuery] string resume_status)
     {
-        ResultMessage resultMessage = m_BizResumeMgr.ActivateCondition(id, loginId, is_active);
+        ResultMessage resultMessage = m_BizResumeMgr.ActivateCondition(id, user_name, resume_status);
         return Ok(resultMessage);
     }    
 }

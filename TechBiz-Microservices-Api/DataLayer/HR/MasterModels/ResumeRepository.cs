@@ -72,8 +72,10 @@ namespace DataLayer.HR.MasterModels
                 NpgsqlCommand sqlCommand = new NpgsqlCommand();
                 DataTable dataTable = new DataTable();
 
-                String select = @" SELECT * ";
-                String from   = @" FROM  hr.tbm_hr_resume  ";
+                String select = @" SELECT tbRes.*, tbJob.hr_job_title, tbCan.hr_candidate_name ";
+                String from = @" FROM  hr.tbm_hr_resume tbRes 
+                                 INNER JOIN hr.tbm_hr_job tbJob ON tbJob.hr_job_id = tbRes.hr_job_id 
+                                 LEFT JOIN hr.tbm_hr_candidates tbCan ON tbCan.hr_candidate_id = tbRes.hr_candidate_id ";
                 String where  = @" WHERE  hr_resume_id = @key  ";
 
                 sqlCommand.Parameters.Add(new NpgsqlParameter("@key", NpgsqlDbType.Integer)).Value = Key;
@@ -191,8 +193,10 @@ namespace DataLayer.HR.MasterModels
                 DataTable dt = new DataTable();
 
                 string selectCount = @"SELECT count(1) ";
-                String select = @" SELECT * ";
-                String from = @"   FROM  hr.tbm_hr_resume ";
+                String select = @" SELECT tbRes.*, tbJob.hr_job_title, tbCan.hr_candidate_name ";
+                String from = @" FROM  hr.tbm_hr_resume tbRes
+                                 INNER JOIN hr.tbm_hr_job tbJob ON tbJob.hr_job_id = tbRes.hr_job_id 
+                                 LEFT JOIN hr.tbm_hr_candidates tbCan ON tbCan.hr_candidate_id = tbRes.hr_candidate_id ";
                 String where = @" WHERE hr_resume_id ILIKE '%' || @searchValue || '%'";                    
                 String orderBy = @" ORDER BY " + queryParameter.sortBy + " " + queryParameter.sortType + @"
                               OFFSET (@page - 1) * @limit 
@@ -228,23 +232,23 @@ namespace DataLayer.HR.MasterModels
             }
         }
 
-        public int UpdateActive(int id, int user_id, bool is_active, NpgsqlConnection conn, NpgsqlTransaction transaction = null)
+        public int UpdateActive(int id, string user_name, string status, NpgsqlConnection conn, NpgsqlTransaction transaction = null)
         {
             int result = 0;
             try
             {
                 string sql = @"UPDATE 											
-                                        hr.tbm_hr_resume											
+                                        hr.tbm_hr_resume										
                                     SET 											
-                                        isActive = @isActive														
+                                        resume_status = @status														
                                     WHERE  											
                                         hr_resume_id = @id";
 
                 using (var cmd = new NpgsqlCommand(sql, conn))
                 {
                     cmd.Parameters.Add("@id", NpgsqlDbType.Integer).Value = id;
-                    cmd.Parameters.Add("@is_active", NpgsqlDbType.Boolean).Value = is_active;// model.isActive;											
-                  //  cmd.Parameters.Add("@update_by", SqlDbType.Int).Value = user_id;
+                    cmd.Parameters.Add("@status", NpgsqlDbType.Varchar).Value = status;// model.isActive;											
+                                                                                       //  cmd.Parameters.Add("@update_by", SqlDbType.Int).Value = user_id;
 
                     result = 0;
                     if (transaction != null)
@@ -261,7 +265,7 @@ namespace DataLayer.HR.MasterModels
             return result;
         }
 
-       
+
 
     }
 }
