@@ -233,7 +233,7 @@ namespace BusinessLogic.HR.Master
 
             return resultMessage;
         }
-        public ResultMessage ActivateCondition(int id,int user_id,bool is_active)
+        public ResultMessage ActivateCondition(int id, string user_name, string status)
         {
             int total = 0;
             ResultMessage resultMessage = new ResultMessage();
@@ -245,7 +245,7 @@ namespace BusinessLogic.HR.Master
                 {
                     conn.Open();
 
-                    int ret = m_ScheduleRepository.UpdateActive(id, user_id, is_active,conn);
+                    int ret = m_ScheduleRepository.UpdateActive(id, user_name, status, conn);
 
 
                     resultMessage.status = true;

@@ -73,5 +73,12 @@ namespace CandidateService.Controllers
             ResultMessage resultMessage = m_BizCandidatesMgr.ImportDataExcelFile(file);
             return Ok(resultMessage);
         }
+
+        [HttpGet("GetCandidatesName")]
+        public IActionResult GetCandidatesName()
+        {
+            ResultMessage res = m_BizCandidatesMgr.GetCandidatesName();
+            return Ok(res);
+        }
     }
 }

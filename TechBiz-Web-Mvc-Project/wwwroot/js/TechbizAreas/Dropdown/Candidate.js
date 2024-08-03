@@ -11,7 +11,7 @@ $(document).ready(function () {
       placeholder: 'Select Candidate',
       //allowClear: true
       ajax: {
-        url: config.apiUrl.base + '/Api/Hr/Candidates/GetPaginate',
+        url: config.apiUrl.base + '/Api/Hr/Candidates/GetCandidatesName',
         type: 'GET',
         dataType: 'json',
         headers: { "Authorization": "Bearer " + token },
@@ -25,18 +25,29 @@ $(document).ready(function () {
         },
         processResults: (data) => {
 
-          return {
-            results: data.data.data.map(item => {
-              return {
-                id: item.hr_candidate_id,
-                text: item.hr_candidate_name
-              };
-            }),
-            pagination: {
-              more: data.data.data.length === 10 
-              //more: data.nextPage
-            }
-          };
+          // ตรวจสอบว่า data.data มีค่าและเป็น array
+          if (data && Array.isArray(data.data)) {
+            return {
+              results: data.data.map(item => {
+                return {
+                  id: item.hr_candidate_id,
+                  text: item.hr_candidate_name
+                };
+              }),
+              pagination: {
+                more: data.data.length === 10
+                // more: data.nextPage // ใช้ถ้ามีการจัดการ pagination
+              }
+            };
+          } else {
+            // หากไม่พบข้อมูลที่คาดหวัง ให้คืนค่าที่เหมาะสม
+            return {
+              results: [],
+              pagination: {
+                more: false
+              }
+            };
+          }
         }
       },
       language: {

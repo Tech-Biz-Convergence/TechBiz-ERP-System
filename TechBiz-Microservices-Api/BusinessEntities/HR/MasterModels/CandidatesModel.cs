@@ -27,4 +27,11 @@ namespace BusinessEntities.HR.MasterModels
     }
     #endregion
 
+    #region CandidatesModel 
+    public class CandidatesModel : tbm_hr_candidates
+    {
+        public string hr_job_name { get; set; }
+
+    }
+    #endregion
 }

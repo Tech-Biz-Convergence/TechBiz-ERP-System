@@ -8,6 +8,7 @@ using System.Xml.Serialization;
 
 namespace BusinessEntities.HR.MasterModels
 {
+    #region tbm_hr_schedule
     public class tbm_hr_schedule
     {
         public DateTime ? create_date { get; set; }
@@ -20,4 +21,13 @@ namespace BusinessEntities.HR.MasterModels
         public string ? available_time_slots { get; set; }            
         public string ? schedule_status { get; set; }
     }
+    #endregion
+
+    #region ScheduleModel 
+    public class ScheduleModel : tbm_hr_schedule
+    {
+        public string hr_candidate_name { get; set; }
+        public string hr_job_title { get; set; }        
+    }
+    #endregion    
 }

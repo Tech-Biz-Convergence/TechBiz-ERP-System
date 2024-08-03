@@ -40,7 +40,7 @@ namespace BusinessLogic.HR.Master
                 {
                     conn.Open();
                     dt = m_CandidatesRepository.GetAll(conn);
-                    var data = dt.DataTableToList<tbm_hr_candidates>();
+                    var data = dt.DataTableToList<CandidatesModel>();
                     resultMessage.status = true;
                     resultMessage.code = GlobalMessage.SELECT_SUCCESS_CODE;
                     resultMessage.data = data;
@@ -74,7 +74,7 @@ namespace BusinessLogic.HR.Master
                 {
                     conn.Open();
                     dt = m_CandidatesRepository.GetByKey(id,conn);
-                    var data = dt.DataTableToList<tbm_hr_candidates>().FirstOrDefault();
+                    var data = dt.DataTableToList<CandidatesModel>().FirstOrDefault();
                     if(data is null)
                     {
                         throw new Exception("Data not found!");
@@ -200,8 +200,7 @@ namespace BusinessLogic.HR.Master
         public ResultMessage GetAllCandidates(QueryParameter queryParameter)
         {
             int total = 0 ;
-            ResultMessage resultMessage = new ResultMessage();
-            List<tbm_hr_candidates> assyPartControlModel = new List<tbm_hr_candidates>();
+            ResultMessage resultMessage = new ResultMessage();            
             DataTable dt = new DataTable();
 
             using (NpgsqlConnection conn = new NpgsqlConnection(GlobalVariables.ConnectionString))
@@ -212,7 +211,7 @@ namespace BusinessLogic.HR.Master
                         
                     dt = m_CandidatesRepository.GetAllPagination(queryParameter, out total, conn);
 
-                    var data = new { total = total, data = dt.DataTableToList<tbm_hr_candidates>() };
+                    var data = new { total = total, data = dt.DataTableToList<CandidatesModel>() };
                     resultMessage.status = true;
                     resultMessage.data = data;
                 }
@@ -310,7 +309,7 @@ namespace BusinessLogic.HR.Master
 
                             dataExcelList.Add(dataDic);
                         }//end for
-                        var data = new { total = countContentData, data = dt.DataTableToList<tbm_hr_candidates>() };
+                        var data = new { total = countContentData, data = dt.DataTableToList<CandidatesModel>() };
                         resultMessage.status = true;
                         resultMessage.data = data;
 
@@ -331,6 +330,37 @@ namespace BusinessLogic.HR.Master
             return resultMessage;
         }
 
+        public ResultMessage GetCandidatesName()
+        {
+            ResultMessage resultMessage = new ResultMessage();
+            List<interviewforModel> assyPartControlModel = new List<interviewforModel>();
+            DataTable dt = new DataTable();
+            try
+            {
+                using (NpgsqlConnection conn = new NpgsqlConnection(GlobalVariables.ConnectionString))
+                {
+                    conn.Open();
+                    dt = m_CandidatesRepository.GetCandidatesName(conn);
 
+                    if (dt.Rows.Count == 0)
+                    {
+                        throw new Exception("No Candidates data found.");
+                    }
+
+                    var data = dt.DataTableToList<interviewforModel>();
+                    resultMessage.status = true;
+                    resultMessage.code = GlobalMessage.SELECT_SUCCESS_CODE;
+                    resultMessage.data = data;
+                }
+            }
+            catch (Exception ex)
+            {
+                resultMessage.description = ex.Message;
+                resultMessage.code = GlobalMessage.SELECT_ERROR_CODE;
+                resultMessage.status = false;
+            }
+
+            return resultMessage;
+        }
     }
 }

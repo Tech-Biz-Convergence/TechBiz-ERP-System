@@ -171,7 +171,7 @@ $(document).ready(function () {
         type: 'DELETE',
         headers: { "Authorization": "Bearer " + token },
         contentType: 'application/json; charset=utf-8',
-        url: config.apiUrl.base + '/Api/hr/job/Delete/' + id,
+        url: config.apiUrl.base + '/Api/hr/schedule/Delete/' + id,
         data: {
           user_name: username
         }
@@ -200,13 +200,13 @@ $(document).ready(function () {
     if (button.hasClass('btn-primary')) {
       console.log(" hasClass('btn-primary') ");
       button.removeClass('btn-primary').addClass('btn-outline-secondary');
-      urlApi = config.apiUrl.base + '/Api/hr/job/activateCondition/' + id;
+      urlApi = config.apiUrl.base + '/Api/hr/schedule/activateCondition/' + id;
       status = "INACTIVE";
       console.log('urlApi : ' + urlApi);
     } else {
       console.log(" No hasClass('btn-primary') ");
       button.removeClass('btn-outline-secondary').addClass('btn-primary');
-      urlApi = config.apiUrl.base + '/Api/hr/job/activateCondition/' + id;
+      urlApi = config.apiUrl.base + '/Api/hr/schedule/activateCondition/' + id;
       status = "ACTIVE";
       console.log('urlApi : ' + urlApi);
     }
@@ -220,7 +220,7 @@ $(document).ready(function () {
       contentType: 'application/json; charset=utf-8',
       data: {
         user_name: username,
-        hr_job_status: status
+        schedule_status: status
       },
       headers: { "Authorization": "Bearer " + token },
       success: function (response) {
@@ -307,7 +307,7 @@ $(document).ready(function () {
       ajax: (data, callback) => {
         $.ajax({
 
-          url: config.apiUrl.base + '/api/hr/job/GetPaginate',
+          url: config.apiUrl.base + '/api/hr/schedule/GetPaginate',
           type: 'GET',
           contentType: 'application/json; charset=utf-8',
           headers: { "Authorization": "Bearer " + token },
@@ -351,37 +351,18 @@ $(document).ready(function () {
           className: 'dt-body-center',
           render: function (data, type, row) {
             // ตรวจสอบค่า row.emp_status
-            var buttonClass = row.hr_job_status === 'ACTIVE' ? 'btn-primary' : 'btn-outline-secondary';
+            var buttonClass = row.schedule_status === 'ACTIVE' ? 'btn-primary' : 'btn-outline-secondary';
             // สร้าง HTML ของปุ่ม
-            return `<button type="button" class="btn rounded-pill btn-icon ${buttonClass} ActiveButton button-feature " data-id="${row.hr_job_id}">
+            return `<button type="button" class="btn rounded-pill btn-icon ${buttonClass} ActiveButton button-feature " data-id="${row.schedule_id}">
                               <span class="tf-icons bx bx-power-off"></span>
                         </button>`;
           }
         },
-        { targets: 1, data: 'hr_job_title', ordering: true },
-        { targets: 2, data: 'hr_job_types', ordering: true },                 
-        {
-          targets: 3,
-          data: 'hr_job_start_date',
-          render: function (data, type, row, meta) {
-            // แปลงรูปแบบวันที่ตามที่ต้องการ
-            return formatDate(row.hr_job_start_date)
-          },
-          ordering: true
-        },
+        { targets: 1, data: 'hr_candidate_name', ordering: true },
+        { targets: 2, data: 'hr_job_title', ordering: true },               
+        { targets: 3, data: 'schedule_status', ordering: true },
         {
           targets: 4,
-          data: 'hr_job_expire_date',
-          render: function (data, type, row, meta) {
-            // แปลงรูปแบบวันที่ตามที่ต้องการ
-            return formatDate(row.hr_job_expire_date)
-          },
-          ordering: true
-        },
-        { targets: 5, data: 'dept_name', ordering: true },
-        { targets: 6, data: 'hr_job_status', ordering: true },
-        {
-          targets: 7,
           data: null,
           orderable: false,
           className: 'dt-head-center dt-body-center',
@@ -391,9 +372,9 @@ $(document).ready(function () {
                               <i class="bx bx-dots-vertical-rounded"></i>
                             </button>
                             <div class="dropdown-menu">
-                              <a class="dropdown-item ViewButton" href="javascript:void(0);" data-id="${row.hr_job_id}"><i class="bx bx-list-ul me-2"></i> View</a>
-                              <a class="dropdown-item EditButton" href="javascript:void(0);" data-id="${row.hr_job_id}"><i class="bx bx-edit-alt me-2"></i> Edit</a>
-                              <a class="dropdown-item DeleteButton" href="javascript:void(0);" data-id="${row.hr_job_id}"><i class="bx bx-trash me-2"></i> Delete</a>
+                              <a class="dropdown-item ViewButton" href="javascript:void(0);" data-id="${row.schedule_id}"><i class="bx bx-list-ul me-2"></i> View</a>
+                              <a class="dropdown-item EditButton" href="javascript:void(0);" data-id="${row.schedule_id}"><i class="bx bx-edit-alt me-2"></i> Edit</a>
+                              <a class="dropdown-item DeleteButton" href="javascript:void(0);" data-id="${row.schedule_id}"><i class="bx bx-trash me-2"></i> Delete</a>
                             </div>
                     </div>`;
           }
@@ -409,7 +390,7 @@ $(document).ready(function () {
     var formData = new FormData(this);
 
     $.ajax({
-      url: config.apiUrl.base + '/api/hr/job/ImportDataExcelFile',
+      url: config.apiUrl.base + '/api/hr/schedule/ImportDataExcelFile',
       headers: { "Authorization": "Bearer " + token },
       type: 'POST',
       data: formData,
@@ -428,17 +409,11 @@ $(document).ready(function () {
   function getTableSortBy(column) {
     switch (column) {
       case 1:
-        return 'hr_job_title';
+        return 'hr_candidate_name';
       case 2:
-        return 'hr_job_types';
-      case 3:
-        return 'hr_job_start_date';
-      case 4:
-        return 'hr_job_expire_date';
-      case 5:
         return 'hr_job_title';
-      case 6:
-        return 'hr_job_status';     
+      case 3:
+        return 'schedule_status';          
       default:
         return null;
     }
@@ -453,26 +428,26 @@ $(document).ready(function () {
     if (formData.end_date === "") {
       formData.end_date = null;
     }
-    if ($('#AddFormId [name=hr_job_status]').prop('checked')) {
-      formData.hr_job_status = 'ACTIVE'
+    if ($('#AddFormId [name=schedule_status]').prop('checked')) {
+      formData.schedule_status = 'ACTIVE'
     } else {
-      formData.hr_job_status = 'INACTIVE'
+      formData.schedule_status = 'INACTIVE'
     }
 
     //check insert or update
-    if (formData.hr_job_id == '0') {
+    if (formData.schedule_id == '0') {
 
 
       //insert
       formData.create_by = username;
       formData.update_by = username;
       var type = 'POST';
-      var url = config.apiUrl.base + '/api/hr/job/addnew';
+      var url = config.apiUrl.base + '/api/hr/schedule/addnew';
     } else {
       //update
       formData.update_by = username;
       type = 'PUT';
-      url = config.apiUrl.base + '/api/hr/job/update';
+      url = config.apiUrl.base + '/api/hr/schedule/update';
     }
     await $.ajax({
       url: url,
@@ -515,7 +490,7 @@ $(document).ready(function () {
 
   async function RenderAddNewForm(id) {
     await $.ajax({
-      url: config.apiUrl.base + '/api/hr/job/get/' + id,
+      url: config.apiUrl.base + '/api/hr/schedule/get/' + id,
       type: 'GET',
       contentType: 'application/json; charset=utf-8',
       // data: {
@@ -527,23 +502,21 @@ $(document).ready(function () {
         if (response.status == true) {
           debugger;
           var res = response.data;
-          $('#AddFormId [name=hr_job_id').val(res.hr_job_id);
-          $('#AddFormId [name=hr_job_title]').val(res.hr_job_title);
-          $('#AddFormId [name=hr_job_types]').val(res.hr_job_types);
-          $('#AddFormId [name=hr_job_start_date]').val(formatDate(res.hr_job_start_date));
-          $('#AddFormId [name=hr_job_expire_date]').val(formatDate(res.hr_job_expire_date));
+          $('#AddFormId [name=schedule_id').val(res.schedule_id);
+          $('#AddFormId [name=available_time_slots]').val(res.available_time_slots);         
           $('#AddFormId [name=create_date]').val(formatDateTime(res.create_date));
           $('#AddFormId [name=create_by]').val(res.create_by);
           $('#AddFormId [name=update_date]').val(formatDateTime(res.update_date));
           $('#AddFormId [name=update_by]').val(res.update_by);
           
-          if (res.hr_job_status === "ACTIVE") {
-            $('#AddFormId [name=hr_job_status]').prop('checked', true); // ตั้งค่าให้ checkbox มีสถานะ checked
+          if (res.schedule_status === "ACTIVE") {
+            $('#AddFormId [name=schedule_status]').prop('checked', true); // ตั้งค่าให้ checkbox มีสถานะ checked
           } else {
-            $('#AddFormId [name=hr_job_status]').prop('checked', false); // ตั้งค่าให้ checkbox ไม่มีสถานะ checked
+            $('#AddFormId [name=schedule_status]').prop('checked', false); // ตั้งค่าให้ checkbox ไม่มีสถานะ checked
           }
           
-          $('#AddFormId [name=dept_id]').append(new Option(res.dept_name, res.dept_id, true, true)).trigger('change');
+          $('#AddFormId [name=hr_candidate_id]').append(new Option(res.hr_candidate_name, res.hr_candidate_id, true, true)).trigger('change');
+          $('#AddFormId [name=hr_job_id]').append(new Option(res.hr_job_title, res.hr_job_id, true, true)).trigger('change');
         } else {
           MessageBox.ErrorMessage(response.code, response.description);
 
@@ -565,7 +538,7 @@ $(document).ready(function () {
   }
   function ClearAddNew() {
     $('#AddFormId').trigger('reset');
-    $('#AddFormId [name=hr_job_id]').val('0');
+    $('#AddFormId [name=schedule_id]').val('0');
     $('#AddFormId div.has-error').removeClass('has-error');
     $('#AddFormId label.help-block').remove();
     $('#saveId').prop('disabled', false);

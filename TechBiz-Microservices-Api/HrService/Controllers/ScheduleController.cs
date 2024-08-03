@@ -71,10 +71,10 @@ public class ScheduleController : ControllerBase
         return Ok(res);
     }
 
-    [HttpGet("ActivateCondition")]
-    public IActionResult ActivateCondition(int id, int loginId, bool is_active)
+    [HttpGet("ActivateCondition/{id}")]
+    public IActionResult ActivateCondition(int id, [FromQuery] string user_name, [FromQuery] string schedule_status)
     {
-        ResultMessage resultMessage = m_BizScheduleMgr.ActivateCondition(id, loginId, is_active);
+        ResultMessage resultMessage = m_BizScheduleMgr.ActivateCondition(id, user_name, schedule_status);
         return Ok(resultMessage);
     }    
 }

@@ -275,7 +275,29 @@ namespace DataLayer.HR.MasterModels
         }
         */
 
-       
+        public DataTable GetCandidatesName(NpgsqlConnection conn)
+        {
+            try
+            {
+                NpgsqlCommand sqlCommand = new NpgsqlCommand();
+                DataTable dataTable = new DataTable();
+
+                string sql = @" SELECT hr_candidate_id, hr_candidate_title
+                         FROM  hr.tbm_hr_candidate WHERE hr_candidate_status = 'ACTIVE'";
+
+                sqlCommand.CommandText = sql;
+                sqlCommand.Connection = conn;
+
+                NpgsqlDataReader reader = sqlCommand.ExecuteReader();
+                dataTable.Load(reader);
+                return dataTable;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error retrieving Candidate data", ex);
+            }
+
+        }
 
     }
 }

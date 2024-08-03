@@ -191,8 +191,11 @@ namespace DataLayer.HR.MasterModels
                 DataTable dt = new DataTable();
 
                 string selectCount = @"SELECT count(1) ";
-                String select = @" SELECT * ";
-                String from = @"   FROM  hr.tbm_hr_schedule ";
+                String select = @" SELECT tbSch.*, tbCan.hr_candidate_name, tbJob.hr_job_title ";
+                String from = @" FROM  hr.tbm_hr_schedule tbSch 
+                                 LEFT JOIN hr.tbm_hr_candidates tbCan ON tbCan.hr_candidate_id = tbSch.hr_candidate_id 
+                                 LEFT JOIN hr.tbm_interview tbInt ON tbInt.interview_id = tbSch.interview_id
+                                 LEFT JOIN hr.tbm_hr_job tbJob ON tbJob.hr_job_id = tbInt.job_id ";
                 String where = @" WHERE schedule_id ILIKE '%' || @searchValue || '%'";                    
                 String orderBy = @" ORDER BY " + queryParameter.sortBy + " " + queryParameter.sortType + @"
                               OFFSET (@page - 1) * @limit 
@@ -228,7 +231,7 @@ namespace DataLayer.HR.MasterModels
             }
         }
 
-        public int UpdateActive(int id, int user_id, bool is_active, NpgsqlConnection conn, NpgsqlTransaction transaction = null)
+        public int UpdateActive(int id, string user_name, string status, NpgsqlConnection conn, NpgsqlTransaction transaction = null)
         {
             int result = 0;
             try
@@ -236,14 +239,14 @@ namespace DataLayer.HR.MasterModels
                 string sql = @"UPDATE 											
                                         hr.tbm_hr_schedule											
                                     SET 											
-                                        isActive = @isActive														
+                                        schedule_status = @status														
                                     WHERE  											
                                         schedule_id = @id";
 
                 using (var cmd = new NpgsqlCommand(sql, conn))
                 {
                     cmd.Parameters.Add("@id", NpgsqlDbType.Integer).Value = id;
-                    cmd.Parameters.Add("@is_active", NpgsqlDbType.Boolean).Value = is_active;// model.isActive;											
+                    cmd.Parameters.Add("@status", NpgsqlDbType.Varchar).Value = status;// model.isActive;											
                   //  cmd.Parameters.Add("@update_by", SqlDbType.Int).Value = user_id;
 
                     result = 0;
