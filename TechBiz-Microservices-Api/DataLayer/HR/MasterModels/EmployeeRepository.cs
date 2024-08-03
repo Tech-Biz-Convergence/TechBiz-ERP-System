@@ -72,10 +72,10 @@ namespace DataLayer.HR.MasterModels
                 NpgsqlCommand sqlCommand = new NpgsqlCommand();
                 DataTable dataTable = new DataTable();
 
-                String select = @" SELECT tbEmp.*,tbDept.dept_name ";
+                String select = @" SELECT tbEmp.*,tbPos.position_name ";
                 String from   = @" FROM  hr.tbm_employee_info  tbEmp
-                                 INNER JOIN hr.tbm_dept_info tbDept 
-                                 ON tbEmp.dept_id = tbDept.dept_id ";
+                                 INNER JOIN hr.tbm_position tbPos 
+                                 ON tbEmp.position_id = tbPos.position_id ";
                 String where  = @" WHERE  emp_id = @key  ";
                 sqlCommand.Parameters.Add(new NpgsqlParameter("@key", NpgsqlDbType.Integer)).Value = Key;
 
@@ -111,7 +111,7 @@ namespace DataLayer.HR.MasterModels
                                         emp_status,
                                         start_date,
                                         end_date,
-                                        dept_id
+                                        position_id
                                         ) 											
                                     VALUES 											
                                         (										
@@ -124,7 +124,7 @@ namespace DataLayer.HR.MasterModels
                                         @emp_status,
                                         @start_date,
                                         @end_date,
-                                        @dept_id
+                                        @position_id
                                         ) RETURNING emp_id;";
 
                 using (var cmd = new NpgsqlCommand(sql, conn))
@@ -137,7 +137,7 @@ namespace DataLayer.HR.MasterModels
                     cmd.Parameters.Add("@emp_status", NpgsqlDbType.Varchar).Value = model.emp_status;
                     cmd.Parameters.Add("@start_date", NpgsqlDbType.Timestamp).Value = model.start_date;
                     cmd.Parameters.Add("@end_date", NpgsqlDbType.Timestamp).Value = model.end_date ?? (object)DBNull.Value;
-                    cmd.Parameters.Add("@dept_id", NpgsqlDbType.Bigint).Value = model.dept_id;
+                    cmd.Parameters.Add("@position_id", NpgsqlDbType.Bigint).Value = model.position_id;
                     if (transaction != null)
                     {
                         cmd.Transaction = transaction;
@@ -173,7 +173,7 @@ namespace DataLayer.HR.MasterModels
                            emp_status = @emp_status,
                            start_date = @start_date,
                            end_date =  @end_date,
-                           dept_id = @dept_id
+                           position_id = @position_id
                        WHERE emp_id = @emp_id";
 
                 using (var cmd = new NpgsqlCommand(sql, conn))
@@ -186,7 +186,7 @@ namespace DataLayer.HR.MasterModels
                     cmd.Parameters.Add("@emp_status", NpgsqlDbType.Varchar).Value = model.emp_status;
                     cmd.Parameters.Add("@start_date", NpgsqlDbType.Timestamp).Value = model.start_date;
                     cmd.Parameters.Add("@end_date", NpgsqlDbType.Timestamp).Value = model.end_date;
-                    cmd.Parameters.Add("@dept_id", NpgsqlDbType.Bigint).Value = model.dept_id;
+                    cmd.Parameters.Add("@position_id", NpgsqlDbType.Bigint).Value = model.position_id;
                     cmd.Parameters.Add("@emp_id", NpgsqlDbType.Integer).Value = model.emp_id;
                     
 
@@ -214,16 +214,16 @@ namespace DataLayer.HR.MasterModels
                 string selectCount = @"SELECT count(1) ";
                 String select = @" SELECT 
                                     tbEmp.*,
-                                    tbDept.dept_name ";
+                                    tbPos.position_name ";
                 String from   = @" FROM 
                                     hr.tbm_employee_info tbEmp
                                 INNER JOIN 
-                                    hr.tbm_dept_info tbDept ON tbEmp.dept_id = tbDept.dept_id ";
+                                    hr.tbm_position tbPos ON tbEmp.position_id = tbPos.position_id ";
                 String where = @" WHERE emp_code ILIKE '%' || @searchValue || '%'
                     OR emp_firstname ILIKE '%' || @searchValue || '%'
                     OR emp_lastname ILIKE '%' || @searchValue || '%'
                     OR emp_mobile_no ILIKE '%' || @searchValue || '%'
-                    OR dept_name ILIKE '%' || @searchValue || '%'  ";
+                    OR position_name ILIKE '%' || @searchValue || '%'  ";
                 String orderBy = @" ORDER BY " + queryParameter.sortBy + " " + queryParameter.sortType + @"
                               OFFSET (@page - 1) * @limit 
                               FETCH NEXT @limit ROWS ONLY ";

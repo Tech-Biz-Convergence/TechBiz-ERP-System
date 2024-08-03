@@ -1,5 +1,4 @@
 ﻿using BusinessEntities.HR.MasterModels;
-using BusinessEntities.HR.ProcessModels;
 using DataLayer.Core;
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Npgsql;

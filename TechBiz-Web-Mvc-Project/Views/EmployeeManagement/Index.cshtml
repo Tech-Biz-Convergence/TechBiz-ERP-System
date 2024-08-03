@@ -29,7 +29,7 @@
         var canView = @Html.Raw(JsonConvert.SerializeObject( menuPermissions.Any(p => p.program_path == $"/{currentController}/{currentAction}" && p.permiss_view_status == "ACTIVE")));
         var canDelete = @Html.Raw(JsonConvert.SerializeObject(menuPermissions.Any(p => p.program_path == $"/{currentController}/{currentAction}" && p.permiss_delete_status == "ACTIVE")));
     </script>
-    <script src="~/js/TechbizAreas/Dropdown/Department.js"></script>
+    <script src="~/js/TechbizAreas/Dropdown/Position.js"></script>
     <script src="~/js/TechbizAreas/Hr/EmployeeManagement/index.js"></script>
 }
  <!-- Content -->
@@ -97,7 +97,7 @@
                       <th>Phone</th>
                       <th>Start Date</th>
                       <th>End Date</th>
-                      <th>Department</th>
+                      <th>Position</th>
                       <th  class="text-center">Actions</th>
                     </tr>
                   </thead>
@@ -196,8 +196,8 @@
                     </div>
                   
                     <div class="mb-3 col-md-6">
-                      <label for="department" class="form-label  required">Department</label>
-                      <select class="form-control" id="department" name="dept_id" >
+                      <label for="position" class="form-label  required">position</label>
+                      <select class="form-control" id="position" name="position_id">
                       </select>
                     </div>
                     <div class="mb-3 col-md-6">

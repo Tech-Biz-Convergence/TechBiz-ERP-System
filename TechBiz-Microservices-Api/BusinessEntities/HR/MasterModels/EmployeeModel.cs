@@ -26,7 +26,7 @@ namespace BusinessEntities.HR.MasterModels
         public string? emp_status { get; set; }
         public DateTime? start_date { get; set; }
         public DateTime? end_date { get; set; }
-        public long? dept_id { get; set; }
+        public long? position_id { get; set; }
 
 
     }
@@ -35,7 +35,7 @@ namespace BusinessEntities.HR.MasterModels
     #region employeeInforModel 
     public class employeeInforModel : tbm_employee_info
     {
-        public string dept_name { get; set; }
+        public string position_name { get; set; }
 
 
     }

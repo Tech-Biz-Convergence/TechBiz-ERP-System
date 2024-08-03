@@ -393,7 +393,7 @@ $(document).ready(function () {
           },
           ordering: true
         },
-        { targets: 6, data: 'dept_name', ordering: true },
+        { targets: 6, data: 'position_name', ordering: true },
         {
           targets: 7,
           data: null,
@@ -563,7 +563,7 @@ $(document).ready(function () {
           } else {
             $('#AddFormId [name=emp_status]').prop('checked', false); // ตั้งค่าให้ checkbox ไม่มีสถานะ checked
           }
-          $('#AddFormId [name=dept_id]').append(new Option(res.dept_name, res.dept_id, true, true)).trigger('change');
+          $('#AddFormId [name=position_id]').append(new Option(res.position_name, res.position_id, true, true)).trigger('change');
 
 
 

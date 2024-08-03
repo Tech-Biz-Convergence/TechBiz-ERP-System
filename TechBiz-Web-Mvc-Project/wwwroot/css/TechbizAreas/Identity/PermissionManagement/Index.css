@@ -1,0 +1,19 @@
+.simple-tree label {
+  margin-right: 10px;
+}
+
+.simple-tree input[type="checkbox"] {
+  margin-left: 5px;
+}
+
+.simple-tree .actions {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 20px; /* เพิ่มการย่อหน้ามาอีก */
+}
+
+  .simple-tree .actions input[type="checkbox"],
+  .simple-tree .actions label {
+    margin-left: 5px;
+    margin-right: 10px;
+  }
