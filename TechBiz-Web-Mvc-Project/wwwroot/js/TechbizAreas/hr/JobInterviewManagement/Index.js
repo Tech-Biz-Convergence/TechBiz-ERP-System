@@ -32,7 +32,7 @@ $(document).ready(function () {
   //>>>>>> Event Add PartNumber submit 
   $("#AddFormId").validate({
     rules: {
-      job_id: {
+      hr_job_id: {
         required: true,
       },
       interview_quest: {
@@ -41,7 +41,7 @@ $(document).ready(function () {
       }
     },
     messages: {
-      job_id: {
+      hr_job_id: {
         required: icon + " Please select Job.",
       },
       interview_quest: {
@@ -481,7 +481,7 @@ $(document).ready(function () {
           debugger;
           var res = response.data;
           $('#AddFormId [name=interview_id]').val(res.interview_id);
-          $('#AddFormId [name=job_id]').val(res.job_id);
+          $('#AddFormId [name=hr_job_id]').val(res.hr_job_id);
           $('#AddFormId [name=hr_job_title]').val(res.hr_job_title);
           $('#AddFormId [name=interview_quest]').val(res.interview_quest);
           $('#AddFormId [name=created_date]').val(formatDateTime(res.created_date));

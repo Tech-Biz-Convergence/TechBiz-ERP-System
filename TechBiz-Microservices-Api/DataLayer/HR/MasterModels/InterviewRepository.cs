@@ -100,7 +100,7 @@ namespace DataLayer.HR.MasterModels
             try
             {
                 // Check if interview_quest is not empty
-                if (model.job_id == null)
+                if (model.hr_job_id == null)
                 {
                     throw new Exception("Holiday name cannot be empty. Please provide a valid name.");
                 }
@@ -112,12 +112,12 @@ namespace DataLayer.HR.MasterModels
                 // Check if job_id and interview_quest duplicate
                 string checkSql = @"SELECT COUNT(*) 
                             FROM hr.tbm_interview 
-                            WHERE job_id = @job_id
+                            WHERE hr_job_id = @hr_job_id
                             AND interview_quest = @interview_quest";
 
                 using (var checkCmd = new NpgsqlCommand(checkSql, conn))
                 {
-                    checkCmd.Parameters.AddWithValue("@job_id", model.job_id);
+                    checkCmd.Parameters.AddWithValue("@hr_job_id", model.hr_job_id);
                     checkCmd.Parameters.AddWithValue("@interview_quest", model.interview_quest);
 
                     int count = Convert.ToInt32(checkCmd.ExecuteScalar());
@@ -131,12 +131,12 @@ namespace DataLayer.HR.MasterModels
                 // Insert tbm_interview
                 string sql = @"INSERT INTO hr.tbm_interview 											
                                 (created_by,
-                                job_id,
+                                hr_job_id,
                                 interview_quest,
                                 interview_status) 											
                             VALUES 											
                                 (@created_by,
-                                @job_id,
+                                @hr_job_id,
                                 @interview_quest,
                                 @interview_status) 
                             RETURNING interview_id;";
@@ -144,7 +144,7 @@ namespace DataLayer.HR.MasterModels
                 using (var cmd = new NpgsqlCommand(sql, conn))
                 {
                     cmd.Parameters.Add("@created_by", NpgsqlDbType.Varchar).Value = model.created_by;
-                    cmd.Parameters.Add("@job_id", NpgsqlDbType.Bigint).Value = model.job_id;
+                    cmd.Parameters.Add("@hr_job_id", NpgsqlDbType.Bigint).Value = model.hr_job_id;
                     cmd.Parameters.Add("@interview_quest", NpgsqlDbType.Varchar).Value = model.interview_quest;
                     cmd.Parameters.Add("@interview_status", NpgsqlDbType.Varchar).Value = model.interview_status;
 
@@ -171,7 +171,7 @@ namespace DataLayer.HR.MasterModels
             try
             {
                 // Check if interview_quest is not empty
-                if (model.job_id == null)
+                if (model.hr_job_id == null)
                 {
                     throw new Exception("Holiday name cannot be empty. Please provide a valid name.");
                 }
@@ -183,13 +183,13 @@ namespace DataLayer.HR.MasterModels
                 // Check if job_id and interview_quest duplicate
                 string checkSql = @"SELECT COUNT(*) 
                             FROM hr.tbm_interview 
-                            WHERE job_id = @job_id
+                            WHERE hr_job_id = @hr_job_id
                             AND interview_quest = @interview_quest
                             AND interview_id = @interview_id ";
 
                 using (var checkCmd = new NpgsqlCommand(checkSql, conn))
                 {
-                    checkCmd.Parameters.AddWithValue("@job_id", model.job_id);
+                    checkCmd.Parameters.AddWithValue("@hr_job_id", model.hr_job_id);
                     checkCmd.Parameters.AddWithValue("@interview_quest", model.interview_quest);
                     checkCmd.Parameters.AddWithValue("@interview_id", model.interview_id);
 
@@ -204,7 +204,7 @@ namespace DataLayer.HR.MasterModels
                 // Update tbm_interview
                 string sql = @"UPDATE hr.tbm_interview
                        SET  updated_by = @updated_by,
-                            job_id = @job_id,
+                            hr_job_id = @hr_job_id,
                             interview_quest = @interview_quest,
                             interview_status = @interview_status
                        WHERE interview_id = @interview_id";
@@ -212,7 +212,7 @@ namespace DataLayer.HR.MasterModels
                 using (var cmd = new NpgsqlCommand(sql, conn))
                 {
                     cmd.Parameters.Add("@updated_by", NpgsqlDbType.Varchar).Value = model.updated_by;
-                    cmd.Parameters.Add("@job_id", NpgsqlDbType.Bigint).Value = model.job_id;
+                    cmd.Parameters.Add("@hr_job_id", NpgsqlDbType.Bigint).Value = model.hr_job_id;
                     cmd.Parameters.Add("@interview_quest", NpgsqlDbType.Varchar).Value = model.interview_quest;
                     cmd.Parameters.Add("@interview_status", NpgsqlDbType.Varchar).Value = model.interview_status;
                     cmd.Parameters.Add("@interview_id", NpgsqlDbType.Bigint).Value = model.interview_id;
@@ -242,7 +242,7 @@ namespace DataLayer.HR.MasterModels
 
                 string selectCount = @"SELECT count(1) ";
                 String select = @" SELECT job.hr_job_title, inv.interview_id, inv.interview_quest, inv.interview_status ";
-                String from = @"   FROM  hr.tbm_interview inv LEFT JOIN hr.tbm_hr_job job ON job.hr_job_id = inv.job_id ";
+                String from = @"   FROM  hr.tbm_interview inv LEFT JOIN hr.tbm_hr_job job ON job.hr_job_id = inv.hr_job_id ";
                 String where = @" WHERE job.hr_job_title ILIKE '%' || @searchValue || '%'
                     OR inv.interview_quest ILIKE '%' || @searchValue || '%' ";
                 String orderBy = @" ORDER BY " + queryParameter.sortBy + " " + queryParameter.sortType + @"

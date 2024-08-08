@@ -30,7 +30,7 @@
         var canDelete = @Html.Raw(JsonConvert.SerializeObject(menuPermissions.Any(p => p.program_path == $"/{currentController}/{currentAction}" && p.permiss_delete_status == "ACTIVE")));
     </script>
 
-    <script src="~/js/TechbizAreas/Dropdown/JobName.js"></script>
+    <script src="~/js/TechbizAreas/Dropdown/Job.js"></script>
     <script src="~/js/TechbizAreas/Hr/JobInterviewManagement/index.js"></script>
 }
 <!-- Content -->
@@ -126,7 +126,7 @@
                                     </div> *@
                                     <div class="mb-3 col-md-6">
                                         <label for="job-name" class="form-label  required">Job Name</label>
-                                        <select class="form-control" id="job-name" name="job_id">
+                                        <select class="form-control" id="job-name" name="hr_job_id">
                                         </select>
                                     </div>
                                     <div class="mb-3 col-md-6">

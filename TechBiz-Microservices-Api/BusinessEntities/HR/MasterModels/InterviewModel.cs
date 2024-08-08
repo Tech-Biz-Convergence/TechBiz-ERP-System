@@ -18,7 +18,7 @@ namespace BusinessEntities.HR.MasterModels
         public System.DateTime updated_date { get; set; }
         public string? updated_by { get; set; }
         public long interview_id { get; set; }
-        public long job_id { get; set; }
+        public long hr_job_id { get; set; }
         public string interview_quest { get; set; }
         public string interview_status { get; set; }
         public string? hr_job_title { get; set; }
