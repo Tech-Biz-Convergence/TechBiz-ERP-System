@@ -108,3 +108,21 @@ function formatDateTime(date) {
   return [year, month, day].join('-') + " " + t;
 }
 
+document.addEventListener('DOMContentLoaded', function () {
+  var saveButton = document.getElementById('saveId');
+  var closeButton = document.getElementById('CloseId');
+  saveButton.className = '';
+  closeButton.className = '';
+  if (saveButton) {
+    saveButton.classList.add('btn');
+    saveButton.classList.add('btn-success');
+    saveButton.classList.add('rounded-pill');
+    saveButton.classList.add('me-2');
+  }
+
+  if (closeButton) {
+    closeButton.classList.add('btn-danger');
+    closeButton.classList.add('rounded-pill');
+    closeButton.classList.add('btn');
+  }
+});

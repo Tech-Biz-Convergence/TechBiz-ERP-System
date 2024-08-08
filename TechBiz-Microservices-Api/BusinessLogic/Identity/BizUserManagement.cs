@@ -1,33 +1,30 @@
-﻿using Utilities;
+﻿using BusinessEntities.HR.MasterModels;
+using BusinessEntities.Identity;
+using DataLayer.HR.MasterModels;
+using DataLayer.Identitys;
+using ExcelDataReader;
+using Microsoft.AspNetCore.Http;
 using Npgsql;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using System.Numerics;
-using System.Data;
-using BusinessEntities.HR.MasterModels;
-using Npgsql.Replication.PgOutput.Messages;
-using System.Reflection.Metadata;
-using Microsoft.AspNetCore.Mvc;
-using ExcelDataReader;
-using Microsoft.AspNetCore.Http;
-using BusinessEntities.Identity;
-using DataLayer.Identitys;
+using Utilities;
 
 namespace BusinessLogic.Identity
 {
-    public class BizRoleManagement
+    public class BizUserManagement
     {
-        private RoleRepository m_RoleRepository;
+        private UserRepository m_UserRepository;
 
-        public BizRoleManagement()
+        public BizUserManagement()
         {
-            m_RoleRepository = new RoleRepository();
+            m_UserRepository = new UserRepository();
         }
-
-        public ResultMessage GetAllRole()
+        public ResultMessage GetAllUser()
         {
             int total = 0;
             ResultMessage resultMessage = new ResultMessage();
@@ -38,8 +35,8 @@ namespace BusinessLogic.Identity
                 try
                 {
                     conn.Open();
-                    dt = m_RoleRepository.GetAll(conn);
-                    var data = dt.DataTableToList<tbm_role>();
+                    dt = m_UserRepository.GetAll(conn);
+                    var data = dt.DataTableToList<tbm_user_info>();
                     resultMessage.status = true;
                     resultMessage.code = GlobalMessage.SELECT_SUCCESS_CODE;
                     resultMessage.data = data;
@@ -58,7 +55,7 @@ namespace BusinessLogic.Identity
             return resultMessage;
         }
 
-        public ResultMessage GetRoleById(int id)
+        public ResultMessage GetUserById(int id)
         {
             ResultMessage resultMessage = new ResultMessage();
             DataTable dt = new DataTable();
@@ -68,8 +65,8 @@ namespace BusinessLogic.Identity
                 try
                 {
                     conn.Open();
-                    dt = m_RoleRepository.GetByKey(id, conn);
-                    var data = dt.DataTableToList<tbm_role>().FirstOrDefault();
+                    dt = m_UserRepository.GetByKey(id, conn);
+                    var data = dt.DataTableToList<userInfoModel>().FirstOrDefault();
                     if (data is null)
                     {
                         throw new Exception("Data not found!");
@@ -96,7 +93,7 @@ namespace BusinessLogic.Identity
             return resultMessage;
         }
 
-        public ResultMessage AddNewRole(tbm_role model)
+        public ResultMessage AddNewUser(tbm_user_info model)
         {
             ResultMessage resultMessage = new ResultMessage();
 
@@ -105,8 +102,8 @@ namespace BusinessLogic.Identity
                 try
                 {
                     conn.Open();
-                    long id = m_RoleRepository.Insert(model, conn);
-                    model.role_id = id;
+                    long id = m_UserRepository.Insert(model, conn);
+                    model.user_id = id;
 
                     resultMessage.data = model;
                     resultMessage.code = GlobalMessage.INSERT_SUCCESS_CODE;
@@ -128,7 +125,7 @@ namespace BusinessLogic.Identity
             return resultMessage;
         }
 
-        public ResultMessage UpdateRole(tbm_role model)
+        public ResultMessage UpdateUser(tbm_user_info model)
         {
             ResultMessage resultMessage = new ResultMessage();
             using (NpgsqlConnection conn = new NpgsqlConnection(GlobalVariables.ConnectionString))
@@ -136,8 +133,8 @@ namespace BusinessLogic.Identity
                 try
                 {
                     conn.Open();
-                    int id = m_RoleRepository.Update(model, conn);
-                    model.role_id = id;
+                    int id = m_UserRepository.Update(model, conn);
+                    model.user_id = id;
 
                     resultMessage.data = model;
                     resultMessage.code = GlobalMessage.UPDATE_SUCCESS_CODE;
@@ -159,7 +156,7 @@ namespace BusinessLogic.Identity
             return resultMessage;
         }
 
-        public ResultMessage DeleteRole(int key)
+        public ResultMessage DeleteUser(int key)
         {
             ResultMessage resultMessage = new ResultMessage();
             using (NpgsqlConnection conn = new NpgsqlConnection(GlobalVariables.ConnectionString))
@@ -167,7 +164,7 @@ namespace BusinessLogic.Identity
                 try
                 {
                     conn.Open();
-                    int id = m_RoleRepository.Delete(key, conn);
+                    int id = m_UserRepository.Delete(key, conn);
 
                     resultMessage.data = id;
                     resultMessage.code = GlobalMessage.UPDATE_SUCCESS_CODE;
@@ -189,7 +186,7 @@ namespace BusinessLogic.Identity
             return resultMessage;
         }
 
-        public ResultMessage GetAllRole(QueryParameter queryParameter)
+        public ResultMessage GetAllUser(QueryParameter queryParameter)
         {
             int total = 0;
             ResultMessage resultMessage = new ResultMessage();
@@ -201,9 +198,9 @@ namespace BusinessLogic.Identity
                 {
                     conn.Open();
 
-                    dt = m_RoleRepository.GetAllPagination(queryParameter, out total, conn);
+                    dt = m_UserRepository.GetAllPagination(queryParameter, out total, conn);
 
-                    var data = new { total, data = dt.DataTableToList<tbm_role>() };
+                    var data = new { total, data = dt.DataTableToList<userInfoModel>() };
                     resultMessage.status = true;
                     resultMessage.data = data;
                 }
@@ -222,11 +219,10 @@ namespace BusinessLogic.Identity
 
             return resultMessage;
         }
-        public ResultMessage ActivateCondition(int id, int user_id, bool is_active)
+        public ResultMessage ActivateCondition(int id, string user_name, string status)
         {
             int total = 0;
             ResultMessage resultMessage = new ResultMessage();
-            List<tbm_role> assyPartControlModel = new List<tbm_role>();
 
             using (NpgsqlConnection conn = new NpgsqlConnection(GlobalVariables.ConnectionString))
             {
@@ -234,7 +230,7 @@ namespace BusinessLogic.Identity
                 {
                     conn.Open();
 
-                    int ret = m_RoleRepository.UpdateActive(id, user_id, is_active, conn);
+                    int ret = m_UserRepository.UpdateActive(id, user_name, status, conn);
 
 
                     resultMessage.status = true;
@@ -298,7 +294,7 @@ namespace BusinessLogic.Identity
 
                             dataExcelList.Add(dataDic);
                         }//end for
-                        var data = new { total = countContentData, data = dt.DataTableToList<tbm_role>() };
+                        var data = new { total = countContentData, data = dt.DataTableToList<tbm_user_info>() };
                         resultMessage.status = true;
                         resultMessage.data = data;
 
@@ -318,5 +314,6 @@ namespace BusinessLogic.Identity
 
             return resultMessage;
         }
+
     }
 }

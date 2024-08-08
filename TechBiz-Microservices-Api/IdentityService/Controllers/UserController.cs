@@ -10,77 +10,76 @@ namespace IdentityService.Controllers;
 [Authorize]
 [ApiController]
 
-public class RoleController : Controller
+public class UserController : Controller
 {
-    BizRoleManagement m_BizRoleMgr;
+    BizUserManagement m_BizUserMgr;
 
-    public RoleController()
+    public UserController()
     {
-        m_BizRoleMgr = new BizRoleManagement();
+        m_BizUserMgr = new BizUserManagement();
     }
 
-
-
     [HttpGet("Get")]
-    public IActionResult GetRole()
+    public IActionResult GetUser()
     {
         ResultMessage res = new ResultMessage();
-        res = m_BizRoleMgr.GetAllRole();
+        res = m_BizUserMgr.GetAllUser();
         return Ok(res);
     }
 
     [HttpGet("Get/{id}")]
-    public IActionResult GetRoleById(int id)
+    public IActionResult GetUserById(int id)
     {
         ResultMessage res = new ResultMessage();
         //  User.FindFirst("Codemobiles");
-        res = m_BizRoleMgr.GetRoleById(id);
+        res = m_BizUserMgr.GetUserById(id);
         return Ok(res);
     }
 
     [HttpPost("AddNew")]
-    public IActionResult AddNewRole([FromBody] tbm_role model)
+    public IActionResult AddNewUser([FromBody] tbm_user_info model)
     {
         ResultMessage res = new ResultMessage();
-        res = m_BizRoleMgr.AddNewRole(model);
+        res = m_BizUserMgr.AddNewUser(model);
         return Ok(res);
     }
     [HttpPut("Update")]
-    public IActionResult UpdateRole([FromBody] tbm_role model)
+    public IActionResult UpdateUser([FromBody] tbm_user_info model)
     {
         ResultMessage res = new ResultMessage();
-        res = m_BizRoleMgr.UpdateRole(model);
+        res = m_BizUserMgr.UpdateUser(model);
         return Ok(res);
     }
 
     [HttpDelete("Delete/{id}")]
-    public IActionResult DeleteRole(int id)
+    public IActionResult DeleteUser(int id)
     {
         ResultMessage res = new ResultMessage();
-        res = m_BizRoleMgr.DeleteRole(id);
+        res = m_BizUserMgr.DeleteUser(id);
         return Ok(res);
     }
 
     [HttpGet("GetPaginate")]
-    public IActionResult GetAllRole([FromQuery] QueryParameter queryParameters)
+    public IActionResult GetAllUser([FromQuery] QueryParameter queryParameters)
     {
         ResultMessage res = new ResultMessage();
         //  User.FindFirst("Codemobiles");
-        res = m_BizRoleMgr.GetAllRole(queryParameters);
+        res = m_BizUserMgr.GetAllUser(queryParameters);
         return Ok(res);
     }
 
-    [HttpGet("ActivateCondition")]
-    public IActionResult ActivateCondition(int id, int loginId, bool is_active)
+    [HttpGet("ActivateCondition/{id}")]
+    public IActionResult ActivateCondition(int id, [FromQuery] string user_name, [FromQuery] string user_status)
     {
-        ResultMessage resultMessage = m_BizRoleMgr.ActivateCondition(id, loginId, is_active);
-        return Ok(resultMessage);
+        ResultMessage res = new ResultMessage();
+        res = m_BizUserMgr.ActivateCondition(id, user_name, user_status);
+        return Ok(res);
     }
 
     [HttpPost("ImportDataExcelFile")]
     public IActionResult ImportDataExcelFile([FromBody] IFormFile file)
     {
-        ResultMessage resultMessage = m_BizRoleMgr.ImportDataExcelFile(file);
+        ResultMessage resultMessage = m_BizUserMgr.ImportDataExcelFile(file);
         return Ok(resultMessage);
     }
 }

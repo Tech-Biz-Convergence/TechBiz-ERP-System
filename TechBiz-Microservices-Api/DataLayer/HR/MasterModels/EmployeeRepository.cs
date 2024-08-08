@@ -228,7 +228,12 @@ namespace DataLayer.HR.MasterModels
                               OFFSET (@page - 1) * @limit 
                               FETCH NEXT @limit ROWS ONLY ";
 
-                if(queryParameter.searchValue == null || queryParameter.searchValue.Trim().Length == 0)
+                if (queryParameter.sortBy == null || queryParameter.sortType == null)
+                {
+                    orderBy = @" ORDER BY emp_firstname,emp_lastname  ASC ";
+                }
+
+                if (queryParameter.searchValue == null || queryParameter.searchValue.Trim().Length == 0)
                 {
                     where = "";
                 }
