@@ -32,50 +32,21 @@ $(document).ready(function () {
   //>>>>>> Event Add PartNumber submit 
   $("#AddFormId").validate({
     rules: {
-      emp_firstname: {
-        required: true,
-        maxlength: 255
-      },
-      emp_lastname: {
-        required: true,
-        maxlength: 255
-      },
-      emp_code: {
-        required: true,
-        maxlength: 50
-      },
-      emp_mobile_no: {
-        maxlength: 10
-      },
-      start_date: {
+      job_id: {
         required: true,
       },
-      dept_id: {
+      interview_quest: {
         required: true,
+        maxlength: 500
       }
     },
     messages: {
-      emp_firstname: {
-        required: icon + " Please enter employee firstname.",
-        maxlength: icon + " Please enter no more than 255 characters."
+      job_id: {
+        required: icon + " Please select Job.",
       },
-      emp_lastname: {
-
-        required: icon + " Please enter employee lastname.",
-        maxlength: icon + " Please enter no more than 255 characters."
-      },
-      emp_code: {
-        required: icon + " Please enter employee code.",
-        maxlength: icon + " Please enter no more than 50 characters."
-      },
-      emp_mobile_no: {
-        maxlength: icon + " Please enter no more than 10 characters."
-      },
-      start_date: {
-        required: icon + " Please select start date.",
-      },
-      dept_id: {
-        required: icon + " Please select department.",
+      interview_quest: {
+        required: icon + " Please enter question.",
+        maxlength: icon + " Please enter no more than 500 characters."
       }
     },
     errorPlacement: (error, element) => {
@@ -358,8 +329,8 @@ $(document).ready(function () {
           orderable: false,
           className: 'dt-body-center',
           render: function (data, type, row) {
-            // ตรวจสอบค่า row.emp_status
-            var buttonClass = row.emp_status === 'ACTIVE' ? 'btn-primary' : 'btn-outline-secondary';
+            // ตรวจสอบค่า row.interview_status
+            var buttonClass = row.interview_status === 'ACTIVE' ? 'btn-primary' : 'btn-outline-secondary';
             // สร้าง HTML ของปุ่ม
             return `<button type="button" class="btn rounded-pill btn-icon ${buttonClass} ActiveButton button-feature " data-id="${row.interview_id}">
                               <span class="tf-icons bx bx-power-off"></span>
@@ -513,9 +484,9 @@ $(document).ready(function () {
           $('#AddFormId [name=job_id]').val(res.job_id);
           $('#AddFormId [name=hr_job_title]').val(res.hr_job_title);
           $('#AddFormId [name=interview_quest]').val(res.interview_quest);
-          $('#AddFormId [name=created_date]').val(res.created_date);
+          $('#AddFormId [name=created_date]').val(formatDateTime(res.created_date));
           $('#AddFormId [name=created_by]').val(res.created_by);
-          $('#AddFormId [name=updated_date]').val(res.updated_date);
+          $('#AddFormId [name=updated_date]').val(formatDateTime(res.updated_date));
           $('#AddFormId [name=updated_by]').val(res.updated_by);
           if (res.interview_status === "ACTIVE") {
             $('#AddFormId [name=interview_status]').prop('checked', true); // ตั้งค่าให้ checkbox มีสถานะ checked

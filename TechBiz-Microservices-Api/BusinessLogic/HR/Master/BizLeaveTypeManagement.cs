@@ -14,18 +14,19 @@ using System.Reflection.Metadata;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using ExcelDataReader;
+using NpgsqlTypes;
 
 
 
 namespace BusinessLogic.HR.Master
 {
-    public class BizLeaveManagement
+    public class BizLeaveTypeManagement
     {
-        private LeaveRepository m_LeaveRepository;
+        private LeaveTypeRepository m_LeaveRepository;
 
-        public BizLeaveManagement()
+        public BizLeaveTypeManagement()
         {
-            m_LeaveRepository = new LeaveRepository();
+            m_LeaveRepository = new LeaveTypeRepository();
         }
 
         public ResultMessage GetAllLeave()
@@ -110,10 +111,46 @@ namespace BusinessLogic.HR.Master
                 try
                 {
                     conn.Open();
+
+                    if (string.IsNullOrEmpty(model.leave_type_name))
+                    {
+                        resultMessage.description = "Leave Type Name Null. Please Enter Data.";
+                        resultMessage.code = GlobalMessage.INSERT_ERROR_CODE;
+                        resultMessage.status = false;
+                        return resultMessage;
+                    }
+                    if (model.leave_max_days == null)
+                    {
+                        resultMessage.description = "Leave Max Null. Please Enter Data.";
+                        resultMessage.code = GlobalMessage.INSERT_ERROR_CODE;
+                        resultMessage.status = false;
+                        return resultMessage;
+                    }
+
+                    string checkSql = @"SELECT COUNT(1) FROM hr.tbm_leave_type 
+                            WHERE leave_type_name = @leave_type_name
+                            AND leave_max_days = @leave_max_days";
+                    using (var checkCmd = new NpgsqlCommand(checkSql, conn))
+                    {
+                        checkCmd.Parameters.Add("@leave_type_name", NpgsqlDbType.Varchar).Value = model.leave_type_name;
+                        checkCmd.Parameters.Add("@leave_max_days", NpgsqlDbType.Integer).Value = model.leave_max_days;
+
+                        int count = Convert.ToInt32(checkCmd.ExecuteScalar());
+
+                        if (count > 0)
+                        {
+                            resultMessage.description = "Data is Duplicate.";
+                            resultMessage.code = GlobalMessage.INSERT_ERROR_CODE;
+                            resultMessage.status = false;
+                            return resultMessage;
+                        }
+                    }
+
                     int id = m_LeaveRepository.Insert(model, conn);
                     model.leave_type_id = id;
 
                     resultMessage.data = model;
+                    resultMessage.description = "Leave Type added successfully.";
                     resultMessage.code = GlobalMessage.INSERT_SUCCESS_CODE;
                     resultMessage.status = true;
                 }
@@ -142,10 +179,48 @@ namespace BusinessLogic.HR.Master
                 try
                 {
                     conn.Open();
+
+                    if (string.IsNullOrEmpty(model.leave_type_name))
+                    {
+                        resultMessage.description = "Leave Type Name Null. Please Enter Data.";
+                        resultMessage.code = GlobalMessage.INSERT_ERROR_CODE;
+                        resultMessage.status = false;
+                        return resultMessage;
+                    }
+                    if (model.leave_max_days == null)
+                    {
+                        resultMessage.description = "Leave Max Null. Please Enter Data.";
+                        resultMessage.code = GlobalMessage.INSERT_ERROR_CODE;
+                        resultMessage.status = false;
+                        return resultMessage;
+                    }
+
+                    string checkSql = @"SELECT COUNT(1) FROM hr.tbm_leave_type 
+                            WHERE leave_type_name = @leave_type_name
+                            AND leave_max_days = @leave_max_days
+                            AND leave_type_id != @leave_type_id ";
+                    using (var checkCmd = new NpgsqlCommand(checkSql, conn))
+                    {
+                        checkCmd.Parameters.Add("@leave_type_name", NpgsqlDbType.Varchar).Value = model.leave_type_name;
+                        checkCmd.Parameters.Add("@leave_max_days", NpgsqlDbType.Integer).Value = model.leave_max_days;
+                        checkCmd.Parameters.Add("@leave_type_id", NpgsqlDbType.Bigint).Value = model.leave_type_id;
+
+                        int count = Convert.ToInt32(checkCmd.ExecuteScalar());
+
+                        if (count > 0)
+                        {
+                            resultMessage.description = "Data is Duplicate.";
+                            resultMessage.code = GlobalMessage.INSERT_ERROR_CODE;
+                            resultMessage.status = false;
+                            return resultMessage;
+                        }
+                    }
+
                     int id = m_LeaveRepository.Update(model, conn);
                     model.leave_type_id = id;
 
                     resultMessage.data = model;
+                    resultMessage.description = "Leave Type updated successfully.";
                     resultMessage.code = GlobalMessage.UPDATE_SUCCESS_CODE;
                     resultMessage.status = true;
                 }
@@ -231,39 +306,6 @@ namespace BusinessLogic.HR.Master
 
             return resultMessage;
         }
-        //public ResultMessage ActivateCondition(int id,int user_id,bool is_active)
-        //{
-        //    int total = 0;
-        //    ResultMessage resultMessage = new ResultMessage();
-        //    List<tm_employee_info> assyPartControlModel = new List<tm_employee_info>();
-
-        //    using (NpgsqlConnection conn = new NpgsqlConnection(GlobalVariables.ConnectionString))
-        //    {
-        //        try
-        //        {
-        //            conn.Open();
-
-        //            int ret = m_EmployeeRepository.UpdateActive(id, user_id, is_active,conn);
-
-
-        //            resultMessage.status = true;
-        //            resultMessage.data = ret;
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            resultMessage.description = ex.ToString();
-        //            resultMessage.code = GlobalMessage.UPDATE_ERROR_CODE;
-        //            resultMessage.status = false;
-        //        }
-        //        finally
-        //        {
-        //            if (conn.State == ConnectionState.Open)
-        //                conn.Close();
-        //        }
-        //    }//using
-
-        //    return resultMessage;
-        //}
         public ResultMessage ImportDataExcelFile(IFormFile uploadfile)
         {
             var resultMessage = new ResultMessage();
@@ -331,6 +373,37 @@ namespace BusinessLogic.HR.Master
             return resultMessage;
         }
 
+        //public ResultMessage GetLeaveType()
+        //{
+        //    ResultMessage resultMessage = new ResultMessage();
+        //    List<tbm_leave_type> assyPartControlModel = new List<tbm_leave_type>();
+        //    DataTable dt = new DataTable();
+        //    try
+        //    {
+        //        using (NpgsqlConnection conn = new NpgsqlConnection(GlobalVariables.ConnectionString))
+        //        {
+        //            conn.Open();
+        //            dt = m_LeaveRepository.GetLeaveType(conn);
 
+        //            if (dt.Rows.Count == 0)
+        //            {
+        //                throw new Exception("No Leave Type data found.");
+        //            }
+
+        //            var data = dt.DataTableToList<tbm_leave_type>();
+        //            resultMessage.status = true;
+        //            resultMessage.code = GlobalMessage.SELECT_SUCCESS_CODE;
+        //            resultMessage.data = data;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        resultMessage.description = ex.Message;
+        //        resultMessage.code = GlobalMessage.SELECT_ERROR_CODE;
+        //        resultMessage.status = false;
+        //    }
+
+        //    return resultMessage;
+        //}
     }
 }

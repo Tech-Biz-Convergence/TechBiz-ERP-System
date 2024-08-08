@@ -32,50 +32,15 @@ $(document).ready(function () {
   //>>>>>> Event Add PartNumber submit 
   $("#AddFormId").validate({
     rules: {
-      emp_firstname: {
+      dept_name: {
         required: true,
-        maxlength: 255
-      },
-      emp_lastname: {
-        required: true,
-        maxlength: 255
-      },
-      emp_code: {
-        required: true,
-        maxlength: 50
-      },
-      emp_mobile_no: {
-        maxlength: 10
-      },
-      start_date: {
-        required: true,
-      },
-      dept_id: {
-        required: true,
+        maxlength: 100
       }
     },
     messages: {
-      emp_firstname: {
-        required: icon + " Please enter employee firstname.",
-        maxlength: icon + " Please enter no more than 255 characters."
-      },
-      emp_lastname: {
-
-        required: icon + " Please enter employee lastname.",
-        maxlength: icon + " Please enter no more than 255 characters."
-      },
-      emp_code: {
-        required: icon + " Please enter employee code.",
-        maxlength: icon + " Please enter no more than 50 characters."
-      },
-      emp_mobile_no: {
-        maxlength: icon + " Please enter no more than 10 characters."
-      },
-      start_date: {
-        required: icon + " Please select start date.",
-      },
-      dept_id: {
-        required: icon + " Please select department.",
+      dept_name: {
+        required: icon + " Please enter departmant name.",
+        maxlength: icon + " Please enter no more than 100 characters."
       }
     },
     errorPlacement: (error, element) => {
@@ -358,8 +323,8 @@ $(document).ready(function () {
           orderable: false,
           className: 'dt-body-center',
           render: function (data, type, row) {
-            // ตรวจสอบค่า row.emp_status
-            var buttonClass = row.emp_status === 'ACTIVE' ? 'btn-primary' : 'btn-outline-secondary';
+            // ตรวจสอบค่า row.dept_status
+            var buttonClass = row.dept_status === 'ACTIVE' ? 'btn-primary' : 'btn-outline-secondary';
             // สร้าง HTML ของปุ่ม
             return `<button type="button" class="btn rounded-pill btn-icon ${buttonClass} ActiveButton button-feature " data-id="${row.dept_id}">
                               <span class="tf-icons bx bx-power-off"></span>
@@ -513,9 +478,9 @@ $(document).ready(function () {
           $('#AddFormId [name=dept_name]').val(res.dept_name);
           $('#AddFormId [name=emp_id]').val(res.emp_id);
           $('#AddFormId [name=emp_name]').val(res.emp_name); 
-          $('#AddFormId [name=create_date]').val(res.create_date);
+          $('#AddFormId [name=create_date]').val(formatDateTime(res.create_date));
           $('#AddFormId [name=create_by]').val(res.create_by);
-          $('#AddFormId [name=update_date]').val(res.update_date);
+          $('#AddFormId [name=update_date]').val(formatDateTime(res.update_date));
           $('#AddFormId [name=update_by]').val(res.update_by);
           if (res.dept_status === "ACTIVE") {
             $('#AddFormId [name=dept_status]').prop('checked', true); // ตั้งค่าให้ checkbox มีสถานะ checked

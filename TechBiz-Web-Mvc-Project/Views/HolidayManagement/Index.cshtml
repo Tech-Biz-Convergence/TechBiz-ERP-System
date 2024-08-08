@@ -30,7 +30,6 @@
         var canDelete = @Html.Raw(JsonConvert.SerializeObject(menuPermissions.Any(p => p.program_path == $"/{currentController}/{currentAction}" && p.permiss_delete_status == "ACTIVE")));
     </script>
 
-    <script src="~/js/TechbizAreas/Dropdown/Department.js"></script>
     <script src="~/js/TechbizAreas/Hr/HolidayManagement/index.js"></script>
 }
 <!-- Content -->

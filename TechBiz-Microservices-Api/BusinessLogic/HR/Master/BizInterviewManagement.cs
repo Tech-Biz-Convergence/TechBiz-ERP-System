@@ -14,6 +14,7 @@ using System.Reflection.Metadata;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using ExcelDataReader;
+using NpgsqlTypes;
 
 
 
@@ -110,10 +111,46 @@ namespace BusinessLogic.HR.Master
                 try
                 {
                     conn.Open();
+
+                    if (model.job_id == null)
+                    {
+                        resultMessage.description = "Job is Null. Please Enter Data.";
+                        resultMessage.code = GlobalMessage.INSERT_ERROR_CODE;
+                        resultMessage.status = false;
+                        return resultMessage;
+                    }
+                    if (string.IsNullOrEmpty(model.interview_quest))
+                    {
+                        resultMessage.description = "Question is Null. Please Enter Data.";
+                        resultMessage.code = GlobalMessage.INSERT_ERROR_CODE;
+                        resultMessage.status = false;
+                        return resultMessage;
+                    }
+
+                    string checkSql = @"SELECT COUNT(1) FROM hr.tbm_interview 
+                            WHERE job_id = @job_id
+                            AND interview_quest = @interview_quest";
+                    using (var checkCmd = new NpgsqlCommand(checkSql, conn))
+                    {
+                        checkCmd.Parameters.Add("@job_id", NpgsqlDbType.Bigint).Value = model.job_id;
+                        checkCmd.Parameters.Add("@interview_quest", NpgsqlDbType.Varchar).Value = model.interview_quest;
+
+                        int count = Convert.ToInt32(checkCmd.ExecuteScalar());
+
+                        if (count > 0)
+                        {
+                            resultMessage.description = "Data is Duplicate.";
+                            resultMessage.code = GlobalMessage.INSERT_ERROR_CODE;
+                            resultMessage.status = false;
+                            return resultMessage;
+                        }
+                    }
+
                     int id = m_InterviewRepository.Insert(model, conn);
                     model.interview_id = id;
 
                     resultMessage.data = model;
+                    resultMessage.description = "Interview added successfully.";
                     resultMessage.code = GlobalMessage.INSERT_SUCCESS_CODE;
                     resultMessage.status = true;
                 }
@@ -142,10 +179,48 @@ namespace BusinessLogic.HR.Master
                 try
                 {
                     conn.Open();
+
+                    if (model.job_id == null)
+                    {
+                        resultMessage.description = "Job is Null. Please Enter Data.";
+                        resultMessage.code = GlobalMessage.INSERT_ERROR_CODE;
+                        resultMessage.status = false;
+                        return resultMessage;
+                    }
+                    if (string.IsNullOrEmpty(model.interview_quest))
+                    {
+                        resultMessage.description = "Question is Null. Please Enter Data.";
+                        resultMessage.code = GlobalMessage.INSERT_ERROR_CODE;
+                        resultMessage.status = false;
+                        return resultMessage;
+                    }
+
+                    string checkSql = @"SELECT COUNT(1) FROM hr.tbm_interview 
+                            WHERE job_id = @job_id
+                            AND interview_quest = @interview_quest
+                            AND interview_id = @interview_id ";
+                    using (var checkCmd = new NpgsqlCommand(checkSql, conn))
+                    {
+                        checkCmd.Parameters.Add("@job_id", NpgsqlDbType.Bigint).Value = model.job_id;
+                        checkCmd.Parameters.Add("@interview_quest", NpgsqlDbType.Varchar).Value = model.interview_quest;
+                        checkCmd.Parameters.Add("@interview_id", NpgsqlDbType.Bigint).Value = model.interview_id; 
+
+                        int count = Convert.ToInt32(checkCmd.ExecuteScalar());
+
+                        if (count > 0)
+                        {
+                            resultMessage.description = "Data is Duplicate.";
+                            resultMessage.code = GlobalMessage.INSERT_ERROR_CODE;
+                            resultMessage.status = false;
+                            return resultMessage;
+                        }
+                    }
+
                     int id = m_InterviewRepository.Update(model, conn);
                     model.interview_id = id;
 
                     resultMessage.data = model;
+                    resultMessage.description = "Interview updated successfully.";
                     resultMessage.code = GlobalMessage.UPDATE_SUCCESS_CODE;
                     resultMessage.status = true;
                 }

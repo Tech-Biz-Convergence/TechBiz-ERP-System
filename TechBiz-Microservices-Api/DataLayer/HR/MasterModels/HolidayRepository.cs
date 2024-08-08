@@ -98,6 +98,42 @@ namespace DataLayer.HR.MasterModels
             int result = 0;
             try
             {
+                // Check if holiday_year, holiday_name, and holiday_day are not empty
+                if (string.IsNullOrEmpty(model.holiday_year))
+                {
+                    throw new Exception("Holiday year Null. Please Enter Holiday year.");
+                }
+                if (string.IsNullOrEmpty(model.holiday_name))
+                {
+                    throw new Exception("Holiday name Null. Please Enter Holiday name.");
+                }
+                if (model.holiday_day == DateTime.MinValue)
+                {
+                    throw new Exception("Holiday day Null. Please Enter Holiday day.");
+                }
+
+                // Check if holiday_year, holiday_name, and holiday_day duplicate
+                string checkSql = @"SELECT COUNT(*) 
+                            FROM hr.tbm_holiday_info 
+                            WHERE holiday_year = @holiday_year
+                            AND holiday_name = @holiday_name
+                            AND holiday_day = @holiday_day";
+
+                using (var checkCmd = new NpgsqlCommand(checkSql, conn))
+                {
+                    checkCmd.Parameters.AddWithValue("@holiday_year", model.holiday_year);
+                    checkCmd.Parameters.AddWithValue("@holiday_name", model.holiday_name);
+                    checkCmd.Parameters.AddWithValue("@holiday_day", model.holiday_day);
+
+                    int count = Convert.ToInt32(checkCmd.ExecuteScalar());
+
+                    if (count > 0)
+                    {
+                        throw new Exception("Data is Duplicate");
+                    }
+                }
+
+                // Insert tbm_holiday_info
                 string sql = @"INSERT INTO hr.tbm_holiday_info 											
                                 (created_by,
                                 holiday_year,
@@ -130,7 +166,8 @@ namespace DataLayer.HR.MasterModels
             }
             catch (Exception ex)
             {
-                throw;
+                // You can log the error here if needed
+                throw new Exception($"Error occurred while inserting holiday: {ex.Message}");
             }
             return result;
         }
@@ -141,6 +178,44 @@ namespace DataLayer.HR.MasterModels
             int result = 0;
             try
             {
+                // Check if holiday_year, holiday_name, and holiday_day are not empty
+                if (string.IsNullOrEmpty(model.holiday_year))
+                {
+                    throw new Exception("Holiday year Null. Please Enter Holiday year.");
+                }
+                if (string.IsNullOrEmpty(model.holiday_name))
+                {
+                    throw new Exception("Holiday name Null. Please Enter Holiday name.");
+                }
+                if (model.holiday_day == DateTime.MinValue)
+                {
+                    throw new Exception("Holiday day Null. Please Enter Holiday day.");
+                }
+
+                // Check if holiday_name already exists for a different dept_id
+                string checkSql = @"SELECT COUNT(*) 
+                            FROM hr.tbm_holiday_info 
+                            WHERE holiday_year = @holiday_year
+                            AND holiday_name = @holiday_name
+                            AND holiday_day = @holiday_day
+                            AND holiday_id != @holiday_id";
+
+                using (var checkCmd = new NpgsqlCommand(checkSql, conn))
+                {
+                    checkCmd.Parameters.AddWithValue("@holiday_year", model.holiday_year);
+                    checkCmd.Parameters.AddWithValue("@holiday_day", model.holiday_day);
+                    checkCmd.Parameters.AddWithValue("@holiday_name", model.holiday_name);
+                    checkCmd.Parameters.AddWithValue("@holiday_id", model.holiday_id);
+
+                    int count = Convert.ToInt32(checkCmd.ExecuteScalar());
+
+                    if (count > 0)
+                    {
+                        throw new Exception("Data is Duplicate");
+                    }
+                }
+
+                // Update tbm_holiday_info
                 string sql = @"UPDATE hr.tbm_holiday_info
                        SET  updated_by = @updated_by,
                             holiday_year = @holiday_year,
@@ -169,7 +244,8 @@ namespace DataLayer.HR.MasterModels
             }
             catch (Exception ex)
             {
-                throw;
+                // You can log the error here if needed
+                throw new Exception($"Error occurred while updating department: {ex.Message}",ex);
             }
             return result;
         }

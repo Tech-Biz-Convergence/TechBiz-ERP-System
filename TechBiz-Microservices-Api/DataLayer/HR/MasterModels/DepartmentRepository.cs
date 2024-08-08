@@ -101,21 +101,45 @@ namespace DataLayer.HR.MasterModels
             int result = 0;
             try
             {
+                // Check if dept_name is not empty
+                if (string.IsNullOrEmpty(model.dept_name))
+                {
+                    throw new Exception("Department name cannot be empty.");
+                }
+
+                // Check if dept_name duplicate
+                string checkSql = @"SELECT COUNT(*) 
+                            FROM hr.tbm_dept_info 
+                            WHERE dept_name = @dept_name";
+
+                using (var checkCmd = new NpgsqlCommand(checkSql, conn))
+                {
+                    checkCmd.Parameters.AddWithValue("@dept_name", model.dept_name);
+
+                    int count = Convert.ToInt32(checkCmd.ExecuteScalar());
+
+                    if (count > 0)
+                    {
+                        throw new Exception("Department name Duplicate");
+                    }
+                }
+
+                // Insert into tbm_dept_info
                 string sql = @"INSERT INTO hr.tbm_dept_info 											
-                                (create_by,
-                                dept_name,
-                                dept_status) 											
-                            VALUES 											
-                                (@create_by,
-                                @dept_name,
-                                @dept_status) 
-                            RETURNING dept_id;";
+                        (create_by,
+                        dept_name,
+                        dept_status) 											
+                    VALUES 											
+                        (@create_by,
+                        @dept_name,
+                        @dept_status) 
+                    RETURNING dept_id;";
 
                 using (var cmd = new NpgsqlCommand(sql, conn))
                 {
-                    cmd.Parameters.Add("@create_by", NpgsqlDbType.Varchar).Value = model.create_by;
-                    cmd.Parameters.Add("@dept_name", NpgsqlDbType.Varchar).Value = model.dept_name;
-                    cmd.Parameters.Add("@dept_status", NpgsqlDbType.Varchar).Value = model.dept_status;
+                    cmd.Parameters.AddWithValue("@create_by", model.create_by);
+                    cmd.Parameters.AddWithValue("@dept_name", model.dept_name);
+                    cmd.Parameters.AddWithValue("@dept_status", model.dept_status);
 
                     if (transaction != null)
                     {
@@ -124,10 +148,12 @@ namespace DataLayer.HR.MasterModels
 
                     result = Convert.ToInt32(cmd.ExecuteScalar());
                 }
+
             }
             catch (Exception ex)
             {
-                throw;
+                // You can log the error here if needed
+                throw new Exception($"Error occurred while inserting department: {ex.Message}",ex);
             }
             return result;
         }
@@ -137,6 +163,31 @@ namespace DataLayer.HR.MasterModels
             int result = 0;
             try
             {
+                // Check if dept_name is not empty
+                if (string.IsNullOrEmpty(model.dept_name))
+                {
+                    throw new Exception("Department name cannot be empty. Please provide a valid name.");
+                }
+
+                // Check if dept_name duplicate for a different dept_id
+                string checkSql = @"SELECT COUNT(*) 
+                            FROM hr.tbm_dept_info 
+                            WHERE dept_name = @dept_name AND dept_id != @dept_id";
+
+                using (var checkCmd = new NpgsqlCommand(checkSql, conn))
+                {
+                    checkCmd.Parameters.AddWithValue("@dept_name", model.dept_name);
+                    checkCmd.Parameters.AddWithValue("@dept_id", model.dept_id);
+
+                    int count = Convert.ToInt32(checkCmd.ExecuteScalar());
+
+                    if (count > 0)
+                    {
+                        throw new Exception("Duplicate");
+                    }
+                }
+
+                // Update tbm_dept_info
                 string sql = @"UPDATE hr.tbm_dept_info
                        SET  update_by = @update_by,
                             dept_name = @dept_name,
@@ -160,7 +211,8 @@ namespace DataLayer.HR.MasterModels
             }
             catch (Exception ex)
             {
-                throw;
+                // You can log the error here if needed
+                throw new Exception($"Error occurred while updating department: {ex.Message}");
             }
             return result;
         }

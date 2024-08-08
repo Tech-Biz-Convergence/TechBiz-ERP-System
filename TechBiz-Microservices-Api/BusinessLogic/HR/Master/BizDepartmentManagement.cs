@@ -14,6 +14,7 @@ using System.Reflection.Metadata;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using ExcelDataReader;
+using NpgsqlTypes;
 
 
 namespace BusinessLogic.HR.Master
@@ -109,10 +110,37 @@ namespace BusinessLogic.HR.Master
                 try
                 {
                     conn.Open();
+
+                    // เช็คว่า dept_name เป็นค่าว่างหรือไม่
+                    if (string.IsNullOrWhiteSpace(model.dept_name))
+                    {
+                        resultMessage.description = "Department Name Null. Please Enter Department Name";
+                        resultMessage.code = GlobalMessage.INSERT_ERROR_CODE;
+                        resultMessage.status = false;
+                        return resultMessage;
+                    }
+
+                    // เช็คว่าชื่อแผนกมีอยู่แล้วในระบบหรือไม่
+                    string checkSql = @"SELECT COUNT(1) FROM hr.tbm_dept_info WHERE dept_name = @dept_name";
+                    using (var checkCmd = new NpgsqlCommand(checkSql, conn))
+                    {
+                        checkCmd.Parameters.Add("@dept_name", NpgsqlDbType.Varchar).Value = model.dept_name;
+                        int count = Convert.ToInt32(checkCmd.ExecuteScalar());
+
+                        if (count > 0)
+                        {
+                            resultMessage.description = "Department name Duplicate.";
+                            resultMessage.code = GlobalMessage.INSERT_ERROR_CODE;
+                            resultMessage.status = false;
+                            return resultMessage;
+                        }
+                    }
+
                     int id = m_DepartmentRepository.Insert(model, conn);
                     model.dept_id = id;
 
                     resultMessage.data = model;
+                    resultMessage.description = "Department added successfully.";
                     resultMessage.code = GlobalMessage.INSERT_SUCCESS_CODE;
                     resultMessage.status = true;
                 }
@@ -141,10 +169,38 @@ namespace BusinessLogic.HR.Master
                 try
                 {
                     conn.Open();
+
+                    // เช็คว่า dept_name เป็นค่าว่างหรือไม่
+                    if (string.IsNullOrWhiteSpace(model.dept_name))
+                    {
+                        resultMessage.description = "Department Name Null. Please Enter Department Name";
+                        resultMessage.code = GlobalMessage.UPDATE_ERROR_CODE;
+                        resultMessage.status = false;
+                        return resultMessage;
+                    }
+
+                    // เช็คว่าชื่อแผนกมีอยู่แล้วในระบบหรือไม่ และไม่ใช่ชื่อของแผนกที่กำลังอัปเดต
+                    string checkSql = @"SELECT COUNT(1) FROM hr.tbm_dept_info WHERE dept_name = @dept_name AND dept_id != @dept_id";
+                    using (var checkCmd = new NpgsqlCommand(checkSql, conn))
+                    {
+                        checkCmd.Parameters.Add("@dept_name", NpgsqlDbType.Varchar).Value = model.dept_name;
+                        checkCmd.Parameters.Add("@dept_id", NpgsqlDbType.Bigint).Value = model.dept_id;
+                        int count = Convert.ToInt32(checkCmd.ExecuteScalar());
+
+                        if (count > 0)
+                        {
+                            resultMessage.description = "Department name Duplicate.";
+                            resultMessage.code = GlobalMessage.UPDATE_ERROR_CODE;
+                            resultMessage.status = false;
+                            return resultMessage;
+                        }
+                    }
+
                     int id = m_DepartmentRepository.Update(model, conn);
                     model.dept_id = id;
 
                     resultMessage.data = model;
+                    resultMessage.description = "Department updated successfully.";
                     resultMessage.code = GlobalMessage.UPDATE_SUCCESS_CODE;
                     resultMessage.status = true;
                 }

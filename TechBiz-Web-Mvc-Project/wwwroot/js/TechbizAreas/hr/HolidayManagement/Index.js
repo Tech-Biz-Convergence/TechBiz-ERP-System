@@ -32,50 +32,29 @@ $(document).ready(function () {
   //>>>>>> Event Add PartNumber submit 
   $("#AddFormId").validate({
     rules: {
-      emp_firstname: {
+      holiday_name: {
         required: true,
-        maxlength: 255
+        maxlength: 100
       },
-      emp_lastname: {
+      holiday_day: {
         required: true,
-        maxlength: 255
       },
-      emp_code: {
+      holiday_year: {
         required: true,
-        maxlength: 50
-      },
-      emp_mobile_no: {
         maxlength: 10
-      },
-      start_date: {
-        required: true,
-      },
-      dept_id: {
-        required: true,
       }
     },
     messages: {
-      emp_firstname: {
-        required: icon + " Please enter employee firstname.",
-        maxlength: icon + " Please enter no more than 255 characters."
+      holiday_name: {
+        required: icon + " Please enter holiday name.",
+        maxlength: icon + " Please enter no more than 100 characters."
       },
-      emp_lastname: {
-
-        required: icon + " Please enter employee lastname.",
-        maxlength: icon + " Please enter no more than 255 characters."
-      },
-      emp_code: {
-        required: icon + " Please enter employee code.",
-        maxlength: icon + " Please enter no more than 50 characters."
-      },
-      emp_mobile_no: {
-        maxlength: icon + " Please enter no more than 10 characters."
-      },
-      start_date: {
+      holiday_day: {
         required: icon + " Please select start date.",
       },
-      dept_id: {
-        required: icon + " Please select department.",
+      holiday_year: {
+        required: icon + " Please enter holiday year.",
+        maxlength: icon + " Please enter no more than 10 characters."
       }
     },
     errorPlacement: (error, element) => {
@@ -358,8 +337,8 @@ $(document).ready(function () {
           orderable: false,
           className: 'dt-body-center',
           render: function (data, type, row) {
-            // ตรวจสอบค่า row.emp_status
-            var buttonClass = row.emp_status === 'ACTIVE' ? 'btn-primary' : 'btn-outline-secondary';
+            // ตรวจสอบค่า row.holiday_status
+            var buttonClass = row.holiday_status === 'ACTIVE' ? 'btn-primary' : 'btn-outline-secondary';
             // สร้าง HTML ของปุ่ม
             return `<button type="button" class="btn rounded-pill btn-icon ${buttonClass} ActiveButton button-feature " data-id="${row.holiday_id}">
                               <span class="tf-icons bx bx-power-off"></span>
@@ -524,9 +503,9 @@ $(document).ready(function () {
           $('#AddFormId [name=holiday_name]').val(res.holiday_name);
           $('#AddFormId [name=holiday_year]').val(res.holiday_year);
           $('#AddFormId [name=holiday_day]').val(formatDate(res.holiday_day));
-          $('#AddFormId [name=created_date]').val(res.created_date);
+          $('#AddFormId [name=created_date]').val(formatDateTime(res.created_date));
           $('#AddFormId [name=created_by]').val(res.created_by);
-          $('#AddFormId [name=updated_date]').val(res.updated_date);
+          $('#AddFormId [name=updated_date]').val(formatDateTime(res.updated_date));
           $('#AddFormId [name=updated_by]').val(res.updated_by);
           if (res.holiday_status === "ACTIVE") {
             $('#AddFormId [name=holiday_status]').prop('checked', true); // ตั้งค่าให้ checkbox มีสถานะ checked

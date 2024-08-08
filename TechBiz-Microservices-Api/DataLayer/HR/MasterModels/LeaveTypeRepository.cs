@@ -1,6 +1,7 @@
 ﻿using BusinessEntities.HR.MasterModels;
 using DataLayer.Core;
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
+using Microsoft.IdentityModel.Tokens;
 using Npgsql;
 using NpgsqlTypes;
 using System;
@@ -13,7 +14,7 @@ using Utilities;
 
 namespace DataLayer.HR.MasterModels
 {
-    public class LeaveRepository : IDataRepository<tbm_leave_type>
+    public class LeaveTypeRepository : IDataRepository<tbm_leave_type>
     {
         public int Delete(int Key, NpgsqlConnection conn, NpgsqlTransaction transaction = null)
         {
@@ -98,6 +99,36 @@ namespace DataLayer.HR.MasterModels
             int result = 0;
             try
             {
+                // Check if interview_quest is not empty
+                if (string.IsNullOrEmpty(model.leave_type_name))
+                {
+                    throw new Exception("Leave Type name cannot be empty. Please provide a valid name.");
+                }
+                if (model.leave_max_days == null)
+                {
+                    throw new Exception("Leave Max cannot be empty. Please provide a valid name.");
+                }
+
+                // Check if leave_type_name, leave_max_days and interview_quest duplicate
+                string checkSql = @"SELECT COUNT(*) 
+                            FROM hr.tbm_leave_type 
+                            WHERE leave_type_name = @leave_type_name
+                            AND leave_max_days = @leave_max_days";
+
+                using (var checkCmd = new NpgsqlCommand(checkSql, conn))
+                {
+                    checkCmd.Parameters.AddWithValue("@leave_type_name", model.leave_type_name);
+                    checkCmd.Parameters.AddWithValue("@leave_max_days", model.leave_max_days); 
+
+                    int count = Convert.ToInt32(checkCmd.ExecuteScalar());
+
+                    if (count > 0)
+                    {
+                        throw new Exception("Duplicate");
+                    }
+                }
+
+                // Insert into tbm_leave_type
                 string sql = @"INSERT INTO hr.tbm_leave_type 											
                                 (created_by,
                                 leave_type_name,
@@ -130,7 +161,8 @@ namespace DataLayer.HR.MasterModels
             }
             catch (Exception ex)
             {
-                throw;
+                // You can log the error here if needed
+                throw new Exception($"Error occurred while inserting department: {ex.Message}",ex);
             }
             return result;
         }
@@ -141,6 +173,38 @@ namespace DataLayer.HR.MasterModels
             int result = 0;
             try
             {
+                // Check if leave_type_name, leave_max_days, leave_type_comment is not empty
+                if (string.IsNullOrEmpty(model.leave_type_name))
+                {
+                    throw new Exception("Leave Type name cannot be empty. Please provide a valid name.");
+                }
+                if (model.leave_max_days == null)
+                {
+                    throw new Exception("Leave Max cannot be empty. Please provide a valid name.");
+                }
+
+                // Check if leave_type_name, leave_max_days and leave_type_id duplicate for a different dept_id
+                string checkSql = @"SELECT COUNT(*) 
+                            FROM hr.tbm_leave_type 
+                            WHERE leave_type_name = @leave_type_name
+                            AND leave_max_days = @leave_max_days
+                            AND leave_type_id != @leave_type_id";
+
+                using (var checkCmd = new NpgsqlCommand(checkSql, conn))
+                {
+                    checkCmd.Parameters.AddWithValue("@leave_type_name", model.leave_type_name);
+                    checkCmd.Parameters.AddWithValue("@leave_max_days", model.leave_max_days);
+                    checkCmd.Parameters.AddWithValue("@leave_type_id", model.leave_type_id);
+
+                    int count = Convert.ToInt32(checkCmd.ExecuteScalar());
+
+                    if (count > 0)
+                    {
+                        throw new Exception("Duplicate");
+                    }
+                }
+
+                // Update tbm_leave_type
                 string sql = @"UPDATE hr.tbm_leave_type
                        SET  updated_by = @updated_by,
                             leave_type_name = @leave_type_name,
@@ -167,7 +231,8 @@ namespace DataLayer.HR.MasterModels
             }
             catch (Exception ex)
             {
-                throw;
+                // You can log the error here if needed
+                throw new Exception($"Error occurred while updating department: {ex.Message}");
             }
             return result;
         }
@@ -219,42 +284,27 @@ namespace DataLayer.HR.MasterModels
             }
         }
 
-        /*
-        public int UpdateActive(int id, int user_id, bool is_active, NpgsqlConnection conn, NpgsqlTransaction transaction = null)
-        {
-            int result = 0;
-            try
-            {
-                string sql = @"UPDATE 											
-                                        tm_employee_info											
-                                    SET 											
-                                        isActive = @isActive														
-                                    WHERE  											
-                                        id = @id";
+        //public DataTable GetLeaveType(NpgsqlConnection conn)
+        //{
+        //    try
+        //    {
+        //        NpgsqlCommand sqlCommand = new NpgsqlCommand();
+        //        DataTable dataTable = new DataTable();
 
-                using (var cmd = new NpgsqlCommand(sql, conn))
-                {
-                    cmd.Parameters.Add("@id", NpgsqlDbType.Integer).Value = id;
-                    cmd.Parameters.Add("@is_active", NpgsqlDbType.Boolean).Value = is_active;// model.isActive;											
-                  //  cmd.Parameters.Add("@update_by", SqlDbType.Int).Value = user_id;
+        //        string sql = @" SELECT leave_type_id, leave_type_name
+        //                    	FROM hr.tbm_leave_type WHERE leave_type_status = 'ACTIVE'";
 
-                    result = 0;
-                    if (transaction != null)
-                    {
-                        cmd.Transaction = transaction;
-                    }
-                    result = cmd.ExecuteNonQuery();
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            return result;
-        }
-        */
+        //        sqlCommand.CommandText = sql;
+        //        sqlCommand.Connection = conn;
 
-       
-
+        //        NpgsqlDataReader reader = sqlCommand.ExecuteReader();
+        //        dataTable.Load(reader);
+        //        return dataTable;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("Error retrieving Leave Type data", ex);
+        //    }
+        //}
     }
 }

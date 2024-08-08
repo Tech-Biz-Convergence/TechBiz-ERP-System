@@ -14,6 +14,7 @@ using System.Reflection.Metadata;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using ExcelDataReader;
+using NpgsqlTypes;
 
 
 
@@ -110,10 +111,54 @@ namespace BusinessLogic.HR.Master
                 try
                 {
                     conn.Open();
+
+                    if (string.IsNullOrWhiteSpace(model.holiday_year))
+                    {
+                        resultMessage.description = "Holiday Year Null. Please Enter Data.";
+                        resultMessage.code = GlobalMessage.INSERT_ERROR_CODE;
+                        resultMessage.status = false;
+                        return resultMessage;
+                    }
+                    if (string.IsNullOrWhiteSpace(model.holiday_name))
+                    {
+                        resultMessage.description = "Holiday Name Null. Please Enter Data.";
+                        resultMessage.code = GlobalMessage.INSERT_ERROR_CODE;
+                        resultMessage.status = false;
+                        return resultMessage;
+                    }
+                    if (model.holiday_day == DateTime.MinValue)
+                    {
+                        resultMessage.description = "Holiday Date Null. Please Enter Data.";
+                        resultMessage.code = GlobalMessage.INSERT_ERROR_CODE;
+                        resultMessage.status = false;
+                        return resultMessage;
+                    }
+
+                    string checkSql = @"SELECT COUNT(1) FROM hr.tbm_holiday_info WHERE holiday_year = @holiday_year
+                            AND holiday_name = @holiday_name
+                            AND holiday_day = @holiday_day";
+                    using (var checkCmd = new NpgsqlCommand(checkSql, conn))
+                    {
+                        checkCmd.Parameters.Add("@holiday_year", NpgsqlDbType.Varchar).Value = model.holiday_year;
+                        checkCmd.Parameters.Add("@holiday_name", NpgsqlDbType.Varchar).Value = model.holiday_name;
+                        checkCmd.Parameters.Add("@holiday_day", NpgsqlDbType.Date).Value = model.holiday_day;
+
+                        int count = Convert.ToInt32(checkCmd.ExecuteScalar());
+
+                        if (count > 0)
+                        {
+                            resultMessage.description = "Department name Duplicate.";
+                            resultMessage.code = GlobalMessage.INSERT_ERROR_CODE;
+                            resultMessage.status = false;
+                            return resultMessage;
+                        }
+                    }
+
                     int id = m_HolidayRepository.Insert(model, conn);
                     model.holiday_id = id;
 
                     resultMessage.data = model;
+                    resultMessage.description = "Department added successfully.";
                     resultMessage.code = GlobalMessage.INSERT_SUCCESS_CODE;
                     resultMessage.status = true;
                 }
@@ -142,10 +187,56 @@ namespace BusinessLogic.HR.Master
                 try
                 {
                     conn.Open();
+
+                    if (string.IsNullOrWhiteSpace(model.holiday_year))
+                    {
+                        resultMessage.description = "Holiday Year Null. Please Enter Data.";
+                        resultMessage.code = GlobalMessage.INSERT_ERROR_CODE;
+                        resultMessage.status = false;
+                        return resultMessage;
+                    }
+                    if (string.IsNullOrWhiteSpace(model.holiday_name))
+                    {
+                        resultMessage.description = "Holiday Name Null. Please Enter Data.";
+                        resultMessage.code = GlobalMessage.INSERT_ERROR_CODE;
+                        resultMessage.status = false;
+                        return resultMessage;
+                    }
+                    if (model.holiday_day == DateTime.MinValue)
+                    {
+                        resultMessage.description = "Holiday Date Null. Please Enter Data.";
+                        resultMessage.code = GlobalMessage.INSERT_ERROR_CODE;
+                        resultMessage.status = false;
+                        return resultMessage;
+                    }
+
+                    string checkSql = @"SELECT COUNT(1) FROM hr.tbm_holiday_info WHERE holiday_year = @holiday_year
+                            AND holiday_name = @holiday_name
+                            AND holiday_day = @holiday_day 
+                            AND holiday_id != @holiday_id";
+                    using (var checkCmd = new NpgsqlCommand(checkSql, conn))
+                    {
+                        checkCmd.Parameters.Add("@holiday_year", NpgsqlDbType.Varchar).Value = model.holiday_year;
+                        checkCmd.Parameters.Add("@holiday_name", NpgsqlDbType.Varchar).Value = model.holiday_name;
+                        checkCmd.Parameters.Add("@holiday_day", NpgsqlDbType.Date).Value = model.holiday_day;
+                        checkCmd.Parameters.Add("@holiday_id", NpgsqlDbType.Bigint).Value = model.holiday_id;
+
+                        int count = Convert.ToInt32(checkCmd.ExecuteScalar());
+
+                        if (count > 0)
+                        {
+                            resultMessage.description = "Data is Duplicate.";
+                            resultMessage.code = GlobalMessage.UPDATE_ERROR_CODE;
+                            resultMessage.status = false;
+                            return resultMessage;
+                        }
+                    }
+
                     int id = m_HolidayRepository.Update(model, conn);
                     model.holiday_id = id;
 
                     resultMessage.data = model;
+                    resultMessage.description = "Department updated successfully.";
                     resultMessage.code = GlobalMessage.UPDATE_SUCCESS_CODE;
                     resultMessage.status = true;
                 }

@@ -160,7 +160,7 @@ $(document).ready(function () {
         type: 'DELETE',
         headers: { "Authorization": "Bearer " + token },
         contentType: 'application/json; charset=utf-8',
-        url: config.apiUrl.base + '/api/hr/Leave/Delete/' + id,
+        url: config.apiUrl.base + '/api/hr/LeaveType/Delete/' + id,
         data: {
           user_name: username
         }
@@ -189,13 +189,13 @@ $(document).ready(function () {
     if (button.hasClass('btn-primary')) {
       console.log(" hasClass('btn-primary') ");
       button.removeClass('btn-primary').addClass('btn-outline-secondary');
-      urlApi = config.apiUrl.base + '/Api/Hr/Leave/activateCondition/' + id;
+      urlApi = config.apiUrl.base + '/Api/Hr/LeaveType/activateCondition/' + id;
       status = "INACTIVE";
       console.log('urlApi : ' + urlApi);
     } else {
       console.log(" No hasClass('btn-primary') ");
       button.removeClass('btn-outline-secondary').addClass('btn-primary');
-      urlApi = config.apiUrl.base + '/Api/Hr/Leave/activateCondition/' + id;
+      urlApi = config.apiUrl.base + '/Api/Hr/LeaveType/activateCondition/' + id;
       status = "ACTIVE";
       console.log('urlApi : ' + urlApi);
     }
@@ -295,7 +295,7 @@ $(document).ready(function () {
       ajax: (data, callback) => {
         $.ajax({
 
-          url: config.apiUrl.base + '/api/hr/leave/GetPaginate',
+          url: config.apiUrl.base + '/api/hr/LeaveType/GetPaginate',
           type: 'GET',
           contentType: 'application/json; charset=utf-8',
           headers: { "Authorization": "Bearer " + token },
@@ -338,7 +338,7 @@ $(document).ready(function () {
           orderable: false,
           className: 'dt-body-center',
           render: function (data, type, row) {
-            // ตรวจสอบค่า row.emp_status
+            // ตรวจสอบค่า row.leave_type_status
             var buttonClass = row.leave_type_status === 'ACTIVE' ? 'btn-primary' : 'btn-outline-secondary';
             // สร้าง HTML ของปุ่ม
             return `<button type="button" class="btn rounded-pill btn-icon ${buttonClass} ActiveButton button-feature " data-id="${row.leave_type_id}">
@@ -384,7 +384,7 @@ $(document).ready(function () {
     var formData = new FormData(this);
 
     $.ajax({
-      url: config.apiUrl.base + '/api/hr/leave/ImportDataExcelFile',
+      url: config.apiUrl.base + '/api/hr/leaveType/ImportDataExcelFile',
       headers: { "Authorization": "Bearer " + token },
       type: 'POST',
       data: formData,
@@ -432,12 +432,12 @@ $(document).ready(function () {
       //insert
       formData.created_by = username;
       var type = 'POST';
-      var url = config.apiUrl.base + '/api/hr/leave/addnew';
+      var url = config.apiUrl.base + '/api/hr/leaveType/addnew';
     } else {
       //update
       formData.updated_by = username;
       type = 'PUT';
-      url = config.apiUrl.base + '/api/hr/leave/update';
+      url = config.apiUrl.base + '/api/hr/leaveType/update';
     }
     await $.ajax({
       url: url,
@@ -480,7 +480,7 @@ $(document).ready(function () {
 
   async function RenderAddNewForm(id) {
     await $.ajax({
-      url: config.apiUrl.base + '/api/hr/leave/get/' + id,
+      url: config.apiUrl.base + '/api/hr/leaveType/get/' + id,
       type: 'GET',
       contentType: 'application/json; charset=utf-8',
       // data: {
@@ -496,9 +496,9 @@ $(document).ready(function () {
           $('#AddFormId [name=leave_type_name]').val(res.leave_type_name);
           $('#AddFormId [name=leave_max_days]').val(res.leave_max_days);
           $('#AddFormId [name=leave_type_comment]').val(res.leave_type_comment);
-          $('#AddFormId [name=created_date]').val(res.created_date);
+          $('#AddFormId [name=created_date]').val(formatDateTime(res.created_date));
           $('#AddFormId [name=created_by]').val(res.created_by);
-          $('#AddFormId [name=updated_date]').val(res.updated_date);
+          $('#AddFormId [name=updated_date]').val(formatDateTime(res.updated_date));
           $('#AddFormId [name=updated_by]').val(res.updated_by);
           if (res.leave_type_status === "ACTIVE") {
             $('#AddFormId [name=leave_type_status]').prop('checked', true); // ตั้งค่าให้ checkbox มีสถานะ checked
